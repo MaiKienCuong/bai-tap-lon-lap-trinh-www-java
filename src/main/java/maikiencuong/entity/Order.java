@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -38,8 +39,8 @@ public class Order {
 	@Column(name = "order_date")
 	private Date orderDate;
 
-	@Column(name = "shipped_date")
-	private Date shippedDate;
+//	@Column(name = "shipped_date")
+//	private Date shippedDate;
 
 	@Column(name = "ship_address", columnDefinition = "nvarchar(255)")
 	private String shipAddress;
@@ -56,8 +57,14 @@ public class Order {
 	@Column(name = "payment_status", columnDefinition = "nvarchar(255)")
 	private String paymentStatus;
 
+	@PrePersist
+	public void prePersist() {
+		orderDate = new Date(new java.util.Date().getTime());
+	}
+
 	// ----------------------
 
+	@JsonIgnore
 	@ToString.Exclude
 	@ManyToOne
 	@JoinColumn(name = "customer_id")

@@ -2,10 +2,8 @@ package maikiencuong.controller.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import maikiencuong.entity.Account;
-import maikiencuong.entity.EnumRole;
-import maikiencuong.entity.Role;
 import maikiencuong.entity.User;
-import maikiencuong.model.request.AccountModel;
 import maikiencuong.model.request.UserModel;
-import maikiencuong.service.AccountServ;
-import maikiencuong.service.RoleServ;
 import maikiencuong.service.UserServ;
 
 @RestController
@@ -42,19 +33,19 @@ import maikiencuong.service.UserServ;
 @RequestMapping("/api")
 public class UserController {
 
-	private static final String ERROR_MESSAGE = "Lỗi: Không tìm thấy Role";
+//	private static final String ERROR_MESSAGE = "Lỗi: Không tìm thấy Role";
 
 	@Autowired
 	private UserServ userServ;
 
-	@Autowired
-	private AccountServ accountServ;
-
-	@Autowired
-	private PasswordEncoder encoder;
-
-	@Autowired
-	private RoleServ roleServ;
+//	@Autowired
+//	private AccountServ accountServ;
+//
+//	@Autowired
+//	private PasswordEncoder encoder;
+//
+//	@Autowired
+//	private RoleServ roleServ;
 
 	@GetMapping("/users")
 	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
@@ -81,11 +72,6 @@ public class UserController {
 
 	@PostMapping("/user")
 	public ResponseEntity<?> addCustomer(@RequestBody UserModel userModel) {
-//		AccountModel accountModel = userModel.getAccount();
-//		if (accountModel != null && accountServ.existsByUsername(accountModel.getUsername())) {
-//			return ResponseEntity.badRequest()
-//					.body(new MessageResponse("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác"));
-//		}
 		User user = getFromUserModel(userModel);
 		User result = userServ.add(user);
 		if (result != null)
@@ -95,11 +81,6 @@ public class UserController {
 
 	@PutMapping("/user")
 	public ResponseEntity<?> updateCustomer(@RequestBody UserModel userModel) {
-//		AccountModel accountModel = userModel.getAccount();
-//		if (accountModel != null && accountServ.existsByUsername(accountModel.getUsername())) {
-//			return ResponseEntity.badRequest()
-//					.body(new MessageResponse("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác"));
-//		}
 		User user = getFromUserModel(userModel);
 		User result = userServ.update(user);
 		if (result != null)
@@ -149,47 +130,47 @@ public class UserController {
 	}
 
 	private User getFromUserModel(UserModel userModel) {
-		AccountModel accountModel = userModel.getAccount();
-		Account account = null;
-		if (accountModel != null) {
-			account = Account.builder().username(accountModel.getUsername())
-					.password(encoder.encode(accountModel.getPassword())).build();
-
-			Set<String> strRoles = accountModel.getRole();
-			Set<Role> roles = new HashSet<>();
-
-			if (strRoles == null) {
-				Role userRole = roleServ.findByName(EnumRole.ROLE_USER)
-						.orElseThrow(() -> new RuntimeException(ERROR_MESSAGE));
-				roles.add(userRole);
-			} else {
-				strRoles.forEach(role -> {
-					switch (role) {
-					case "admin":
-						Role adminRole = roleServ.findByName(EnumRole.ROLE_ADMIN)
-								.orElseThrow(() -> new RuntimeException(ERROR_MESSAGE));
-						roles.add(adminRole);
-
-						break;
-					case "manager":
-						Role modRole = roleServ.findByName(EnumRole.ROLE_MANAGER)
-								.orElseThrow(() -> new RuntimeException(ERROR_MESSAGE));
-						roles.add(modRole);
-
-						break;
-					default:
-						Role userRole = roleServ.findByName(EnumRole.ROLE_USER)
-								.orElseThrow(() -> new RuntimeException(ERROR_MESSAGE));
-						roles.add(userRole);
-					}
-				});
-			}
-			account.setRoles(roles);
-			return User.builder().id(userModel.getId()).account(account).address(userModel.getAddress())
-					.birthDate(userModel.getBirthDate()).email(userModel.getEmail())
-					.identityCard(userModel.getIdentityCard()).name(userModel.getName())
-					.nativeCountry(userModel.getNativeCountry()).phone(userModel.getPhone()).build();
-		}
+//		AccountModel accountModel = userModel.getAccount();
+//		Account account = null;
+//		if (accountModel != null) {
+//			account = Account.builder().username(accountModel.getUsername())
+//					.password(encoder.encode(accountModel.getPassword())).build();
+//
+//			Set<String> strRoles = accountModel.getRole();
+//			Set<Role> roles = new HashSet<>();
+//
+//			if (strRoles == null) {
+//				Role userRole = roleServ.findByName(EnumRole.ROLE_USER)
+//						.orElseThrow(() -> new RuntimeException(ERROR_MESSAGE));
+//				roles.add(userRole);
+//			} else {
+//				strRoles.forEach(role -> {
+//					switch (role) {
+//					case "admin":
+//						Role adminRole = roleServ.findByName(EnumRole.ROLE_ADMIN)
+//								.orElseThrow(() -> new RuntimeException(ERROR_MESSAGE));
+//						roles.add(adminRole);
+//
+//						break;
+//					case "manager":
+//						Role modRole = roleServ.findByName(EnumRole.ROLE_MANAGER)
+//								.orElseThrow(() -> new RuntimeException(ERROR_MESSAGE));
+//						roles.add(modRole);
+//
+//						break;
+//					default:
+//						Role userRole = roleServ.findByName(EnumRole.ROLE_USER)
+//								.orElseThrow(() -> new RuntimeException(ERROR_MESSAGE));
+//						roles.add(userRole);
+//					}
+//				});
+//			}
+//			account.setRoles(roles);
+//		}
+//		if (userModel.getId() != null) {
+//			User user = userServ.findById(userModel.getId());
+//			account = user.getAccount();
+//		}
 		return User.builder().id(userModel.getId()).address(userModel.getAddress()).birthDate(userModel.getBirthDate())
 				.email(userModel.getEmail()).identityCard(userModel.getIdentityCard()).name(userModel.getName())
 				.nativeCountry(userModel.getNativeCountry()).phone(userModel.getPhone()).build();

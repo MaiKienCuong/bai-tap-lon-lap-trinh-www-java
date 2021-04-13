@@ -46,6 +46,7 @@ public class Customer {
 	private String email;
 
 	// --------------------------
+	@JsonIgnore
 	@ToString.Exclude
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "account_id", columnDefinition = "bigint")

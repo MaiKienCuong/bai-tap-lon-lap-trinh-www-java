@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -51,7 +53,18 @@ public class SubProduct {
 
 	// -----------
 
+	@PrePersist
+	public void prePersist() {
+		createdAt = new Date(new java.util.Date().getTime());
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+		updatedAt = new Date(new java.util.Date().getTime());
+	}
+
 	@JsonIgnore
+	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id")
 	private Product product;

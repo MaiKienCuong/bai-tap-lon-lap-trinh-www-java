@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -87,6 +89,16 @@ public class Product {
 
 	// -----------------
 
+	@PrePersist
+	public void prePersist() {
+		createdAt = new Date(new java.util.Date().getTime());
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+		updatedAt = new Date(new java.util.Date().getTime());
+	}
+
 	@JsonIgnore
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -96,6 +108,7 @@ public class Product {
 	// ----------------------------
 
 	@JsonIgnore
+	@ToString.Exclude
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
 	private List<SubProduct> subProducts;
 

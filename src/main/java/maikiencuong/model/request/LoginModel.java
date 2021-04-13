@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginModel {
+	
 	@NotBlank
 	private String username;
 

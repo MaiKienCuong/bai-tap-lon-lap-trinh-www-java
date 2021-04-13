@@ -24,8 +24,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
 @ToString
 @Builder
 @Entity
@@ -35,16 +33,22 @@ import lombok.ToString;
 public class Account {
 
 	@Id
+	@Getter
+	@Setter
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Getter
+	@Setter
 	@Column(name = "username", columnDefinition = "varchar(50) not null")
 	private String username;
 
-	@JsonIgnore
+	@Setter
 	@Column(name = "password", columnDefinition = "varchar(255) not null")
 	private String password;
 
+	@Getter
+	@Setter
 	@Column(name = "enable", nullable = false)
 	private boolean enable;
 
@@ -55,15 +59,27 @@ public class Account {
 		enable = true;
 	}
 
+	@JsonIgnore
+	public String getPassword() {
+		return password;
+	}
+
+	@Getter
+	@Setter
+	@ToString.Exclude
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "Account_Role", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 
+	@Getter
+	@Setter
 	@JsonIgnore
 	@ToString.Exclude
 	@OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
 	private User user;
 
+	@Getter
+	@Setter
 	@JsonIgnore
 	@ToString.Exclude
 	@OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
