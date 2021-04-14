@@ -3,7 +3,6 @@ package maikiencuong.entity;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,19 +41,15 @@ public class Customer {
 	@Column(name = "phone", columnDefinition = "varchar(50)")
 	private String phone;
 
-	@Column(name = "email", columnDefinition = "varchar(50)")
-	private String email;
-
 	// --------------------------
 	@JsonIgnore
 	@ToString.Exclude
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "account_id", columnDefinition = "bigint")
 	private Account account;
 
-	@JsonIgnore
 	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "typeCustomer_id")
 	private TypeCustomer typeCustomer;
 

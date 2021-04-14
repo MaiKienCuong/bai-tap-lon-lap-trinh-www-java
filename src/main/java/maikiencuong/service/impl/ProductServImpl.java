@@ -33,14 +33,14 @@ public class ProductServImpl implements ProductServ {
 
 	@Override
 	@Transactional
-	public Page<Product> findAllByNameLikeOrCategoryLike(String name, String category, Pageable pageable) {
-		return productRepo.findAllByNameLikeOrCategoryLike(name, category, pageable);
+	public Page<Product> findAllByNameLikeOrCategory_NameLike(String name, String category, Pageable pageable) {
+		return productRepo.findAllByNameLikeOrCategory_NameLike(name, category, pageable);
 	}
 
 	@Override
 	@Transactional
-	public Page<Product> findAllByCategoryLike(String category, Pageable pageable) {
-		return productRepo.findAllByCategoryLike(category, pageable);
+	public Page<Product> findAllByCategory_NameLike(String category, Pageable pageable) {
+		return productRepo.findAllByCategory_NameLike(category, pageable);
 	}
 
 	@Override
@@ -56,7 +56,6 @@ public class ProductServImpl implements ProductServ {
 	}
 
 	@Override
-	@Transactional
 	public void delete(Long id) {
 		productRepo.deleteById(id);
 	}

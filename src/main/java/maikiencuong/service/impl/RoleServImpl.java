@@ -3,6 +3,8 @@ package maikiencuong.service.impl;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,19 @@ public class RoleServImpl implements RoleServ {
 	@Transactional
 	public Optional<Role> findByName(EnumRole name) {
 		return roleRepo.findByName(name);
+	}
+
+	@Override
+	@Transactional
+	public Page<Role> findAll(Pageable pageable) {
+		return roleRepo.findAll(pageable);
+	}
+
+	@Override
+	@Transactional
+	public Role findById(Long id) {
+		Optional<Role> optional = roleRepo.findById(id);
+		return optional.isEmpty() ? optional.get() : null;
 	}
 
 }

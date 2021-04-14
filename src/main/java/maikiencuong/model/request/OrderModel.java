@@ -13,8 +13,6 @@ public class OrderModel {
 
 	private String paymentMethod;
 
-	private String paymentStatus;
-
 	// ----------------------
 
 	private CustomerModel customer;

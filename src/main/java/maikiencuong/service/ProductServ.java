@@ -27,8 +27,8 @@ public interface ProductServ {
 
 	public Page<Product> findAllByMarkerIn(String[] markers, Pageable pageable);
 
-	public Page<Product> findAllByCategoryLike(String category, Pageable pageable);
+	public Page<Product> findAllByCategory_NameLike(String category, Pageable pageable);
 
-	public Page<Product> findAllByNameLikeOrCategoryLike(String name, String category, Pageable pageable);
+	public Page<Product> findAllByNameLikeOrCategory_NameLike(String name, String category, Pageable pageable);
 
 }

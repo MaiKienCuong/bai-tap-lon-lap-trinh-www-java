@@ -8,11 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginModel {
-	
-	@NotBlank
+
+	@NotBlank(message = "Username không được để trống")
 	private String username;
 
-	@NotBlank
+	@NotBlank(message = "Mật khẩu không được để trống")
 	private String password;
 
 }

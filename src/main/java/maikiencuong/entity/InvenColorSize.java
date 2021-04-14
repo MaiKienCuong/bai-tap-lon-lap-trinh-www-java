@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ import maikiencuong.views.Views;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
+@Builder
 @JsonInclude(Include.NON_NULL)
 public class InvenColorSize {
 

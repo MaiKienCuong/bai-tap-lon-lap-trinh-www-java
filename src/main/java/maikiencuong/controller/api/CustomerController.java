@@ -2,8 +2,13 @@ package maikiencuong.controller.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +31,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import maikiencuong.entity.Account;
 import maikiencuong.entity.Customer;
+import maikiencuong.entity.EnumRole;
+import maikiencuong.entity.EnumTypeCustomer;
+import maikiencuong.entity.Role;
+import maikiencuong.entity.TypeCustomer;
+import maikiencuong.model.request.AccountModel;
 import maikiencuong.model.request.CustomerModel;
+import maikiencuong.model.response.MessageResponse;
+import maikiencuong.service.AccountServ;
 import maikiencuong.service.CustomerServ;
+import maikiencuong.service.RoleServ;
+import maikiencuong.service.TypeCustomerServ;
 
 @RestController
 @CrossOrigin("*")
@@ -36,16 +53,17 @@ public class CustomerController {
 	@Autowired
 	private CustomerServ customerServ;
 
-//	@Autowired
-//	private AccountServ accountServ;
-//
-//	@Autowired
-//	private PasswordEncoder encoder;
-//
-//	@Autowired
-//	private RoleServ roleServ;
-//
-//	private static final String ERROR_MESSAGE = "Lỗi: Không tìm thấy Role";
+	@Autowired
+	private AccountServ accountServ;
+
+	@Autowired
+	TypeCustomerServ typeCustomerServ;
+
+	@Autowired
+	RoleServ roleServ;
+
+	@Autowired
+	PasswordEncoder encoder;
 
 	@GetMapping("/customers")
 	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
@@ -58,7 +76,7 @@ public class CustomerController {
 			Map<String, Object> map = getMapProductResult(pageResult);
 			return ResponseEntity.ok(map);
 		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new MessageResponse("Đã có lỗi xảy ra"), HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -67,31 +85,64 @@ public class CustomerController {
 		Customer customer = customerServ.findById(id);
 		if (customer != null)
 			return ResponseEntity.ok(customer);
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new MessageResponse("Đã có lỗi xảy ra"), HttpStatus.BAD_REQUEST);
 	}
 
 	@PostMapping("/customer")
-	public ResponseEntity<?> addCustomer(@RequestBody CustomerModel customerModel) {
+	public ResponseEntity<?> addCustomer(@Valid @RequestBody CustomerModel customerModel, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse(bindingResult.getFieldError().getDefaultMessage()));
+		}
+		AccountModel accountModel = customerModel.getAccount();
+		if (customerModel.getId() == null) {
+			if (accountServ.existsByUsername(accountModel.getUsername())) {
+				return ResponseEntity.badRequest()
+						.body(new MessageResponse("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác"));
+			}
+
+			if (accountServ.existsByEmail(accountModel.getEmail())) {
+				return ResponseEntity.badRequest()
+						.body(new MessageResponse("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác"));
+			}
+		}
 		Customer customer = getFromCustomerModel(customerModel);
 		Customer result = customerServ.add(customer);
 		if (result != null)
 			return ResponseEntity.ok(result);
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new MessageResponse("Đã có lỗi xảy ra"), HttpStatus.BAD_REQUEST);
 	}
 
 	@PutMapping("/customer")
-	public ResponseEntity<?> updateCustomer(@RequestBody CustomerModel customerModel) {
+	public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerModel customerModel,
+			BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse(bindingResult.getFieldError().getDefaultMessage()));
+		}
+		AccountModel accountModel = customerModel.getAccount();
+		if (customerModel.getId() == null) {
+			if (accountServ.existsByUsername(accountModel.getUsername())) {
+				return ResponseEntity.badRequest()
+						.body(new MessageResponse("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác"));
+			}
+
+			if (accountServ.existsByEmail(accountModel.getEmail())) {
+				return ResponseEntity.badRequest()
+						.body(new MessageResponse("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác"));
+			}
+		}
 		Customer customer = getFromCustomerModel(customerModel);
 		Customer result = customerServ.update(customer);
 		if (result != null)
 			return ResponseEntity.ok(result);
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new MessageResponse("Đã có lỗi xảy ra"), HttpStatus.BAD_REQUEST);
 	}
 
 	@DeleteMapping("/customer/{id}")
 	public ResponseEntity<?> deleteCustomer(@PathVariable("id") Long id) {
 		customerServ.delete(id);
-		return ResponseEntity.ok("Xoa thanh cong khach hang");
+		return ResponseEntity.ok(new MessageResponse("Xóa thành công khách hàng"));
 	}
 
 	private Sort.Direction getSortDirection(String direction) {
@@ -130,8 +181,33 @@ public class CustomerController {
 	}
 
 	private Customer getFromCustomerModel(CustomerModel customerModel) {
-		return Customer.builder().id(customerModel.getId()).email(customerModel.getEmail())
-				.name(customerModel.getName()).phone(customerModel.getPhone()).build();
+
+		Customer customer = new Customer();
+		if (customerModel != null && customerModel.getId() != null) {
+			customer = customerServ.findById(customerModel.getId());
+		}
+		customer.setName(customerModel.getName());
+		customer.setPhone(customerModel.getPhone());
+
+		AccountModel accountModel = customerModel.getAccount();
+		Account account = customer.getAccount();
+		if (account == null) {
+			account = new Account();
+			Set<Role> roles = new HashSet<>();
+			Optional<Role> optional = roleServ.findByName(EnumRole.ROLE_CUSTOMER);
+			roles.add(optional.get());
+			account.setRoles(roles);
+		}
+		account.setEnable(accountModel.isEnable());
+		account.setEmail(accountModel.getEmail());
+		account.setUsername(accountModel.getUsername());
+		account.setPassword(encoder.encode(accountModel.getPassword()));
+		if (customer.getTypeCustomer() == null) {
+			Optional<TypeCustomer> optional = typeCustomerServ.findByType(EnumTypeCustomer.NONE);
+			customer.setTypeCustomer(optional.get());
+		}
+		customer.setAccount(account);
+		return customer;
 	}
 
 }

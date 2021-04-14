@@ -45,18 +45,6 @@ public class CustomerServImpl implements CustomerServ {
 
 	@Override
 	@Transactional
-	public Page<Customer> findAllByNameLike(String name, Pageable pageable) {
-		return customerRepo.findAllByNameLike(name, pageable);
-	}
-
-	@Override
-	@Transactional
-	public Page<Customer> findAllByPhoneLike(String phone, Pageable pageable) {
-		return customerRepo.findAllByPhoneLike(phone, pageable);
-	}
-
-	@Override
-	@Transactional
 	public Page<Customer> findAll(Pageable pageable) {
 		return customerRepo.findAll(pageable);
 	}

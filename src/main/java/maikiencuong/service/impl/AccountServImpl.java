@@ -3,6 +3,8 @@ package maikiencuong.service.impl;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +41,30 @@ public class AccountServImpl implements AccountServ {
 	@Transactional
 	public Account add(Account account) {
 		return accountRepo.save(account);
+	}
+
+	@Override
+	@Transactional
+	public Page<Account> findAll(Pageable pageable) {
+		return accountRepo.findAll(pageable);
+	}
+
+	@Override
+	@Transactional
+	public Account update(Account account) {
+		return accountRepo.saveAndFlush(account);
+	}
+
+	@Override
+	@Transactional
+	public void delete(Long id) {
+		accountRepo.deleteById(id);
+	}
+
+	@Override
+	@Transactional
+	public boolean existsByEmail(String email) {
+		return accountRepo.existsByEmail(email);
 	}
 
 }

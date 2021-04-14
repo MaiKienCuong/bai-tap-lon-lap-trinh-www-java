@@ -97,6 +97,14 @@
 	<mark>api/product/size-and-inventory?id=1&color=Xanh</mark>
 	<a href="api/product/size-and-inventory?id=1&color=Xanh">size va so
 		luong ton cua mau XANH</a>
+	<br>
+	<hr>
+	<br>
+	<mark>api/categories</mark>
+	<a href="api/categories">tất cả loại sản phẩm</a>
+	<br>
+	<mark>api/orders</mark>
+	<a href="api/orders">tất cả hóa đơn</a>
 
 </body>
 </html>

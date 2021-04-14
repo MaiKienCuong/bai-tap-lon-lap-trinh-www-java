@@ -3,41 +3,36 @@ package maikiencuong.model.response;
 import java.util.List;
 
 import lombok.Getter;
-import lombok.Setter;
 import maikiencuong.entity.Customer;
-import maikiencuong.entity.User;
 
+@Getter
 public class JwtResponse {
-	@Getter
-	@Setter
-	private String accessToken;
 
-	@Getter
-	@Setter
-	private String tokenType = "Bearer";
-
-	@Getter
 	private Long id;
 
-	@Getter
 	private String username;
 
-	@Getter
-	private Customer customer;
+	private String tokenType = "Bearer";
 
-	@Getter
-	private User user;
+	private String accessToken;
 
-	@Getter
+	private String email;
+
+	private boolean enable;
+
 	private List<String> roles;
 
-	public JwtResponse(String accessToken, Long id, String username, Customer customer, User user, List<String> roles) {
-		this.accessToken = accessToken;
+	private Customer customer;
+
+	public JwtResponse(Long id, String username, String accessToken, String email, boolean enable, List<String> roles,
+			Customer customer) {
 		this.id = id;
 		this.username = username;
-		this.customer = customer;
-		this.user = user;
+		this.accessToken = accessToken;
+		this.email = email;
+		this.enable = enable;
 		this.roles = roles;
+		this.customer = customer;
 	}
 
 }

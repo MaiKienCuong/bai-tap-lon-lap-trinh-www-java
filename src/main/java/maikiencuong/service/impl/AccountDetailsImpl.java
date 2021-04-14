@@ -8,12 +8,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.Getter;
 import maikiencuong.entity.Account;
 import maikiencuong.entity.Customer;
-import maikiencuong.entity.User;
 
 public class AccountDetailsImpl implements UserDetails {
 
@@ -24,30 +24,27 @@ public class AccountDetailsImpl implements UserDetails {
 
 	private String username;
 
-	@JsonIgnore
-	private boolean enable;
+	@Getter
+	private String email;
 
-	@JsonIgnore
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
-	@JsonIgnore
-	@Getter
-	private User user;
+	private boolean enable;
 
-	@JsonIgnore
 	@Getter
 	private Customer customer;
 
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public AccountDetailsImpl(Long id, String username, boolean enable, String password, Customer customer, User user,
-			Collection<? extends GrantedAuthority> authorities) {
+	public AccountDetailsImpl(Long id, String username, String email, boolean enable, String password,
+			Customer customer, Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.username = username;
+		this.email = email;
 		this.enable = enable;
 		this.password = password;
 		this.customer = customer;
-		this.user = user;
 		this.authorities = authorities;
 	}
 
@@ -55,8 +52,8 @@ public class AccountDetailsImpl implements UserDetails {
 		List<GrantedAuthority> authorities = account.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 
-		return new AccountDetailsImpl(account.getId(), account.getUsername(), account.isEnable(), account.getPassword(),
-				account.getCustomer(), account.getUser(), authorities);
+		return new AccountDetailsImpl(account.getId(), account.getUsername(), account.getEmail(), account.isEnable(),
+				account.getPassword(), account.getCustomer(), authorities);
 	}
 
 	@Override

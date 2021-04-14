@@ -83,7 +83,7 @@ public class ProductContr {
 			if (query == null) {
 				return ResponseEntity.ok(new HashMap<String, Object>());
 			} else {
-				pageResult = productServ.findAllByNameLikeOrCategoryLike("%" + query + "%", "%" + query + "%",
+				pageResult = productServ.findAllByNameLikeOrCategory_NameLike("%" + query + "%", "%" + query + "%",
 						pageable);
 				Map<String, Object> map = getMapProductResult(pageResult);
 				return ResponseEntity.ok(map);
@@ -105,7 +105,7 @@ public class ProductContr {
 			if (query == null) {
 				return ResponseEntity.ok(new HashMap<String, Object>());
 			} else {
-				pageResult = productServ.findAllByCategoryLike("%" + query + "%", pageable);
+				pageResult = productServ.findAllByCategory_NameLike("%" + query + "%", pageable);
 				Map<String, Object> map = getMapProductResult(pageResult);
 				return ResponseEntity.ok(map);
 			}

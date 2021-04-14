@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,6 +33,8 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
+@AllArgsConstructor
+@Builder
 public class Product {
 
 	@Id
@@ -74,9 +78,6 @@ public class Product {
 	@Column(name = "material", columnDefinition = "nvarchar(255)")
 	private String material;
 
-	@Column(name = "category", columnDefinition = "nvarchar(255)")
-	private String category;
-
 	private boolean active;
 
 	@Column(name = "created_at")
@@ -111,5 +112,10 @@ public class Product {
 	@ToString.Exclude
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
 	private List<SubProduct> subProducts;
+
+	@ManyToOne
+	@ToString.Exclude
+	@JoinColumn(name = "category_id")
+	private Category category;
 
 }

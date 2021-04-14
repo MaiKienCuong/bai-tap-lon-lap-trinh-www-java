@@ -18,9 +18,9 @@ import maikiencuong.entity.Product;
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Long> {
 
-	public Page<Product> findAllByCategoryLike(String category, Pageable pageable);
+	public Page<Product> findAllByCategory_NameLike(String category, Pageable pageable);
 
-	public Page<Product> findAllByNameLikeOrCategoryLike(String name, String category, Pageable pageable);
+	public Page<Product> findAllByNameLikeOrCategory_NameLike(String name, String category, Pageable pageable);
 
 	public Page<Product> findAllByMarkerIn(String[] markers, Pageable pageable);
 

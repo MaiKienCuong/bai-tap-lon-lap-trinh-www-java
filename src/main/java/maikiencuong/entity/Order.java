@@ -16,8 +16,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +30,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
+@Builder
 public class Order {
 
 	@Id
@@ -37,10 +41,8 @@ public class Order {
 	private Long id;
 
 	@Column(name = "order_date")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
 	private Date orderDate;
-
-//	@Column(name = "shipped_date")
-//	private Date shippedDate;
 
 	@Column(name = "ship_address", columnDefinition = "nvarchar(255)")
 	private String shipAddress;
@@ -54,9 +56,6 @@ public class Order {
 	@Column(name = "payment_method", columnDefinition = "nvarchar(255)")
 	private String paymentMethod;
 
-	@Column(name = "payment_status", columnDefinition = "nvarchar(255)")
-	private String paymentStatus;
-
 	@PrePersist
 	public void prePersist() {
 		orderDate = new Date(new java.util.Date().getTime());
@@ -64,15 +63,15 @@ public class Order {
 
 	// ----------------------
 
-	@JsonIgnore
+//	@JsonIgnore
 	@ToString.Exclude
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 
-	@JsonIgnore
+//	@JsonIgnore
 	@ToString.Exclude
-	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-	private List<OrderDetail> orderDetailss;
+	@OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+	private List<OrderDetail> orderDetails;
 
 }
