@@ -65,7 +65,6 @@ public class CustomerController {
 	@GetMapping("/customers")
 	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort) {
-
 		try {
 			List<Order> orders = getListSortOrder(sort);
 			Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
@@ -88,7 +87,8 @@ public class CustomerController {
 	@PostMapping("/customer")
 	public ResponseEntity<?> addCustomer(@Valid @RequestBody CustomerModel customerModel) {
 		Customer customer = getFromCustomerModel(customerModel);
-		if (accountServ.existsByUsername(customer.getAccount().getUsername())) {
+		Account account = customer.getAccount();
+		if (accountServ.existsByUsername(account.getUsername())) {
 			return ResponseEntity.badRequest()
 					.body(new MessageResponse("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác"));
 		}
@@ -176,9 +176,11 @@ public class CustomerController {
 			roles.add(roleServ.findByName(EnumRole.ROLE_CUSTOMER).get());
 			account.setRoles(roles);
 		}
+		if (!account.getUsername().equals(accountModel.getUsername()))
+			account.setUsername(accountModel.getUsername());
+		if (!account.getEmail().equals(accountModel.getEmail()))
+			account.setEmail(accountModel.getEmail());
 		account.setEnable(accountModel.isEnable());
-		account.setEmail(accountModel.getEmail());
-		account.setUsername(accountModel.getUsername());
 		account.setPassword(encoder.encode(accountModel.getPassword()));
 		if (customer.getTypeCustomer() == null) {
 			customer.setTypeCustomer(typeCustomerServ.findByType(EnumTypeCustomer.NONE).get());
