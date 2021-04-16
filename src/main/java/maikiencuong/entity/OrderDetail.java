@@ -1,7 +1,5 @@
 package maikiencuong.entity;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -40,7 +38,7 @@ public class OrderDetail {
 	private Integer quantity;
 
 	@Column(name = "price", nullable = false)
-	private BigDecimal price;
+	private Double price;
 
 	// ------------------------
 
@@ -54,5 +52,9 @@ public class OrderDetail {
 	@ManyToOne
 	@JoinColumn(name = "subProduct_id")
 	private SubProduct subProduct;
+
+	public Double lineTotal() {
+		return price * quantity;
+	}
 
 }

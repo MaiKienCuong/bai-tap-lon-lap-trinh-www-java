@@ -1,6 +1,5 @@
 package maikiencuong.entity;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class Product {
 	private String name;
 
 	@Column(name = "price")
-	private BigDecimal price;
+	private Double price;
 
 	@Column(name = "url", columnDefinition = "varchar(255)")
 	private String url;

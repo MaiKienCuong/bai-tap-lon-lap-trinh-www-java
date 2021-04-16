@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +34,6 @@ import maikiencuong.entity.Customer;
 import maikiencuong.entity.EnumRole;
 import maikiencuong.entity.EnumTypeCustomer;
 import maikiencuong.entity.Role;
-import maikiencuong.entity.TypeCustomer;
 import maikiencuong.model.request.AccountModel;
 import maikiencuong.model.request.CustomerModel;
 import maikiencuong.model.response.MessageResponse;
@@ -89,24 +86,17 @@ public class CustomerController {
 	}
 
 	@PostMapping("/customer")
-	public ResponseEntity<?> addCustomer(@Valid @RequestBody CustomerModel customerModel, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse(bindingResult.getFieldError().getDefaultMessage()));
-		}
-		AccountModel accountModel = customerModel.getAccount();
-		if (customerModel.getId() == null) {
-			if (accountServ.existsByUsername(accountModel.getUsername())) {
-				return ResponseEntity.badRequest()
-						.body(new MessageResponse("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác"));
-			}
-
-			if (accountServ.existsByEmail(accountModel.getEmail())) {
-				return ResponseEntity.badRequest()
-						.body(new MessageResponse("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác"));
-			}
-		}
+	public ResponseEntity<?> addCustomer(@Valid @RequestBody CustomerModel customerModel) {
 		Customer customer = getFromCustomerModel(customerModel);
+		if (accountServ.existsByUsername(customer.getAccount().getUsername())) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác"));
+		}
+
+		if (accountServ.existsByEmail(customer.getAccount().getEmail())) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác"));
+		}
 		Customer result = customerServ.add(customer);
 		if (result != null)
 			return ResponseEntity.ok(result);
@@ -114,25 +104,17 @@ public class CustomerController {
 	}
 
 	@PutMapping("/customer")
-	public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerModel customerModel,
-			BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse(bindingResult.getFieldError().getDefaultMessage()));
-		}
-		AccountModel accountModel = customerModel.getAccount();
-		if (customerModel.getId() == null) {
-			if (accountServ.existsByUsername(accountModel.getUsername())) {
-				return ResponseEntity.badRequest()
-						.body(new MessageResponse("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác"));
-			}
-
-			if (accountServ.existsByEmail(accountModel.getEmail())) {
-				return ResponseEntity.badRequest()
-						.body(new MessageResponse("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác"));
-			}
-		}
+	public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerModel customerModel) {
 		Customer customer = getFromCustomerModel(customerModel);
+		if (accountServ.existsByUsername(customer.getAccount().getUsername())) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác"));
+		}
+
+		if (accountServ.existsByEmail(customer.getAccount().getEmail())) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác"));
+		}
 		Customer result = customerServ.update(customer);
 		if (result != null)
 			return ResponseEntity.ok(result);
@@ -181,21 +163,17 @@ public class CustomerController {
 	}
 
 	private Customer getFromCustomerModel(CustomerModel customerModel) {
-
 		Customer customer = new Customer();
-		if (customerModel != null && customerModel.getId() != null) {
+		AccountModel accountModel = customerModel.getAccount();
+		if (customerModel.getId() != null) {
 			customer = customerServ.findById(customerModel.getId());
 		}
-		customer.setName(customerModel.getName());
-		customer.setPhone(customerModel.getPhone());
 
-		AccountModel accountModel = customerModel.getAccount();
 		Account account = customer.getAccount();
 		if (account == null) {
 			account = new Account();
 			Set<Role> roles = new HashSet<>();
-			Optional<Role> optional = roleServ.findByName(EnumRole.ROLE_CUSTOMER);
-			roles.add(optional.get());
+			roles.add(roleServ.findByName(EnumRole.ROLE_CUSTOMER).get());
 			account.setRoles(roles);
 		}
 		account.setEnable(accountModel.isEnable());
@@ -203,9 +181,10 @@ public class CustomerController {
 		account.setUsername(accountModel.getUsername());
 		account.setPassword(encoder.encode(accountModel.getPassword()));
 		if (customer.getTypeCustomer() == null) {
-			Optional<TypeCustomer> optional = typeCustomerServ.findByType(EnumTypeCustomer.NONE);
-			customer.setTypeCustomer(optional.get());
+			customer.setTypeCustomer(typeCustomerServ.findByType(EnumTypeCustomer.NONE).get());
 		}
+		customer.setName(customerModel.getName());
+		customer.setPhone(customerModel.getPhone());
 		customer.setAccount(account);
 		return customer;
 	}

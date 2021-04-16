@@ -1,7 +1,5 @@
 package maikiencuong.model.request;
 
-import java.math.BigDecimal;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,10 +9,10 @@ public class OrderDetailModel {
 
 	private Integer quantity;
 
-	private BigDecimal price;
+	private Double price;
 
 	// ------------------------
 
 	private SubProductModel subProduct;
-	
+
 }

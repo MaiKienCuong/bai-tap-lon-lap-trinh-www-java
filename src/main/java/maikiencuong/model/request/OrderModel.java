@@ -17,6 +17,6 @@ public class OrderModel {
 
 	private CustomerModel customer;
 
-	private List<OrderDetailModel> orderDetailss;
+	private List<OrderDetailModel> orderDetails;
 
 }

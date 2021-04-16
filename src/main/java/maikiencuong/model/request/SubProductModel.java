@@ -9,6 +9,4 @@ public class SubProductModel {
 
 	private Long id;
 
-	private InvenColorSizeModel invenColorSize;
-
 }

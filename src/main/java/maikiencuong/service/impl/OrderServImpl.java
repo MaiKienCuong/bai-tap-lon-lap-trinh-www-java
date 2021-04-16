@@ -31,4 +31,22 @@ public class OrderServImpl implements OrderServ {
 		return optional.isEmpty() ? optional.get() : null;
 	}
 
+	@Override
+	@Transactional
+	public Order add(Order order) {
+		return orderRepo.save(order);
+	}
+
+	@Override
+	@Transactional
+	public Order update(Order order) {
+		return orderRepo.saveAndFlush(order);
+	}
+
+	@Override
+	@Transactional
+	public void delete(Long id) {
+		orderRepo.deleteById(id);
+	}
+
 }

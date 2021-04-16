@@ -1,11 +1,13 @@
 package maikiencuong.entity;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,11 +49,12 @@ public class Order {
 	@Column(name = "ship_address", columnDefinition = "nvarchar(255)")
 	private String shipAddress;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "status", columnDefinition = "nvarchar(255)")
-	private String status;
+	private EnumStatusOrder status;
 
 	@Column(name = "total")
-	private BigDecimal total;
+	private Double total;
 
 	@Column(name = "payment_method", columnDefinition = "nvarchar(255)")
 	private String paymentMethod;
@@ -59,6 +62,8 @@ public class Order {
 	@PrePersist
 	public void prePersist() {
 		orderDate = new Date(new java.util.Date().getTime());
+		status = EnumStatusOrder.ĐANG_CHỜ;
+		sumTotal();
 	}
 
 	// ----------------------
@@ -71,7 +76,15 @@ public class Order {
 
 //	@JsonIgnore
 	@ToString.Exclude
-	@OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<OrderDetail> orderDetails;
+
+	public Double sumTotal() {
+		total = 0d;
+		if (!orderDetails.isEmpty()) {
+			orderDetails.forEach(x -> total += x.lineTotal());
+		}
+		return total;
+	}
 
 }

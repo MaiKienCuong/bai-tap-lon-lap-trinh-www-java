@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,7 @@ public class CategoryController {
 	@Autowired
 	private CategoryServ categoryServ;
 
-	@RequestMapping("/categories")
+	@GetMapping("/categories")
 	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort) {
 
@@ -73,4 +74,5 @@ public class CategoryController {
 		map.put("totalPages", pageResult.getTotalPages());
 		return map;
 	}
+
 }

@@ -14,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -72,12 +71,12 @@ public class AuthController {
 	 * @return
 	 */
 	@PostMapping("/signin")
-	public ResponseEntity<?> signin(@Valid @RequestBody LoginModel request, BindingResult bindingResult) {
+	public ResponseEntity<?> signin(@Valid @RequestBody LoginModel request) {
 
-		if (bindingResult.hasErrors()) {
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse(bindingResult.getFieldError().getDefaultMessage()));
-		}
+//		if (bindingResult.hasErrors()) {
+//			return ResponseEntity.badRequest()
+//					.body(new MessageResponse(bindingResult.getFieldError().getDefaultMessage()));
+//		}
 		Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
@@ -100,11 +99,11 @@ public class AuthController {
 	 * @return
 	 */
 	@PostMapping("/signup")
-	public ResponseEntity<?> signup(@Valid @RequestBody CustomerModel request, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			return ResponseEntity.badRequest()
-					.body(new MessageResponse(bindingResult.getFieldError().getDefaultMessage()));
-		}
+	public ResponseEntity<?> signup(@Valid @RequestBody CustomerModel request) {
+//		if (bindingResult.hasErrors()) {
+//			return ResponseEntity.badRequest()
+//					.body(new MessageResponse(bindingResult.getFieldError().getDefaultMessage()));
+//		}
 		AccountModel accountModel = request.getAccount();
 		if (accountServ.existsByUsername(accountModel.getUsername())) {
 			return ResponseEntity.badRequest()
@@ -122,18 +121,19 @@ public class AuthController {
 
 		Set<Role> roles = new HashSet<>();
 		Role userRole = roleServ.findByName(EnumRole.ROLE_CUSTOMER)
-				.orElseThrow(() -> new RuntimeException("Role này chưa được lưu trong database"));
+				.orElseThrow(() -> new RuntimeException("Role này chưa có trong database"));
 		roles.add(userRole);
 		account.setRoles(roles);
 
 		TypeCustomer typeCustomer = typeCustomerServ.findByType(EnumTypeCustomer.NONE)
-				.orElseThrow(() -> new RuntimeException("Loại khách hàng này chưa được lưu trong database"));
+				.orElseThrow(() -> new RuntimeException("Loại khách hàng này chưa có trong database"));
 
 		Customer customer = Customer.builder().account(account).name(request.getName()).phone(request.getPhone())
 				.typeCustomer(typeCustomer).build();
 		Customer result = customerServ.add(customer);
-
-		return ResponseEntity.ok(result);
+		if (result != null)
+			return ResponseEntity.ok(new MessageResponse("Đăng ký tài khoản thành công"));
+		return ResponseEntity.ok(new MessageResponse("Đăng ký không thành công"));
 
 	}
 

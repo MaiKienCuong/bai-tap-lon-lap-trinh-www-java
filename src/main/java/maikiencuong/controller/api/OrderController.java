@@ -13,11 +13,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import maikiencuong.entity.Customer;
+import maikiencuong.entity.OrderDetail;
+import maikiencuong.model.request.OrderModel;
+import maikiencuong.service.CustomerServ;
 import maikiencuong.service.OrderServ;
+import maikiencuong.service.SubProductServ;
 
 @RestController
 @RequestMapping("/api")
@@ -26,6 +33,12 @@ public class OrderController {
 
 	@Autowired
 	private OrderServ orderServ;
+	
+	@Autowired
+	private CustomerServ customerServ;
+	
+	@Autowired
+	private SubProductServ subProductServ;
 
 	@RequestMapping("/orders")
 	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
@@ -36,6 +49,31 @@ public class OrderController {
 		Page<maikiencuong.entity.Order> pageResult = orderServ.findAll(pageable);
 		Map<String, Object> map = getMapOrderResult(pageResult);
 		return ResponseEntity.ok(map);
+	}
+
+	@PostMapping("/order")
+	public ResponseEntity<?> addOrder(@RequestBody OrderModel orderModel) {
+		Customer customer = customerServ.findById(orderModel.getCustomer().getId());
+		List<OrderDetail> orderDetails=new ArrayList<OrderDetail>();
+		
+		maikiencuong.entity.Order order=maikiencuong.entity.Order.builder()
+				.customer(customer)
+				.shipAddress(orderModel.getShipAddress())
+				.paymentMethod(orderModel.getPaymentMethod())
+				.build();
+		
+		orderModel.getOrderDetails().forEach(o->{
+			OrderDetail detail=OrderDetail.builder()
+					.quantity(o.getQuantity())
+					.price(o.getPrice())
+					.order(order)
+					.subProduct(subProductServ.findById(o.getSubProduct().getId()))
+					.build();
+			orderDetails.add(detail);
+		});
+		order.setOrderDetails(orderDetails);
+		maikiencuong.entity.Order result = orderServ.add(order);
+		return ResponseEntity.ok(result);
 	}
 
 	private Sort.Direction getSortDirection(String direction) {
