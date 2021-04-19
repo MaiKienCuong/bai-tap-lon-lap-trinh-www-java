@@ -1,13 +1,10 @@
 package maikiencuong.repository;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import maikiencuong.dto.SizeColorInventory;
 import maikiencuong.entity.SubProduct;
 
 /**
@@ -21,17 +18,10 @@ import maikiencuong.entity.SubProduct;
 @Repository
 public interface SubProductRepo extends JpaRepository<SubProduct, Long> {
 
-	@Query("select new maikiencuong.dto.SizeColorInventory(s.size, -1) from SubProduct s where s.product.id=:id")
-	public Set<SizeColorInventory> sizeById(@Param("id") Long id);
+	public List<SubProduct> findAllByProduct_Id(Long id);
 
-	@Query("select new maikiencuong.dto.SizeColorInventory(s.color) from SubProduct s where s.product.id=:id")
-	public Set<SizeColorInventory> colorById(@Param("id") Long id);
+	public List<SubProduct> findAllByProduct_IdAndColor(Long id, String color);
 
-	@Query("select new maikiencuong.dto.SizeColorInventory(s.size, s.inventory) from SubProduct s where s.product.id=:id and s.color=:color")
-	public Set<SizeColorInventory> inventoryAndSizeByIdAndColor(@Param("id") Long id, @Param("color") String color);
-
-	@Query("select new maikiencuong.dto.SizeColorInventory(s.color, s.size, s.inventory) from SubProduct s where s.product.id=:id and s.color=:color and s.size=:size")
-	public Set<SizeColorInventory> invenColorSizeByIdAndColorAndSize(@Param("id") Long id, @Param("color") String color,
-			@Param("size") String size);
+	public List<SubProduct> findAllByProduct_IdAndColorAndSize(Long id, String color, String size);
 
 }

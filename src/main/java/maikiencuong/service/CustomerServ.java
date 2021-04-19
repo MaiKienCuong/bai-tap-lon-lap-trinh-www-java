@@ -21,4 +21,6 @@ public interface CustomerServ {
 
 	public boolean existsByEmail(String email);
 
+	public Customer findByEmail(String email);
+
 }

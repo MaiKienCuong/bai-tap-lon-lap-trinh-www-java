@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,8 +22,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import maikiencuong.dto.SizeColorInventory;
+import maikiencuong.dto.ColorDTO;
+import maikiencuong.dto.ProductDTO;
+import maikiencuong.dto.SizeDTO;
+import maikiencuong.dto.SizeInventoryDTO;
 import maikiencuong.entity.Product;
+import maikiencuong.entity.SubProduct;
 import maikiencuong.service.ProductServ;
 import maikiencuong.service.SubProductServ;
 
@@ -35,6 +41,9 @@ public class ProductApi {
 
 	@Autowired
 	private SubProductServ subProductServ;
+
+	@Autowired
+	private ModelMapper modelMapper;
 
 	/**
 	 * <p>
@@ -105,7 +114,7 @@ public class ProductApi {
 	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
 		Product result = productServ.findById(id);
 		if (result != null)
-			return ResponseEntity.ok(result);
+			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
 		return ResponseEntity.ok("Không tìm thấy sản phẩm");
 	}
 
@@ -118,9 +127,12 @@ public class ProductApi {
 	 */
 	@RequestMapping("/product/sizes/{id}")
 	public ResponseEntity<?> listSizeById(@PathVariable("id") Long id) {
-		Set<SizeColorInventory> set = subProductServ.sizeById(id);
-		if (!set.isEmpty())
+		List<SubProduct> list = subProductServ.findAllByProduct_Id(id);
+		if (!list.isEmpty()) {
+			Set<SizeDTO> set = modelMapper.map(list, new TypeToken<Set<SizeDTO>>() {
+			}.getType());
 			return ResponseEntity.ok(set);
+		}
 		return ResponseEntity.ok("Danh sách trống");
 	}
 
@@ -133,9 +145,12 @@ public class ProductApi {
 	 */
 	@RequestMapping("/product/colors/{id}")
 	public ResponseEntity<?> listColorById(@PathVariable("id") Long id) {
-		Set<SizeColorInventory> set = subProductServ.colorById(id);
-		if (!set.isEmpty())
+		List<SubProduct> list = subProductServ.findAllByProduct_Id(id);
+		if (!list.isEmpty()) {
+			Set<ColorDTO> set = modelMapper.map(list, new TypeToken<Set<ColorDTO>>() {
+			}.getType());
 			return ResponseEntity.ok(set);
+		}
 		return ResponseEntity.ok("Danh sách trống");
 	}
 
@@ -149,9 +164,12 @@ public class ProductApi {
 	 */
 	@RequestMapping("/product/size-and-inventory")
 	public ResponseEntity<?> listSizeByIdAndColor(@RequestParam("id") Long id, @RequestParam("color") String color) {
-		Set<SizeColorInventory> set = subProductServ.inventoryAndSizeByIdAndColor(id, color);
-		if (!set.isEmpty())
+		List<SubProduct> list = subProductServ.findAllByProduct_IdAndColor(id, color);
+		if (!list.isEmpty()) {
+			Set<SizeInventoryDTO> set = modelMapper.map(list, new TypeToken<Set<SizeInventoryDTO>>() {
+			}.getType());
 			return ResponseEntity.ok(set);
+		}
 		return ResponseEntity.ok("Danh sách trống");
 	}
 
@@ -215,7 +233,9 @@ public class ProductApi {
 
 	private Map<String, Object> getMapProductResult(Page<Product> pageResult) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("products", pageResult.getContent());
+		List<ProductDTO> list = modelMapper.map(pageResult.getContent(), new TypeToken<List<ProductDTO>>() {
+		}.getType());
+		map.put("products", list);
 		map.put("currentPage", pageResult.getNumber());
 		map.put("totalItems", pageResult.getTotalElements());
 		map.put("totalPages", pageResult.getTotalPages());

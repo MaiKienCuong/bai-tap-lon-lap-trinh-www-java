@@ -2,12 +2,15 @@ package maikiencuong.dto;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CustomerDTO implements Serializable{
+public class CustomerDTO implements Serializable {
 
 	/**
 	 * 
@@ -18,12 +21,16 @@ public class CustomerDTO implements Serializable{
 
 	private String name;
 
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String phone;
 
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String email;
 
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String address;
 
+//	@JsonProperty(access = Access.WRITE_ONLY)
 	private AccountDTO account;
 
 }

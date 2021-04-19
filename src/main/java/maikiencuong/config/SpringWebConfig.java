@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -31,7 +32,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import maikiencuong.dto.DTOModelMapper;
+import maikiencuong.dto.mapper.DTOModelMapper;
 
 @EnableWebMvc
 @Configuration
@@ -39,17 +40,18 @@ import maikiencuong.dto.DTOModelMapper;
 @ComponentScan({ "maikiencuong" })
 @PropertySource("classpath:application.properties")
 @EnableJpaRepositories("maikiencuong.repository")
+@EnableAspectJAutoProxy
 public class SpringWebConfig implements WebMvcConfigurer {
 
 	private static final String PROP_DATABASE_URL = "db.url";
 	private static final String PROP_DATABASE_DRIVER = "db.driver";
 	private static final String PROP_DATABASE_PASSWORD = "db.password";
 	private static final String PROP_DATABASE_USERNAME = "db.username";
-	private static final String PROP_ENTITYMANAGER_PACKAGES_TO_SCAN = "db.entitymanager.packages.to.scan";
 	private static final String PROP_HIBERNATE_DIALECT = "hibernate.dialect";
 	private static final String PROP_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
 	private static final String PROP_HIBERNATE_FORMAT_SQL = "hibernate.format_sql";
 	private static final String PROP_HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
+	private static final String PROP_ENTITYMANAGER_PACKAGES_TO_SCAN = "db.entitymanager.packages.to.scan";
 
 	@Autowired
 	private Environment evn;
@@ -64,11 +66,6 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		viewResolver.setPrefix("/WEB-INF/");
 		viewResolver.setSuffix(".jsp");
 		return viewResolver;
-	}
-
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/src/**").addResourceLocations("/src/");
 	}
 
 	/* config jpa */
@@ -103,7 +100,8 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	@Bean
 	public ModelMapper modelMapper() {
 		ModelMapper modelMapper = new ModelMapper();
-		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		modelMapper.getConfiguration().setSkipNullEnabled(true);
 		return modelMapper;
 	}
 
@@ -116,6 +114,11 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		EntityManager entityManager = entityManagerFactory().getObject().createEntityManager();
 		argumentResolvers.add(new DTOModelMapper(objectMapper(), entityManager, modelMapper()));
+	}
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/src/**").addResourceLocations("/src/");
 	}
 
 	private Properties hibernateProperties() {

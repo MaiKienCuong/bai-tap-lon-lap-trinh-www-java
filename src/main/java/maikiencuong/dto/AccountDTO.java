@@ -21,7 +21,7 @@ public class AccountDTO implements Serializable {
 	private String username;
 
 	private boolean enable;
-	
+
 	private Set<Role> roles;
 
 }

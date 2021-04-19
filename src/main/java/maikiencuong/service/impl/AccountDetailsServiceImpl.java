@@ -1,5 +1,7 @@
 package maikiencuong.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,10 +20,11 @@ public class AccountDetailsServiceImpl implements UserDetailsService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Account account = accountRepo.findByUsername(username);
-		if (account == null)
+		Optional<Account> optional = accountRepo.findByUsername(username);
+		if (optional.isPresent()) {
+			return AccountDetailsImpl.build(optional.get());
+		} else
 			throw new UsernameNotFoundException("Không tìm thấy tài khoản có username: " + username);
-		return AccountDetailsImpl.build(account);
 	}
 
 }

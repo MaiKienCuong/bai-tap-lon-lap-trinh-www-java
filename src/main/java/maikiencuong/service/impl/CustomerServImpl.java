@@ -61,4 +61,11 @@ public class CustomerServImpl implements CustomerServ {
 		return customerRepo.existsByEmail(email);
 	}
 
+	@Override
+	@Transactional
+	public Customer findByEmail(String email) {
+		Optional<Customer> optional = customerRepo.findByEmail(email);
+		return optional.isPresent() ? optional.get() : null;
+	}
+
 }

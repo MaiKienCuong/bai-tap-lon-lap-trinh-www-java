@@ -1,4 +1,4 @@
-package maikiencuong.dto;
+package maikiencuong.dto.create;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -36,6 +36,6 @@ public class AccountCreateDTO implements Serializable {
 	private boolean enable = true;
 
 	@JsonIgnore
-	private Set<Role> roles = new HashSet<Role>(Arrays.asList(new Role(EnumRole.ROLE_CUSTOMER)));
+	private Set<Role> roles = new HashSet<>(Arrays.asList(new Role(EnumRole.ROLE_CUSTOMER)));
 
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,18 +15,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import maikiencuong.dto.OrderDTO;
-import maikiencuong.entity.Customer;
-import maikiencuong.entity.OrderDetail;
-import maikiencuong.service.CustomerServ;
+import maikiencuong.dto.create.OrderCreateDTO;
+import maikiencuong.dto.mapper.DTO;
+import maikiencuong.handler.MyExcetion;
 import maikiencuong.service.OrderServ;
-import maikiencuong.service.SubProductServ;
 
 @RestController
 @RequestMapping("/api")
@@ -35,36 +37,33 @@ public class OrderApi {
 	private OrderServ orderServ;
 
 	@Autowired
-	private CustomerServ customerServ;
+	private ModelMapper modelMapper;
 
-	@Autowired
-	private SubProductServ subProductServ;
-
-	@RequestMapping("/orders")
+	@GetMapping("/orders")
 	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "id-asc") String[] sort) {
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "id-asc") String[] sort)
+			throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);
 		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
 		Page<maikiencuong.entity.Order> pageResult = orderServ.findAll(pageable);
-		Map<String, Object> map = getMapOrderResult(pageResult);
-		return ResponseEntity.ok(map);
+		return ResponseEntity.ok(getMapOrderResult(pageResult));
+	}
+
+	@GetMapping("/orders/customer/{id}")
+	public ResponseEntity<?> findAllByCustomerId(@RequestParam(defaultValue = "8") int size,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "id-asc") String[] sort,
+			@PathVariable("id") Long id) throws MyExcetion {
+		List<Order> orders = getListSortOrder(sort);
+		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
+		Page<maikiencuong.entity.Order> pageResult = orderServ.findAllByCustomer_Id(id, pageable);
+		return ResponseEntity.ok(getMapOrderResult(pageResult));
 	}
 
 	@PostMapping("/order")
-	public ResponseEntity<?> addOrder(@RequestBody OrderDTO orderModel) {
-		Customer customer = customerServ.findById(orderModel.getCustomer().getId());
-		List<OrderDetail> orderDetails = new ArrayList<>();
-		maikiencuong.entity.Order order = maikiencuong.entity.Order.builder().customer(customer)
-				.shipAddress(orderModel.getShipAddress()).paymentMethod(orderModel.getPaymentMethod()).build();
-		orderModel.getOrderDetails().forEach(o -> {
-			OrderDetail detail = OrderDetail.builder().quantity(o.getQuantity()).price(o.getPrice()).order(order)
-					.subProduct(subProductServ.findById(o.getSubProduct().getId())).build();
-			orderDetails.add(detail);
-		});
-		order.setOrderDetails(orderDetails);
+	public ResponseEntity<?> addOrder(@DTO(OrderCreateDTO.class) maikiencuong.entity.Order order) {
 		maikiencuong.entity.Order result = orderServ.add(order);
 		if (result != null)
-			return ResponseEntity.ok(result);
+			return ResponseEntity.ok(modelMapper.map(result, OrderDTO.class));
 		return ResponseEntity.ok("Thêm hóa đơn không thành công");
 	}
 
@@ -77,28 +76,28 @@ public class OrderApi {
 		return Sort.Direction.ASC;
 	}
 
-	private List<Order> getListSortOrder(String[] sort) {
+	private List<Order> getListSortOrder(String[] sort) throws MyExcetion {
 		List<Order> orders = new ArrayList<>();
-		if (sort.length > 1) {
+		try {
 			if (sort[0].contains("-")) {
-				// neu sort tren nhieu hon 1 field
-				// ?sort=id-desc&sort=title-asc
 				for (String sortOrder : sort) {
 					String[] subSort = sortOrder.split("-");
 					orders.add(new Order(getSortDirection(subSort[1]), subSort[0]));
 				}
 			} else {
-				// neu chi sort tren 1 field
-				// ?sort=id-desc
 				orders.add(new Order(getSortDirection(sort[1]), sort[0]));
 			}
+		} catch (Exception e) {
+			throw new MyExcetion("Lỗi: Vui lòng kiểm tra lại tham số sort");
 		}
 		return orders;
 	}
 
 	private Map<String, Object> getMapOrderResult(Page<maikiencuong.entity.Order> pageResult) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("orders", pageResult.getContent());
+		List<OrderDTO> list = modelMapper.map(pageResult.getContent(), new TypeToken<List<OrderDTO>>() {
+		}.getType());
+		map.put("orders", list);
 		map.put("currentPage", pageResult.getNumber());
 		map.put("totalItems", pageResult.getTotalElements());
 		map.put("totalPages", pageResult.getTotalPages());

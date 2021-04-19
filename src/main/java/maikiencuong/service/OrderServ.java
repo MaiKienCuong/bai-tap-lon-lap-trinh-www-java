@@ -17,4 +17,6 @@ public interface OrderServ {
 
 	public Page<Order> findAll(Pageable pageable);
 
+	public Page<Order> findAllByCustomer_Id(Long id, Pageable pageable);
+
 }

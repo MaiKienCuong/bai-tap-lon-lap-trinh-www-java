@@ -22,7 +22,7 @@ public class CategoryServImpl implements CategoryServ {
 	@Transactional
 	public Category findById(Long id) {
 		Optional<Category> optional = categoryRepo.findById(id);
-		return optional.isEmpty() ? optional.get() : null;
+		return optional.isPresent() ? optional.get() : null;
 	}
 
 	@Override

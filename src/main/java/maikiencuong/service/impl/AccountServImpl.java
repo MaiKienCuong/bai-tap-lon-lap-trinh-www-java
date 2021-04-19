@@ -34,7 +34,8 @@ public class AccountServImpl implements AccountServ {
 	@Override
 	@Transactional
 	public Account findByUsername(String username) {
-		return accountRepo.findByUsername(username);
+		Optional<Account> optional = accountRepo.findByUsername(username);
+		return optional.isPresent() ? optional.get() : null;
 	}
 
 	@Override

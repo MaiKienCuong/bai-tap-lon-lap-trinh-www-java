@@ -44,7 +44,7 @@ public class Account {
 	@Column(name = "username", columnDefinition = "varchar(50) not null", unique = true)
 	private String username;
 
-	@JsonProperty(access = Access.WRITE_ONLY)
+	@JsonIgnore
 	@Column(name = "password", columnDefinition = "varchar(255) not null")
 	private String password;
 
@@ -58,15 +58,14 @@ public class Account {
 		enable = true;
 	}
 
-//	@ToString.Exclude
-	@JsonProperty(access = Access.READ_ONLY)
+	@ToString.Exclude
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinTable(name = "Account_Role", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 
-	@JsonIgnore
 	@ToString.Exclude
-	@OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
+	@JsonProperty(access = Access.WRITE_ONLY)
+	@OneToOne(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Customer customer;
 
 }

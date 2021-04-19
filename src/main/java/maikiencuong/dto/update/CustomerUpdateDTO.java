@@ -1,7 +1,8 @@
-package maikiencuong.dto;
+package maikiencuong.dto.update;
 
 import java.io.Serializable;
 
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,12 +14,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CustomerCreateDTO implements Serializable {
+public class CustomerUpdateDTO implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	@Id
+	@NotNull(message = "Id khách hàng không được để trống")
+	private Long id;
 
 	@NotBlank(message = "Tên khách hàng không được để trống")
 	private String name;
@@ -35,6 +40,6 @@ public class CustomerCreateDTO implements Serializable {
 
 	@Valid
 	@NotNull(message = "Chưa có thông tin tài khoản")
-	private AccountCreateDTO account;
+	private AccountUpdateDTO account;
 
 }

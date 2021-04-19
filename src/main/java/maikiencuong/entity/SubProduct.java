@@ -1,6 +1,6 @@
 package maikiencuong.entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,11 +47,11 @@ public class SubProduct {
 
 	@Column(name = "created_at", columnDefinition = "datetime")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
-	private Date createdAt;
+	private LocalDateTime createdAt;
 
 	@Column(name = "updated_at", columnDefinition = "datetime")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
-	private Date updatedAt;
+	private LocalDateTime updatedAt;
 
 	@Column(name = "color", columnDefinition = "nvarchar(50)")
 	private String color;
@@ -65,12 +65,12 @@ public class SubProduct {
 
 	@PrePersist
 	public void prePersist() {
-		createdAt = new Date(new java.util.Date().getTime());
+		createdAt = LocalDateTime.now();
 	}
 
 	@PreUpdate
 	public void preUpdate() {
-		updatedAt = new Date(new java.util.Date().getTime());
+		updatedAt = LocalDateTime.now();
 	}
 
 	@JsonIgnore

@@ -1,4 +1,4 @@
-package maikiencuong.dto;
+package maikiencuong.dto.mapper;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -56,6 +56,8 @@ public class DTOModelMapper extends RequestResponseBodyMethodProcessor {
 			return modelMapper.map(dto, parameter.getParameterType());
 		} else {
 			Object persistedObject = entityManager.find(parameter.getParameterType(), id);
+			if (persistedObject == null)
+				return null;
 			modelMapper.map(dto, persistedObject);
 			return persistedObject;
 		}

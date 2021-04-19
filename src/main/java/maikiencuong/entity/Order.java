@@ -1,6 +1,6 @@
 package maikiencuong.entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -44,7 +44,7 @@ public class Order {
 
 	@Column(name = "order_date", columnDefinition = "datetime")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
-	private Date orderDate;
+	private LocalDateTime orderDate;
 
 	@Column(name = "ship_address", columnDefinition = "nvarchar(255)")
 	private String shipAddress;
@@ -62,21 +62,19 @@ public class Order {
 
 	@PrePersist
 	public void prePersist() {
-		orderDate = new Date(new java.util.Date().getTime());
+		orderDate = LocalDateTime.now();
 		status = EnumStatusOrder.PENDING;
 		sumTotal();
 	}
 
 	// ----------------------
 
-//	@JsonIgnore
-	@ToString.Exclude
+//	@ToString.Exclude
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 
-//	@JsonIgnore
-	@ToString.Exclude
+//	@ToString.Exclude
 	@OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<OrderDetail> orderDetails;
 

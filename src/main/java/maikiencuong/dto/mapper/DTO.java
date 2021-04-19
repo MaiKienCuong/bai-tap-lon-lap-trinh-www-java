@@ -1,4 +1,4 @@
-package maikiencuong.dto;
+package maikiencuong.dto.mapper;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

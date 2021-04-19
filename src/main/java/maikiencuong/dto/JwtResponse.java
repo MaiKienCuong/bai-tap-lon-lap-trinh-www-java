@@ -1,12 +1,19 @@
 package maikiencuong.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Getter;
-import maikiencuong.entity.Customer;
+import lombok.Setter;
 
 @Getter
-public class JwtResponse {
+@Setter
+public class JwtResponse implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private Long id;
 
@@ -20,10 +27,10 @@ public class JwtResponse {
 
 	private List<String> roles;
 
-	private Customer customer;
+	private CustomerDTO customer;
 
 	public JwtResponse(Long id, String username, String accessToken, boolean enable, List<String> roles,
-			Customer customer) {
+			CustomerDTO customer) {
 		this.id = id;
 		this.username = username;
 		this.accessToken = accessToken;

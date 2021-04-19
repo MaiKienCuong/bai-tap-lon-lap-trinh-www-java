@@ -49,4 +49,10 @@ public class OrderServImpl implements OrderServ {
 		orderRepo.deleteById(id);
 	}
 
+	@Override
+	@Transactional
+	public Page<Order> findAllByCustomer_Id(Long id, Pageable pageable) {
+		return orderRepo.findAllByCustomer_Id(id, pageable);
+	}
+
 }

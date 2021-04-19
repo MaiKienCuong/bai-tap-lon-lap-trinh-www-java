@@ -1,8 +1,7 @@
 package maikiencuong.service;
 
-import java.util.Set;
+import java.util.List;
 
-import maikiencuong.dto.SizeColorInventory;
 import maikiencuong.entity.SubProduct;
 
 /**
@@ -23,12 +22,10 @@ public interface SubProductServ {
 
 	public SubProduct update(SubProduct subProduct);
 
-	public Set<SizeColorInventory> sizeById(Long id);
+	public List<SubProduct> findAllByProduct_Id(Long id);
 
-	public Set<SizeColorInventory> colorById(Long id);
+	public List<SubProduct> findAllByProduct_IdAndColor(Long id, String color);
 
-	public Set<SizeColorInventory> inventoryAndSizeByIdAndColor(Long id, String color);
-
-	public Set<SizeColorInventory> invenColorSizeByIdAndColorAndSize(Long id, String color, String size);
+	public List<SubProduct> findAllByProduct_IdAndColorAndSize(Long id, String color, String size);
 
 }

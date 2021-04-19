@@ -2,11 +2,13 @@ package maikiencuong.handler;
 
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -38,10 +40,19 @@ public class MyHandlerException extends ResponseEntityExceptionHandler {
 		return ResponseEntity.badRequest().body(new MessageResponse(bindingResult.getFieldError().getDefaultMessage()));
 	}
 
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler(JpaSystemException.class)
 	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
-		ex.printStackTrace();
-		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi: " + ex.getMessage()));
+		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi khi thêm hoặc cập nhật dữ liệu"));
+	}
+
+	@ExceptionHandler(PropertyReferenceException.class)
+	public final ResponseEntity<Object> handlePropertyReferenceException(Exception ex, WebRequest request) {
+		return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));
+	}
+
+	@ExceptionHandler(MyExcetion.class)
+	public final ResponseEntity<Object> handleMyException(MyExcetion ex, WebRequest request) {
+		return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));
 	}
 
 	@Override
