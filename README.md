@@ -1,7 +1,7 @@
 - xoa database cu
 - chay script tao database truoc khi chay code
 
-# đăng nhập POST - api/auth/signin
+- đăng nhập POST - api/auth/signin
 {
     "username": "admin",
     "password":"admin"
@@ -15,7 +15,7 @@ cho khách hàng sửa username với điều kiện không trùng
 email không được trùng
 address k nhập thì lưu null vào db
 
-# khách hàng đăng ký mới: POST - api/customer hoặc POST - api/auth/signup
+- khách hàng đăng ký mới: POST - api/customer hoặc POST - api/auth/signup
 {
     "name": "Cường Mai Kiên",
     "phone": "0961516942",
@@ -26,7 +26,7 @@ address k nhập thì lưu null vào db
         "password":"12345678"
     }
 }
-# khách hàng sửa thông tin: PUT - api/customer
+- khách hàng sửa thông tin: PUT - api/customer
 {
     "name": "Cường Mai Kiên",
     "phone": "0961516942",
@@ -39,7 +39,7 @@ address k nhập thì lưu null vào db
     }
 }
 
-# thêm hóa đơn POST - api/order
+- thêm hóa đơn POST - api/order
 {
    "shipAddress": "ha thanh ha trung thanh hoa city",
     "paymentMethod": "STORE",
@@ -63,6 +63,6 @@ address k nhập thì lưu null vào db
     ]
 }
 
-# lấy danh sách tất cả hóa đơn của 1 khách hàng GET - api/orders/customer/{id}
+- lấy danh sách tất cả hóa đơn của 1 khách hàng GET - api/orders/customer/{id}
 
-# xem chi tiết hóa đơn của hóa đơn theo mã hóa đơn GET - api/order-detail/order/{id}
+- xem chi tiết hóa đơn của hóa đơn theo mã hóa đơn GET - api/order-detail/order/{id}
