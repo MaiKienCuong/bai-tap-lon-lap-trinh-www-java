@@ -35,4 +35,8 @@ public class Role {
 	@Column(name = "role", columnDefinition = "varchar(50) not null")
 	private EnumRole name;
 
+	public Role(EnumRole name) {
+		this.name = name;
+	}
+
 }

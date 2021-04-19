@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import maikiencuong.model.response.MessageResponse;
+import maikiencuong.dto.MessageResponse;
 
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {

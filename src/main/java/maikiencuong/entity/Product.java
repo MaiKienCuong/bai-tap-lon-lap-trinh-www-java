@@ -79,11 +79,11 @@ public class Product {
 
 	private boolean active;
 
-	@Column(name = "created_at")
+	@Column(name = "created_at", columnDefinition = "datetime")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
 	private Date createdAt;
 
-	@Column(name = "updated_at")
+	@Column(name = "updated_at", columnDefinition = "datetime")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
 	private Date updatedAt;
 

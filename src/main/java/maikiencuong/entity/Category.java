@@ -28,7 +28,7 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name", columnDefinition = "nvarchar(255)")
+	@Column(name = "name", columnDefinition = "nvarchar(255) not null")
 	private String name;
-	
+
 }

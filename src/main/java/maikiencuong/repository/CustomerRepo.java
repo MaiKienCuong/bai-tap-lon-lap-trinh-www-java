@@ -12,4 +12,6 @@ public interface CustomerRepo extends JpaRepository<Customer, Long> {
 
 	public Page<Customer> findAllByNameLikeOrPhoneLike(String name, String phone, Pageable pageable);
 
+	public boolean existsByEmail(String email);
+
 }

@@ -42,7 +42,7 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "order_date")
+	@Column(name = "order_date", columnDefinition = "datetime")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
 	private Date orderDate;
 
@@ -57,12 +57,13 @@ public class Order {
 	private Double total;
 
 	@Column(name = "payment_method", columnDefinition = "nvarchar(255)")
-	private String paymentMethod;
+	@Enumerated(EnumType.STRING)
+	private EnumPaymentMethod paymentMethod;
 
 	@PrePersist
 	public void prePersist() {
 		orderDate = new Date(new java.util.Date().getTime());
-		status = EnumStatusOrder.ĐANG_CHỜ;
+		status = EnumStatusOrder.PENDING;
 		sumTotal();
 	}
 

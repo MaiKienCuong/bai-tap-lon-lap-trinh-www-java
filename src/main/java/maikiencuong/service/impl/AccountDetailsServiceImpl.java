@@ -18,9 +18,9 @@ public class AccountDetailsServiceImpl implements UserDetailsService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Account account = accountRepo.findByUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy tài khoản có username: " + username));
-
+		Account account = accountRepo.findByUsername(username);
+		if (account == null)
+			throw new UsernameNotFoundException("Không tìm thấy tài khoản có username: " + username);
 		return AccountDetailsImpl.build(account);
 	}
 

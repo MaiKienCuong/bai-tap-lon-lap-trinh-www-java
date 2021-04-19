@@ -16,7 +16,6 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,16 +45,21 @@ public class SubProduct {
 	@Column(name = "name", columnDefinition = "nvarchar(255)")
 	private String name;
 
-	@Column(name = "created_at")
+	@Column(name = "created_at", columnDefinition = "datetime")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
 	private Date createdAt;
 
-	@Column(name = "updated_at")
+	@Column(name = "updated_at", columnDefinition = "datetime")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
 	private Date updatedAt;
 
-	@JsonUnwrapped
-	private InvenColorSize invenColorSize;
+	@Column(name = "color", columnDefinition = "nvarchar(50)")
+	private String color;
+
+	@Column(name = "size", columnDefinition = "nvarchar(50)")
+	private String size;
+
+	private Integer inventory;
 
 	// -----------
 

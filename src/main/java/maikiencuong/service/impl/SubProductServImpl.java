@@ -1,6 +1,5 @@
 package maikiencuong.service.impl;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -8,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import maikiencuong.entity.InvenColorSize;
+import maikiencuong.dto.SizeColorInventory;
 import maikiencuong.entity.SubProduct;
 import maikiencuong.repository.SubProductRepo;
 import maikiencuong.service.SubProductServ;
@@ -21,36 +20,26 @@ public class SubProductServImpl implements SubProductServ {
 
 	@Override
 	@Transactional
-	public Set<InvenColorSize> sizeById(Long id) {
-		Set<InvenColorSize> set = subProductRepo.sizeById(id);
-		set.forEach(x -> {
-			x.setColor(null);
-			x.setInventory(null);
-		});
-		return new HashSet<>(set);
+	public Set<SizeColorInventory> sizeById(Long id) {
+		return subProductRepo.sizeById(id);
 	}
 
 	@Override
 	@Transactional
-	public Set<InvenColorSize> inventoryAndSizeByIdAndColor(Long id, String color) {
+	public Set<SizeColorInventory> inventoryAndSizeByIdAndColor(Long id, String color) {
 		return subProductRepo.inventoryAndSizeByIdAndColor(id, color);
 	}
 
 	@Override
 	@Transactional
-	public Set<InvenColorSize> invenColorSizeByIdAndColorAndSize(Long id, String color, String size) {
+	public Set<SizeColorInventory> invenColorSizeByIdAndColorAndSize(Long id, String color, String size) {
 		return subProductRepo.invenColorSizeByIdAndColorAndSize(id, color, size);
 	}
 
 	@Override
 	@Transactional
-	public Set<InvenColorSize> colorById(Long id) {
-		Set<InvenColorSize> set = subProductRepo.colorById(id);
-		set.forEach(x -> {
-			x.setSize(null);
-			x.setInventory(null);
-		});
-		return new HashSet<>(set);
+	public Set<SizeColorInventory> colorById(Long id) {
+		return subProductRepo.colorById(id);
 	}
 
 	@Override

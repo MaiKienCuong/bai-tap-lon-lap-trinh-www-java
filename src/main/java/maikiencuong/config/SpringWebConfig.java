@@ -1,26 +1,37 @@
 package maikiencuong.config;
 
+import java.util.List;
 import java.util.Properties;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import maikiencuong.dto.DTOModelMapper;
 
 @EnableWebMvc
 @Configuration
@@ -42,6 +53,9 @@ public class SpringWebConfig implements WebMvcConfigurer {
 
 	@Autowired
 	private Environment evn;
+
+	@Autowired
+	private ApplicationContext applicationContext;
 
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
@@ -84,6 +98,24 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
 		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 		return transactionManager;
+	}
+
+	@Bean
+	public ModelMapper modelMapper() {
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+		return modelMapper;
+	}
+
+	@Bean
+	public ObjectMapper objectMapper() {
+		return Jackson2ObjectMapperBuilder.json().applicationContext(applicationContext).build();
+	}
+
+	@Override
+	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+		EntityManager entityManager = entityManagerFactory().getObject().createEntityManager();
+		argumentResolvers.add(new DTOModelMapper(objectMapper(), entityManager, modelMapper()));
 	}
 
 	private Properties hibernateProperties() {

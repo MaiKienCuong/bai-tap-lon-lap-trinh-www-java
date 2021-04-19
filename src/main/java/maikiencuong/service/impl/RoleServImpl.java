@@ -21,7 +21,7 @@ public class RoleServImpl implements RoleServ {
 
 	@Override
 	@Transactional
-	public Optional<Role> findByName(EnumRole name) {
+	public Role findByName(EnumRole name) {
 		return roleRepo.findByName(name);
 	}
 

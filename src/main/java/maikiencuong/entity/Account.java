@@ -2,6 +2,7 @@ package maikiencuong.entity;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -40,15 +41,12 @@ public class Account {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "username", columnDefinition = "varchar(50) not null")
+	@Column(name = "username", columnDefinition = "varchar(50) not null", unique = true)
 	private String username;
 
 	@JsonProperty(access = Access.WRITE_ONLY)
 	@Column(name = "password", columnDefinition = "varchar(255) not null")
 	private String password;
-
-	@Column(name = "email", columnDefinition = "varchar(50) not null")
-	private String email;
 
 	@Column(name = "enable", nullable = false)
 	private boolean enable;
@@ -60,9 +58,9 @@ public class Account {
 		enable = true;
 	}
 
-	@ToString.Exclude
+//	@ToString.Exclude
 	@JsonProperty(access = Access.READ_ONLY)
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinTable(name = "Account_Role", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 

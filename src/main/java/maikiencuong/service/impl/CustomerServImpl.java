@@ -55,4 +55,10 @@ public class CustomerServImpl implements CustomerServ {
 		return customerRepo.findAllByNameLikeOrPhoneLike(name, phone, pageable);
 	}
 
+	@Override
+	@Transactional
+	public boolean existsByEmail(String email) {
+		return customerRepo.existsByEmail(email);
+	}
+
 }

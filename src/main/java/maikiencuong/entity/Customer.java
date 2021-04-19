@@ -7,11 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,19 +35,20 @@ public class Customer {
 	@Column(name = "name", columnDefinition = "nvarchar(255) not null")
 	private String name;
 
-	@Column(name = "phone", columnDefinition = "varchar(50)")
+	@Column(name = "phone", columnDefinition = "varchar(50) not null")
 	private String phone;
 
+	@Column(name = "email", columnDefinition = "varchar(50) not null", unique = true)
+	private String email;
+
+	@Column(name = "address", columnDefinition = "nvarchar(255)")
+	private String address;
+
 	// --------------------------
-	@JsonIgnore
-	@ToString.Exclude
+//	@JsonIgnore
+//	@ToString.Exclude
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "account_id", columnDefinition = "bigint")
 	private Account account;
-
-	@ToString.Exclude
-	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "typeCustomer_id")
-	private TypeCustomer typeCustomer;
 
 }

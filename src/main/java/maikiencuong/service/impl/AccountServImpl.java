@@ -33,7 +33,7 @@ public class AccountServImpl implements AccountServ {
 
 	@Override
 	@Transactional
-	public Optional<Account> findByUsername(String username) {
+	public Account findByUsername(String username) {
 		return accountRepo.findByUsername(username);
 	}
 
@@ -59,12 +59,6 @@ public class AccountServImpl implements AccountServ {
 	@Transactional
 	public void delete(Long id) {
 		accountRepo.deleteById(id);
-	}
-
-	@Override
-	@Transactional
-	public boolean existsByEmail(String email) {
-		return accountRepo.existsByEmail(email);
 	}
 
 }

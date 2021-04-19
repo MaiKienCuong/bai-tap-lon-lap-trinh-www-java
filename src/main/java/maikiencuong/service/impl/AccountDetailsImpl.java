@@ -24,9 +24,6 @@ public class AccountDetailsImpl implements UserDetails {
 
 	private String username;
 
-	@Getter
-	private String email;
-
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
@@ -37,11 +34,10 @@ public class AccountDetailsImpl implements UserDetails {
 
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public AccountDetailsImpl(Long id, String username, String email, boolean enable, String password,
-			Customer customer, Collection<? extends GrantedAuthority> authorities) {
+	public AccountDetailsImpl(Long id, String username, boolean enable, String password, Customer customer,
+			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.username = username;
-		this.email = email;
 		this.enable = enable;
 		this.password = password;
 		this.customer = customer;
@@ -52,8 +48,8 @@ public class AccountDetailsImpl implements UserDetails {
 		List<GrantedAuthority> authorities = account.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 
-		return new AccountDetailsImpl(account.getId(), account.getUsername(), account.getEmail(), account.isEnable(),
-				account.getPassword(), account.getCustomer(), authorities);
+		return new AccountDetailsImpl(account.getId(), account.getUsername(), account.isEnable(), account.getPassword(),
+				account.getCustomer(), authorities);
 	}
 
 	@Override
