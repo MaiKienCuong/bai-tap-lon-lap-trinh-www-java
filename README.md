@@ -3,6 +3,12 @@
 - xoa database cu
 - chay script tao database truoc khi chay code
 
+account customer 1: anhem 123456
+
+account customer 1: emem 123456
+
+account admin:  admin admin
+
 # khách hàng đăng ký mới: POST - api/customer
 {
     "name": "Cường Mai Kiên",
