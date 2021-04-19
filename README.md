@@ -1,4 +1,4 @@
-'''diff
+```diff
 - xoa database cu
 - chay script tao database truoc khi chay code
 
@@ -72,4 +72,4 @@ address k nhập thì lưu null vào db
 
 - xem chi tiết hóa đơn của hóa đơn theo mã hóa đơn GET - api/order-detail/order/{id}
 
-'''
+```
