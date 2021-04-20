@@ -22,7 +22,7 @@ public class AccountServImpl implements AccountServ {
 	@Transactional
 	public Account findById(Long id) {
 		Optional<Account> optional = accountRepo.findById(id);
-		return !optional.isEmpty() ? optional.get() : null;
+		return optional.isPresent() ? optional.get() : null;
 	}
 
 	@Override

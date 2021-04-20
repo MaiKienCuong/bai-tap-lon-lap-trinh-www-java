@@ -26,6 +26,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import maikiencuong.enumvalue.EnumPaymentMethod;
+import maikiencuong.enumvalue.EnumStatusOrder;
 
 @Entity
 @Table(name = "Orders")

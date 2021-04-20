@@ -36,11 +36,11 @@ import maikiencuong.dto.mapper.DTOModelMapper;
 
 @EnableWebMvc
 @Configuration
+@EnableAspectJAutoProxy
 @EnableTransactionManagement
 @ComponentScan({ "maikiencuong" })
 @PropertySource("classpath:application.properties")
 @EnableJpaRepositories("maikiencuong.repository")
-@EnableAspectJAutoProxy
 public class SpringWebConfig implements WebMvcConfigurer {
 
 	private static final String PROP_DATABASE_URL = "db.url";

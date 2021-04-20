@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import maikiencuong.entity.EnumRole;
 import maikiencuong.entity.Role;
+import maikiencuong.enumvalue.EnumRole;
 
 /**
  * cac phuong thuc khong co Annotation @query se duoc JPA tu dong tao ra cau

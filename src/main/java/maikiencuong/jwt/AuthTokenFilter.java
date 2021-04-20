@@ -1,4 +1,4 @@
-package maikiencuong.security.jwt;
+package maikiencuong.jwt;
 
 import java.io.IOException;
 

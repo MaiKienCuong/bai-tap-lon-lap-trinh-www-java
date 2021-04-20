@@ -21,7 +21,7 @@ public class SupplierServ implements maikiencuong.service.SupplierServ {
 	@Transactional
 	public Supplier findById(Long id) {
 		Optional<Supplier> optional = supplierRepo.findById(id);
-		return optional.isEmpty() ? optional.get() : null;
+		return optional.isPresent() ? optional.get() : null;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class SupplierServ implements maikiencuong.service.SupplierServ {
 	@Override
 	@Transactional
 	public Page<Supplier> findAllByNameLikeOrPhoneLike(String name, String phone, Pageable pageable) {
-		return supplierRepo.findAllByNameLikeOrPhoneLike(name, phone, pageable);
+		return supplierRepo.findAllByNameLikeOrPhoneLike("%" + name + "%", "%" + phone + "%", pageable);
 	}
 
 	@Override

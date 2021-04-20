@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import maikiencuong.dto.CustomerDTO;
-import maikiencuong.dto.MessageResponse;
 import maikiencuong.dto.create.CustomerCreateDTO;
 import maikiencuong.dto.mapper.DTO;
 import maikiencuong.dto.update.CustomerUpdateDTO;
 import maikiencuong.entity.Customer;
 import maikiencuong.handler.MyExcetion;
+import maikiencuong.payload.response.MessageResponse;
 import maikiencuong.service.CustomerServ;
 
 @RestController
@@ -54,7 +54,7 @@ public class CustomerApi {
 		return ResponseEntity.ok(getMapProductResult(pageResult));
 	}
 
-	@RequestMapping("/customer/{id}")
+	@GetMapping("/customer/{id}")
 	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
 		Customer result = customerServ.findById(id);
 		if (result != null)
@@ -64,21 +64,17 @@ public class CustomerApi {
 
 	@PostMapping("/customer")
 	public ResponseEntity<?> addCustomer(@DTO(CustomerCreateDTO.class) Customer customer) {
-		if (customer != null) {
-			Customer result = customerServ.add(customer);
-			if (result != null)
-				return ResponseEntity.ok(modelMapper.map(result, CustomerDTO.class));
-		}
+		Customer result = customerServ.add(customer);
+		if (result != null)
+			return ResponseEntity.ok(modelMapper.map(result, CustomerDTO.class));
 		return ResponseEntity.badRequest().body(new MessageResponse("Thêm khách hàng không thành công"));
 	}
 
 	@PutMapping("/customer")
 	public ResponseEntity<?> updateCustomer(@DTO(CustomerUpdateDTO.class) Customer customer) {
-		if (customer != null) {
-			Customer result = customerServ.update(customer);
-			if (result != null)
-				return ResponseEntity.ok(modelMapper.map(result, CustomerDTO.class));
-		}
+		Customer result = customerServ.update(customer);
+		if (result != null)
+			return ResponseEntity.ok(modelMapper.map(result, CustomerDTO.class));
 		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật khách hàng không thành công"));
 	}
 

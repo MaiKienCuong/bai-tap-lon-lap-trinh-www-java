@@ -1,8 +1,5 @@
 package maikiencuong.controller.api;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -18,14 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import maikiencuong.dto.AccountDTO;
 import maikiencuong.dto.CustomerDTO;
-import maikiencuong.dto.JwtResponse;
-import maikiencuong.dto.LoginDTO;
-import maikiencuong.dto.MessageResponse;
 import maikiencuong.dto.create.CustomerCreateDTO;
 import maikiencuong.dto.mapper.DTO;
 import maikiencuong.entity.Customer;
-import maikiencuong.security.jwt.JwtUtils;
+import maikiencuong.jwt.JwtUtils;
+import maikiencuong.payload.request.LoginRequest;
+import maikiencuong.payload.response.JwtResponse;
+import maikiencuong.payload.response.MessageResponse;
 import maikiencuong.service.CustomerServ;
 import maikiencuong.service.impl.AccountDetailsImpl;
 
@@ -46,43 +44,28 @@ public class AuthApi {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
-	/**
-	 * dang nhap
-	 * 
-	 * @param loginRequest
-	 * @return
-	 */
 	@PostMapping("/signin")
-	public ResponseEntity<?> signin(@Valid @RequestBody LoginDTO request) {
+	public ResponseEntity<?> signin(@Valid @RequestBody LoginRequest request) {
 		Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
-
 		AccountDetailsImpl accountDetails = (AccountDetailsImpl) authentication.getPrincipal();
-		List<String> roles = accountDetails.getAuthorities().stream().map(item -> item.getAuthority())
-				.collect(Collectors.toList());
-		if (accountDetails.getCustomer() != null)
-			return ResponseEntity.ok(new JwtResponse(accountDetails.getId(), accountDetails.getUsername(), jwt,
-					accountDetails.isEnabled(), roles,
-					modelMapper.map(accountDetails.getCustomer(), CustomerDTO.class)));
-		return ResponseEntity.ok(new JwtResponse(accountDetails.getId(), accountDetails.getUsername(), jwt,
-				accountDetails.isEnabled(), roles, null));
+		AccountDTO accountDTO = modelMapper.map(accountDetails.getAccount(), AccountDTO.class);
+		Customer customer = accountDetails.getAccount().getCustomer();
+		if (customer != null) {
+			CustomerDTO customerDTO = modelMapper.map(customer, CustomerDTO.class);
+			return ResponseEntity.ok(new JwtResponse(jwt, customerDTO, accountDTO));
+		}
+		return ResponseEntity.ok(new JwtResponse(jwt, null, accountDTO));
 	}
 
-	/**
-	 * dang ky tai khoan cho khach hang
-	 * 
-	 * @param request
-	 * @return
-	 */
 	@PostMapping("/signup")
 	public ResponseEntity<?> signup(@DTO(CustomerCreateDTO.class) Customer customer) {
 		Customer result = customerServ.add(customer);
 		if (result != null)
 			return ResponseEntity.ok(new MessageResponse("Đăng ký tài khoản thành công"));
 		return ResponseEntity.badRequest().body(new MessageResponse("Đăng ký không thành công"));
-
 	}
 
 }

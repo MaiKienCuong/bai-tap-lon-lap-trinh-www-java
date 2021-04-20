@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import maikiencuong.entity.Role;
+import maikiencuong.handler.MyExcetion;
 import maikiencuong.service.RoleServ;
 
 @RestController
@@ -30,7 +31,8 @@ public class RoleApi {
 
 	@RequestMapping("/roles")
 	public ResponseEntity<?> getAllRole(@RequestParam(defaultValue = "8") int size,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort) {
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort)
+			throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);
 		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
 		Page<Role> pageResult = roleServ.findAll(pageable);
@@ -47,21 +49,19 @@ public class RoleApi {
 		return Sort.Direction.ASC;
 	}
 
-	private List<Order> getListSortOrder(String[] sort) {
+	private List<Order> getListSortOrder(String[] sort) throws MyExcetion {
 		List<Order> orders = new ArrayList<>();
-		if (sort.length > 1) {
+		try {
 			if (sort[0].contains("-")) {
-				// neu sort tren nhieu hon 1 field
-				// ?sort=id-desc&sort=title-asc
 				for (String sortOrder : sort) {
 					String[] subSort = sortOrder.split("-");
 					orders.add(new Order(getSortDirection(subSort[1]), subSort[0]));
 				}
 			} else {
-				// neu chi sort tren 1 field
-				// ?sort=id-desc
 				orders.add(new Order(getSortDirection(sort[1]), sort[0]));
 			}
+		} catch (Exception e) {
+			throw new MyExcetion("Lỗi: Vui lòng kiểm tra lại tham số sort");
 		}
 		return orders;
 	}

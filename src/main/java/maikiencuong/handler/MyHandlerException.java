@@ -27,7 +27,7 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import maikiencuong.dto.MessageResponse;
+import maikiencuong.payload.response.MessageResponse;
 
 @ControllerAdvice
 @RestController

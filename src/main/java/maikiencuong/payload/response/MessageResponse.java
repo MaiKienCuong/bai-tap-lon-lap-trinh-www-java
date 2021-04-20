@@ -1,4 +1,4 @@
-package maikiencuong.dto;
+package maikiencuong.payload.response;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package maikiencuong.dto;
+package maikiencuong.payload.request;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginDTO implements Serializable{
+public class LoginRequest implements Serializable{
 
 	/**
 	 * 

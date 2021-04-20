@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.Setter;
-import maikiencuong.entity.EnumPaymentMethod;
-import maikiencuong.entity.EnumStatusOrder;
+import maikiencuong.enumvalue.EnumPaymentMethod;
+import maikiencuong.enumvalue.EnumStatusOrder;
 
 @Getter
 @Setter

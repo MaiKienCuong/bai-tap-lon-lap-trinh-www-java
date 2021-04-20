@@ -28,7 +28,7 @@ public class OrderServImpl implements OrderServ {
 	@Transactional
 	public Order findById(Long id) {
 		Optional<Order> optional = orderRepo.findById(id);
-		return optional.isEmpty() ? optional.get() : null;
+		return optional.isPresent() ? optional.get() : null;
 	}
 
 	@Override

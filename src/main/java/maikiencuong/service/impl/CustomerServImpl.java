@@ -22,7 +22,7 @@ public class CustomerServImpl implements CustomerServ {
 	@Transactional
 	public Customer findById(Long id) {
 		Optional<Customer> optional = customerRepo.findById(id);
-		return !optional.isEmpty() ? optional.get() : null;
+		return optional.isPresent() ? optional.get() : null;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class CustomerServImpl implements CustomerServ {
 	@Override
 	@Transactional
 	public Page<Customer> findAllByNameLikeOrPhoneLike(String name, String phone, Pageable pageable) {
-		return customerRepo.findAllByNameLikeOrPhoneLike(name, phone, pageable);
+		return customerRepo.findAllByNameLikeOrPhoneLike("%" + name + "%", "%" + phone + "%", pageable);
 	}
 
 	@Override

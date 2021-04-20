@@ -39,7 +39,7 @@ public class SubProductServImpl implements SubProductServ {
 	@Transactional
 	public SubProduct findById(Long id) {
 		Optional<SubProduct> optional = subProductRepo.findById(id);
-		return !optional.isEmpty() ? optional.get() : null;
+		return optional.isPresent() ? optional.get() : null;
 	}
 
 	@Override

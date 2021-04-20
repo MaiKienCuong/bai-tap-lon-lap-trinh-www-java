@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import maikiencuong.entity.EnumRole;
 import maikiencuong.entity.Role;
+import maikiencuong.enumvalue.EnumRole;
 import maikiencuong.repository.RoleRepo;
 import maikiencuong.service.RoleServ;
 
@@ -36,7 +36,7 @@ public class RoleServImpl implements RoleServ {
 	@Transactional
 	public Role findById(Long id) {
 		Optional<Role> optional = roleRepo.findById(id);
-		return optional.isEmpty() ? optional.get() : null;
+		return optional.isPresent() ? optional.get() : null;
 	}
 
 }

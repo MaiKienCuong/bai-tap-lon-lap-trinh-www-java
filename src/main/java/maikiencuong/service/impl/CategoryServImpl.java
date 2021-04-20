@@ -46,7 +46,7 @@ public class CategoryServImpl implements CategoryServ {
 	@Override
 	@Transactional
 	public Page<Category> findAllByNameLike(String name, Pageable pageable) {
-		return categoryRepo.findAllByNameLike(name, pageable);
+		return categoryRepo.findAllByNameLike("%" + name + "%", pageable);
 	}
 
 	@Override

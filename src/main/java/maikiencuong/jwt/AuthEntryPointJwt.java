@@ -1,4 +1,4 @@
-package maikiencuong.security.jwt;
+package maikiencuong.jwt;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import maikiencuong.dto.MessageResponse;
+import maikiencuong.payload.response.MessageResponse;
 
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {

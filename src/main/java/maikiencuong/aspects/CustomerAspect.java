@@ -36,19 +36,19 @@ public class CustomerAspect {
 
 	@Before("execution(* maikiencuong.controller.api.AuthApi.signup(..))")
 	public void validSignupCustomer(JoinPoint joinPoint) throws MyExcetion {
-		Customer customer = (Customer) joinPoint.getArgs()[0];
-		Account account = customer.getAccount();
-		if (accountServ.existsByUsername(account.getUsername())) {
+		Customer newCustomer = (Customer) joinPoint.getArgs()[0];
+		Account newAccount = newCustomer.getAccount();
+		if (accountServ.existsByUsername(newAccount.getUsername())) {
 			throw new MyExcetion("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác");
 		}
-		if (customerServ.existsByEmail(customer.getEmail())) {
+		if (customerServ.existsByEmail(newCustomer.getEmail())) {
 			throw new MyExcetion("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác");
 		}
-		Set<Role> roles = account.getRoles().stream().map(item -> roleServ.findByName(item.getName()))
+		Set<Role> roles = newAccount.getRoles().stream().map(item -> roleServ.findByName(item.getName()))
 				.collect(Collectors.toSet());
-		account.setRoles(roles);
-		account.setCustomer(customer);
-		account.setPassword(encoder.encode(account.getPassword()));
+		newAccount.setRoles(roles);
+		newAccount.setCustomer(newCustomer);
+		newAccount.setPassword(encoder.encode(newAccount.getPassword()));
 	}
 
 	@Before("execution(* maikiencuong.controller.api.CustomerApi.addCustomer(..))")
@@ -58,17 +58,17 @@ public class CustomerAspect {
 
 	@Before("execution(* maikiencuong.controller.api.CustomerApi.updateCustomer(..))")
 	public void validUpdateCustomer(JoinPoint joinPoint) throws MyExcetion {
-		Customer customer = (Customer) joinPoint.getArgs()[0];
-		Account account = customer.getAccount();
-		Account account2 = accountServ.findByUsername(account.getUsername());
-		if (account2 != null && !account.getId().equals(account2.getId())) {
+		Customer updateCustomer = (Customer) joinPoint.getArgs()[0];
+		Account updateAccount = updateCustomer.getAccount();
+		Account existsAccount = accountServ.findByUsername(updateAccount.getUsername());
+		if (existsAccount != null && !updateAccount.getId().equals(existsAccount.getId())) {
 			throw new MyExcetion("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác");
 		}
-		Customer customer2 = customerServ.findByEmail(customer.getEmail());
-		if (customer2 != null && !customer.getId().equals(customer2.getId())) {
+		Customer existsCustomer = customerServ.findByEmail(updateCustomer.getEmail());
+		if (existsCustomer != null && !updateCustomer.getId().equals(existsCustomer.getId())) {
 			throw new MyExcetion("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác");
 		}
-		account.setCustomer(customer);
-		account.setPassword(encoder.encode(account.getPassword()));
+		updateAccount.setCustomer(updateCustomer);
+		updateAccount.setPassword(encoder.encode(updateAccount.getPassword()));
 	}
 }

@@ -22,13 +22,13 @@ public class OrderAspect {
 
 	@Before("execution(* maikiencuong.controller.api.OrderApi.addOrder(..))")
 	public void beforeAddOrder(JoinPoint joinPoint) {
-		Order order = (Order) joinPoint.getArgs()[0];
-		order.setCustomer(customerServ.findById(order.getCustomer().getId()));
-		order.getOrderDetails().forEach(x -> {
+		Order newOrder = (Order) joinPoint.getArgs()[0];
+		newOrder.setCustomer(customerServ.findById(newOrder.getCustomer().getId()));
+		newOrder.getOrderDetails().forEach(x -> {
 			x.setSubProduct(subProductServ.findById(x.getSubProduct().getId()));
-			x.setOrder(order);
+			x.setOrder(newOrder);
 		});
-		order.sumTotal();
+		newOrder.sumTotal();
 	}
 
 }

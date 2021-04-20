@@ -1,4 +1,4 @@
-package maikiencuong.entity;
+package maikiencuong.enumvalue;
 
 public enum EnumPaymentMethod {
 	STORE, COD

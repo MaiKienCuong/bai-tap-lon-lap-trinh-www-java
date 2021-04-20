@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import maikiencuong.dto.CategoryDTO;
-import maikiencuong.dto.MessageResponse;
 import maikiencuong.dto.create.CategoryCreateDTO;
 import maikiencuong.dto.mapper.DTO;
 import maikiencuong.dto.update.CategoryUpdateDTO;
 import maikiencuong.entity.Category;
 import maikiencuong.handler.MyExcetion;
+import maikiencuong.payload.response.MessageResponse;
 import maikiencuong.service.CategoryServ;
 
 @RestController
@@ -54,7 +54,7 @@ public class CategoryApi {
 		return ResponseEntity.ok(getMapCategoryResult(pageResult));
 	}
 
-	@RequestMapping("/category/{id}")
+	@GetMapping("/category/{id}")
 	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
 		Category result = categoryServ.findById(id);
 		if (result != null)
@@ -64,21 +64,17 @@ public class CategoryApi {
 
 	@PostMapping("/category")
 	public ResponseEntity<?> addCategory(@DTO(CategoryCreateDTO.class) Category category) {
-		if (category != null) {
-			Category result = categoryServ.add(category);
-			if (result != null)
-				return ResponseEntity.ok(modelMapper.map(result, CategoryDTO.class));
-		}
+		Category result = categoryServ.add(category);
+		if (result != null)
+			return ResponseEntity.ok(modelMapper.map(result, CategoryDTO.class));
 		return ResponseEntity.badRequest().body(new MessageResponse("Thêm loại sản phẩm không thành công"));
 	}
 
 	@PutMapping("/category")
 	public ResponseEntity<?> updateCategory(@DTO(CategoryUpdateDTO.class) Category category) {
-		if (category != null) {
-			Category result = categoryServ.update(category);
-			if (result != null)
-				return ResponseEntity.ok(modelMapper.map(result, CategoryDTO.class));
-		}
+		Category result = categoryServ.update(category);
+		if (result != null)
+			return ResponseEntity.ok(modelMapper.map(result, CategoryDTO.class));
 		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật loại sản phẩm không thành công"));
 	}
 

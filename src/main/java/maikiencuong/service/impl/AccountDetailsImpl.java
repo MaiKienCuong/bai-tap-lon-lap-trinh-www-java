@@ -8,48 +8,29 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
-
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import maikiencuong.entity.Account;
-import maikiencuong.entity.Customer;
 
+@EqualsAndHashCode(of = { "account" })
 public class AccountDetailsImpl implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
 	@Getter
-	private Long id;
-
-	private String username;
-
-	@JsonProperty(access = Access.WRITE_ONLY)
-	private String password;
-
-	private boolean enable;
-
-	@Getter
-	private Customer customer;
+	private Account account;
 
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public AccountDetailsImpl(Long id, String username, boolean enable, String password, Customer customer,
-			Collection<? extends GrantedAuthority> authorities) {
-		this.id = id;
-		this.username = username;
-		this.enable = enable;
-		this.password = password;
-		this.customer = customer;
+	public AccountDetailsImpl(Account account, Collection<? extends GrantedAuthority> authorities) {
+		this.account = account;
 		this.authorities = authorities;
 	}
 
 	public static AccountDetailsImpl build(Account account) {
 		List<GrantedAuthority> authorities = account.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
-
-		return new AccountDetailsImpl(account.getId(), account.getUsername(), account.isEnable(), account.getPassword(),
-				account.getCustomer(), authorities);
+		return new AccountDetailsImpl(account, authorities);
 	}
 
 	@Override
@@ -59,12 +40,12 @@ public class AccountDetailsImpl implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return password;
+		return account.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return username;
+		return account.getUsername();
 	}
 
 	@Override
@@ -84,32 +65,7 @@ public class AccountDetailsImpl implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return enable;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AccountDetailsImpl other = (AccountDetailsImpl) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+		return account.isEnable();
 	}
 
 }

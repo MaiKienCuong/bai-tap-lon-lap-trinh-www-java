@@ -24,7 +24,7 @@ public class AccountDetailsServiceImpl implements UserDetailsService {
 		if (optional.isPresent()) {
 			return AccountDetailsImpl.build(optional.get());
 		} else
-			throw new UsernameNotFoundException("Không tìm thấy tài khoản có username: " + username);
+			throw new UsernameNotFoundException("Đăng nhập không thành công");
 	}
 
 }

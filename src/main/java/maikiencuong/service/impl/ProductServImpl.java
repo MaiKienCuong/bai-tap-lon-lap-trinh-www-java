@@ -22,7 +22,7 @@ public class ProductServImpl implements ProductServ {
 	@Transactional
 	public Product findById(Long id) {
 		Optional<Product> optional = productRepo.findById(id);
-		return !optional.isEmpty() ? optional.get() : null;
+		return optional.isPresent() ? optional.get() : null;
 	}
 
 	@Override
@@ -34,13 +34,13 @@ public class ProductServImpl implements ProductServ {
 	@Override
 	@Transactional
 	public Page<Product> findAllByNameLikeOrCategory_NameLike(String name, String category, Pageable pageable) {
-		return productRepo.findAllByNameLikeOrCategory_NameLike(name, category, pageable);
+		return productRepo.findAllByNameLikeOrCategory_NameLike("%" + name + "%", "%" + category + "%", pageable);
 	}
 
 	@Override
 	@Transactional
 	public Page<Product> findAllByCategory_NameLike(String category, Pageable pageable) {
-		return productRepo.findAllByCategory_NameLike(category, pageable);
+		return productRepo.findAllByCategory_NameLike("%" + category + "%", pageable);
 	}
 
 	@Override

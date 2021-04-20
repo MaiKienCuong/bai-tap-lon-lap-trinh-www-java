@@ -8,7 +8,6 @@ import java.util.Collections;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.core.MethodParameter;
@@ -24,6 +23,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import maikiencuong.handler.MyExcetion;
 
 public class DTOModelMapper extends RequestResponseBodyMethodProcessor {
 
@@ -51,13 +52,15 @@ public class DTOModelMapper extends RequestResponseBodyMethodProcessor {
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		Object dto = super.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
+		if (dto == null)
+			throw new MyExcetion("Dữ liệu trống");
 		Object id = getEntityId(dto);
 		if (id == null) {
 			return modelMapper.map(dto, parameter.getParameterType());
 		} else {
 			Object persistedObject = entityManager.find(parameter.getParameterType(), id);
 			if (persistedObject == null)
-				return null;
+				throw new MyExcetion("Không tìm thấy dữ liệu");
 			modelMapper.map(dto, persistedObject);
 			return persistedObject;
 		}
@@ -75,7 +78,7 @@ public class DTOModelMapper extends RequestResponseBodyMethodProcessor {
 		throw new RuntimeException();
 	}
 
-	private Object getEntityId(@NotNull Object dto) {
+	private Object getEntityId(Object dto) {
 		for (Field field : dto.getClass().getDeclaredFields()) {
 			if (field.getAnnotation(Id.class) != null) {
 				try {
