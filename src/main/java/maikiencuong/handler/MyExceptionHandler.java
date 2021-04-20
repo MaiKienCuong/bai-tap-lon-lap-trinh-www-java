@@ -31,7 +31,7 @@ import maikiencuong.payload.response.MessageResponse;
 
 @ControllerAdvice
 @RestController
-public class MyHandlerException extends ResponseEntityExceptionHandler {
+public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -42,7 +42,7 @@ public class MyHandlerException extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(JpaSystemException.class)
 	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
-		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi khi thêm hoặc cập nhật dữ liệu"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Không thể thêm hay cập nhật dữ liệu"));
 	}
 
 	@ExceptionHandler(PropertyReferenceException.class)

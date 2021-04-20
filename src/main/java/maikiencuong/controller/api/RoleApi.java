@@ -36,8 +36,7 @@ public class RoleApi {
 		List<Order> orders = getListSortOrder(sort);
 		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
 		Page<Role> pageResult = roleServ.findAll(pageable);
-		Map<String, Object> map = getMapRoleResult(pageResult);
-		return ResponseEntity.ok(map);
+		return ResponseEntity.ok(getMapRoleResult(pageResult));
 	}
 
 	private Sort.Direction getSortDirection(String direction) {

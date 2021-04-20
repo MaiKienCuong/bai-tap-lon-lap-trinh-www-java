@@ -2,10 +2,10 @@ package maikiencuong.dto.update;
 
 import java.io.Serializable;
 
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,9 +19,8 @@ public class AccountUpdateDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-//	@Id
-//	@NotNull(message = "Id tài khoản không được để trống")
-	@JsonIgnore
+	@Id
+	@NotNull(message = "Id tài khoản không được để trống")
 	private Long id;
 
 	@NotBlank(message = "Username không được để trống")

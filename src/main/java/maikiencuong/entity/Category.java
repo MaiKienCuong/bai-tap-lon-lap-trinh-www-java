@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@ToString
 @Builder
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "Category")
 @NoArgsConstructor
 @AllArgsConstructor

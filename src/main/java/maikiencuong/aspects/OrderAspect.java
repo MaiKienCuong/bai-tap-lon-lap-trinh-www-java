@@ -28,7 +28,6 @@ public class OrderAspect {
 			x.setSubProduct(subProductServ.findById(x.getSubProduct().getId()));
 			x.setOrder(newOrder);
 		});
-		newOrder.sumTotal();
 	}
 
 }

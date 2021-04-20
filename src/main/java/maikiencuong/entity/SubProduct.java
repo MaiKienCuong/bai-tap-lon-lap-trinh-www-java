@@ -14,9 +14,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,8 +25,8 @@ import lombok.ToString;
 @Table(name = "SubProduct")
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class SubProduct {
@@ -46,11 +43,9 @@ public class SubProduct {
 	private String name;
 
 	@Column(name = "created_at", columnDefinition = "datetime")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
 	private LocalDateTime createdAt;
 
 	@Column(name = "updated_at", columnDefinition = "datetime")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
 	private LocalDateTime updatedAt;
 
 	@Column(name = "color", columnDefinition = "nvarchar(50)")
@@ -60,8 +55,6 @@ public class SubProduct {
 	private String size;
 
 	private Integer inventory;
-
-	// -----------
 
 	@PrePersist
 	public void prePersist() {
@@ -73,7 +66,6 @@ public class SubProduct {
 		updatedAt = LocalDateTime.now();
 	}
 
-	@JsonIgnore
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id")

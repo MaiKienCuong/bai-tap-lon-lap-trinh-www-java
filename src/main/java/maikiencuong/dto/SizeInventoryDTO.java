@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = { "id" })
 public class SizeInventoryDTO implements Serializable {
 
 	/**
@@ -16,11 +16,9 @@ public class SizeInventoryDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Long subproductId;
+	private Long id;
 
-	@EqualsAndHashCode.Exclude
 	private String size;
 
-	@EqualsAndHashCode.Exclude
 	private Integer inventory;
 }

@@ -10,11 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,10 +22,11 @@ import lombok.ToString;
 @Table(name = "Customer")
 @Getter
 @Setter
-@NoArgsConstructor
-@ToString
 @Builder
+@ToString
+@NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = { "id" })
 public class Customer {
 
 	@Id
@@ -49,7 +48,6 @@ public class Customer {
 
 	// --------------------------
 	@ToString.Exclude
-	@JsonProperty(access = Access.WRITE_ONLY)
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "account_id", columnDefinition = "bigint")
 	private Account account;

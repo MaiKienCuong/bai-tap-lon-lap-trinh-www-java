@@ -100,7 +100,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	@Bean
 	public ModelMapper modelMapper() {
 		ModelMapper modelMapper = new ModelMapper();
-		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
 		modelMapper.getConfiguration().setSkipNullEnabled(true);
 		return modelMapper;
 	}

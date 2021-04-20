@@ -18,8 +18,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,9 +31,9 @@ import maikiencuong.enumvalue.EnumStatusOrder;
 @Table(name = "Orders")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder
 public class Order {
 
@@ -45,7 +43,6 @@ public class Order {
 	private Long id;
 
 	@Column(name = "order_date", columnDefinition = "datetime")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
 	private LocalDateTime orderDate;
 
 	@Column(name = "ship_address", columnDefinition = "nvarchar(255)")
@@ -58,25 +55,21 @@ public class Order {
 	@Column(name = "total")
 	private Double total;
 
-	@Column(name = "payment_method", columnDefinition = "nvarchar(255)")
 	@Enumerated(EnumType.STRING)
+	@Column(name = "payment_method", columnDefinition = "nvarchar(255)")
 	private EnumPaymentMethod paymentMethod;
 
 	@PrePersist
 	public void prePersist() {
-		orderDate = LocalDateTime.now();
-		status = EnumStatusOrder.PENDING;
 		sumTotal();
 	}
 
-	// ----------------------
-
-//	@ToString.Exclude
 	@ManyToOne
+	@ToString.Exclude
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 
-//	@ToString.Exclude
+	@ToString.Exclude
 	@OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<OrderDetail> orderDetails;
 

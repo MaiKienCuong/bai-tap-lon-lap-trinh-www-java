@@ -1,8 +1,8 @@
 package maikiencuong.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +18,8 @@ public class OrderDetailServImpl implements OrderDetailServ {
 
 	@Override
 	@Transactional
-	public Page<OrderDetail> findAllByOrder_Id(Long id, Pageable pageable) {
-		return orderDetailRepo.findAllByOrder_Id(id, pageable);
+	public List<OrderDetail> findAllByOrder_Id(Long id) {
+		return orderDetailRepo.findAllByOrder_Id(id);
 	}
 
 }

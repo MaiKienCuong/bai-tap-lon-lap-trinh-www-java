@@ -3,7 +3,6 @@ package maikiencuong.dto.update;
 import java.io.Serializable;
 
 import javax.persistence.Id;
-import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -37,9 +36,5 @@ public class CustomerUpdateDTO implements Serializable {
 	private String email;
 
 	private String address;
-
-	@Valid
-	@NotNull(message = "Chưa có thông tin tài khoản")
-	private AccountUpdateDTO account;
 
 }

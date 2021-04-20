@@ -13,12 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,11 +25,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@ToString
 @Builder
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "Account")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,18 +44,12 @@ public class Account {
 	private String username;
 
 	@JsonIgnore
+	@ToString.Exclude
 	@Column(name = "password", columnDefinition = "varchar(255) not null")
 	private String password;
 
 	@Column(name = "enable", nullable = false)
 	private boolean enable;
-
-	// --------------------
-
-	@PrePersist
-	private void prePersist() {
-		enable = true;
-	}
 
 	@ToString.Exclude
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
@@ -66,7 +57,6 @@ public class Account {
 	private Set<Role> roles;
 
 	@ToString.Exclude
-	@JsonProperty(access = Access.WRITE_ONLY)
 	@OneToOne(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Customer customer;
 

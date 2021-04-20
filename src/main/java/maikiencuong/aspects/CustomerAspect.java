@@ -61,11 +61,14 @@ public class CustomerAspect {
 		Customer updateCustomer = (Customer) joinPoint.getArgs()[0];
 		Account updateAccount = updateCustomer.getAccount();
 		Account existsAccount = accountServ.findByUsername(updateAccount.getUsername());
-		if (existsAccount != null && !updateAccount.getId().equals(existsAccount.getId())) {
+		System.out.println(updateCustomer);
+		System.out.println(updateAccount);
+		System.out.println(existsAccount);
+		if (existsAccount != null && !updateAccount.equals(existsAccount)) {
 			throw new MyExcetion("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác");
 		}
 		Customer existsCustomer = customerServ.findByEmail(updateCustomer.getEmail());
-		if (existsCustomer != null && !updateCustomer.getId().equals(existsCustomer.getId())) {
+		if (existsCustomer != null && !updateCustomer.equals(existsCustomer)) {
 			throw new MyExcetion("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác");
 		}
 		updateAccount.setCustomer(updateCustomer);

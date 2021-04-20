@@ -16,9 +16,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,8 +27,8 @@ import lombok.ToString;
 @Table(name = "Product")
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Product {
@@ -80,11 +77,9 @@ public class Product {
 	private boolean active;
 
 	@Column(name = "created_at", columnDefinition = "datetime")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
 	private LocalDateTime createdAt;
 
 	@Column(name = "updated_at", columnDefinition = "datetime")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
 	private LocalDateTime updatedAt;
 
 	// -----------------
@@ -99,15 +94,11 @@ public class Product {
 		updatedAt = LocalDateTime.now();
 	}
 
-	@JsonIgnore
-	@ToString.Exclude
 	@ManyToOne
+	@ToString.Exclude
 	@JoinColumn(name = "supplier_id")
 	private Supplier supplier;
 
-	// ----------------------------
-
-	@JsonIgnore
 	@ToString.Exclude
 	@OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
 	private List<SubProduct> subProducts;

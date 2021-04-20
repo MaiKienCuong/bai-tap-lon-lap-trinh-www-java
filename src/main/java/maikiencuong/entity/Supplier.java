@@ -18,8 +18,8 @@ import lombok.ToString;
 @Table(name = "Supplier")
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Supplier {

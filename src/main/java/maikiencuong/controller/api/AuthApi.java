@@ -54,8 +54,7 @@ public class AuthApi {
 		AccountDTO accountDTO = modelMapper.map(accountDetails.getAccount(), AccountDTO.class);
 		Customer customer = accountDetails.getAccount().getCustomer();
 		if (customer != null) {
-			CustomerDTO customerDTO = modelMapper.map(customer, CustomerDTO.class);
-			return ResponseEntity.ok(new JwtResponse(jwt, customerDTO, accountDTO));
+			return ResponseEntity.ok(new JwtResponse(jwt, modelMapper.map(customer, CustomerDTO.class), accountDTO));
 		}
 		return ResponseEntity.ok(new JwtResponse(jwt, null, accountDTO));
 	}
