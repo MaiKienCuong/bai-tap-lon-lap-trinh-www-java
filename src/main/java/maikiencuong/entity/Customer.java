@@ -46,7 +46,6 @@ public class Customer {
 	@Column(name = "address", columnDefinition = "nvarchar(255)")
 	private String address;
 
-	// --------------------------
 	@ToString.Exclude
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "account_id", columnDefinition = "bigint")

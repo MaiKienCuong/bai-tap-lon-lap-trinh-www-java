@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 import maikiencuong.dto.OrderDTO;
 import maikiencuong.dto.create.OrderCreateDTO;
 import maikiencuong.dto.mapper.DTO;
+import maikiencuong.entity.Orderr;
 import maikiencuong.handler.MyExcetion;
+import maikiencuong.payload.response.MessageResponse;
 import maikiencuong.service.OrderServ;
 
 @RestController
@@ -45,7 +47,8 @@ public class OrderApi {
 			throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);
 		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
-		Page<maikiencuong.entity.Order> pageResult = orderServ.findAll(pageable);
+		Page<Orderr> pageResult = orderServ.findAll(pageable);
+
 		return ResponseEntity.ok(getMapOrderResult(pageResult));
 	}
 
@@ -55,16 +58,18 @@ public class OrderApi {
 			@PathVariable("id") Long id) throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);
 		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
-		Page<maikiencuong.entity.Order> pageResult = orderServ.findAllByCustomer_Id(id, pageable);
+		Page<Orderr> pageResult = orderServ.findAllByCustomer_Id(id, pageable);
+
 		return ResponseEntity.ok(getMapOrderResult(pageResult));
 	}
 
 	@PostMapping("/order")
-	public ResponseEntity<?> addOrder(@DTO(OrderCreateDTO.class) maikiencuong.entity.Order order) {
-		maikiencuong.entity.Order result = orderServ.add(order);
+	public ResponseEntity<?> addOrder(@DTO(OrderCreateDTO.class) Orderr order) {
+		Orderr result = orderServ.add(order);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, OrderDTO.class));
-		return ResponseEntity.ok("Thêm hóa đơn không thành công");
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Thêm không thành công"));
 	}
 
 	private Sort.Direction getSortDirection(String direction) {
@@ -73,6 +78,7 @@ public class OrderApi {
 		} else if (direction.equals("desc")) {
 			return Sort.Direction.DESC;
 		}
+
 		return Sort.Direction.ASC;
 	}
 
@@ -90,10 +96,11 @@ public class OrderApi {
 		} catch (Exception e) {
 			throw new MyExcetion("Lỗi: Vui lòng kiểm tra lại tham số sort");
 		}
+
 		return orders;
 	}
 
-	private Map<String, Object> getMapOrderResult(Page<maikiencuong.entity.Order> pageResult) {
+	private Map<String, Object> getMapOrderResult(Page<Orderr> pageResult) {
 		Map<String, Object> map = new HashMap<>();
 		List<OrderDTO> list = modelMapper.map(pageResult.getContent(), new TypeToken<List<OrderDTO>>() {
 		}.getType());
@@ -101,6 +108,7 @@ public class OrderApi {
 		map.put("currentPage", pageResult.getNumber());
 		map.put("totalItems", pageResult.getTotalElements());
 		map.put("totalPages", pageResult.getTotalPages());
+
 		return map;
 	}
 }

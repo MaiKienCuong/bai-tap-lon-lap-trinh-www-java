@@ -35,7 +35,7 @@ import maikiencuong.enumvalue.EnumStatusOrder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Order {
+public class Orderr {
 
 	@Id
 	@Column(name = "id")
@@ -52,12 +52,12 @@ public class Order {
 	@Column(name = "status", columnDefinition = "nvarchar(255)")
 	private EnumStatusOrder status;
 
-	@Column(name = "total")
-	private Double total;
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "payment_method", columnDefinition = "nvarchar(255)")
 	private EnumPaymentMethod paymentMethod;
+	
+	@Column(name = "total")
+	private Double total;
 
 	@PrePersist
 	public void prePersist() {

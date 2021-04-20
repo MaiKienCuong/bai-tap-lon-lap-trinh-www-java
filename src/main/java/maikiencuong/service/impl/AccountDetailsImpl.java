@@ -30,6 +30,7 @@ public class AccountDetailsImpl implements UserDetails {
 	public static AccountDetailsImpl build(Account account) {
 		List<GrantedAuthority> authorities = account.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
+
 		return new AccountDetailsImpl(account, authorities);
 	}
 

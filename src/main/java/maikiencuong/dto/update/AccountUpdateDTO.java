@@ -2,9 +2,7 @@ package maikiencuong.dto.update;
 
 import java.io.Serializable;
 
-import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.Getter;
@@ -19,18 +17,16 @@ public class AccountUpdateDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@NotNull(message = "Id tài khoản không được để trống")
-	private Long id;
-
 	@NotBlank(message = "Username không được để trống")
 	@Size(min = 3, max = 60, message = "Username phải từ 3 đến 60 ký tự")
 	private String username;
 
-	@NotBlank(message = "Mật khẩu không được để trống")
-	@Size(min = 6, max = 60, message = "Mật khẩu phải từ 6 đến 60 kí tự")
-	private String password;
+	@NotBlank(message = "Mật khẩu cũ không được để trống")
+	@Size(min = 6, max = 60, message = "Mật khẩu cũ phải từ 6 đến 60 kí tự")
+	private String oldPassword;
 
-	private boolean enable = true;
+	@NotBlank(message = "Mật khẩu mới không được để trống")
+	@Size(min = 6, max = 60, message = "Mật khẩu mới phải từ 6 đến 60 kí tự")
+	private String newPassword;
 
 }

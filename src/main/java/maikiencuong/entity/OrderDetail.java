@@ -41,7 +41,7 @@ public class OrderDetail {
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "order_id")
-	private Order order;
+	private Orderr order;
 
 	@ToString.Exclude
 	@ManyToOne

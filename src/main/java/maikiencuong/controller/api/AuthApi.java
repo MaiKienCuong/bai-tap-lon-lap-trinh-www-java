@@ -33,13 +33,13 @@ import maikiencuong.service.impl.AccountDetailsImpl;
 public class AuthApi {
 
 	@Autowired
-	private ModelMapper modelMapper;
-
-	@Autowired
 	private JwtUtils jwtUtils;
 
 	@Autowired
-	CustomerServ customerServ;
+	private ModelMapper modelMapper;
+
+	@Autowired
+	private CustomerServ customerServ;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -51,19 +51,20 @@ public class AuthApi {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		AccountDetailsImpl accountDetails = (AccountDetailsImpl) authentication.getPrincipal();
+
 		AccountDTO accountDTO = modelMapper.map(accountDetails.getAccount(), AccountDTO.class);
 		Customer customer = accountDetails.getAccount().getCustomer();
-		if (customer != null) {
+		if (customer != null)
 			return ResponseEntity.ok(new JwtResponse(jwt, modelMapper.map(customer, CustomerDTO.class), accountDTO));
-		}
+
 		return ResponseEntity.ok(new JwtResponse(jwt, null, accountDTO));
 	}
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> signup(@DTO(CustomerCreateDTO.class) Customer customer) {
-		Customer result = customerServ.add(customer);
-		if (result != null)
+		if (customerServ.add(customer) != null)
 			return ResponseEntity.ok(new MessageResponse("Đăng ký tài khoản thành công"));
+
 		return ResponseEntity.badRequest().body(new MessageResponse("Đăng ký không thành công"));
 	}
 

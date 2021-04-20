@@ -51,6 +51,7 @@ public class CategoryApi {
 		List<Order> orders = getListSortOrder(sort);
 		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
 		Page<Category> pageResult = categoryServ.findAll(pageable);
+
 		return ResponseEntity.ok(getMapCategoryResult(pageResult));
 	}
 
@@ -59,7 +60,8 @@ public class CategoryApi {
 		Category result = categoryServ.findById(id);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, CategoryDTO.class));
-		return ResponseEntity.ok(new MessageResponse("Không tìm thấy loại sản phẩm nào"));
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy loại sản phẩm nào"));
 	}
 
 	@PostMapping("/category")
@@ -67,7 +69,8 @@ public class CategoryApi {
 		Category result = categoryServ.add(category);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, CategoryDTO.class));
-		return ResponseEntity.badRequest().body(new MessageResponse("Thêm loại sản phẩm không thành công"));
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Thêm không thành công"));
 	}
 
 	@PutMapping("/category")
@@ -75,16 +78,17 @@ public class CategoryApi {
 		Category result = categoryServ.update(category);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, CategoryDTO.class));
-		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật loại sản phẩm không thành công"));
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật không thành công"));
 	}
 
 	@DeleteMapping("/category/{id}")
-	public ResponseEntity<?> deleteCustomer(@PathVariable("id") Long id) {
+	public ResponseEntity<?> deleteCategory(@PathVariable("id") Long id) {
 		try {
 			categoryServ.delete(id);
-			return ResponseEntity.ok(new MessageResponse("Xóa thành công loại sản phẩm"));
+			return ResponseEntity.ok(new MessageResponse("Xóa thành công"));
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Xóa loại sản phẩm không thành công"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Xóa không thành công"));
 		}
 	}
 
@@ -98,6 +102,7 @@ public class CategoryApi {
 		} else if (direction.equals("desc")) {
 			return Sort.Direction.DESC;
 		}
+
 		return Sort.Direction.ASC;
 	}
 
@@ -115,6 +120,7 @@ public class CategoryApi {
 		} catch (Exception e) {
 			throw new MyExcetion("Lỗi: Vui lòng kiểm tra lại tham số sort");
 		}
+
 		return orders;
 	}
 
@@ -126,6 +132,7 @@ public class CategoryApi {
 		map.put("currentPage", pageResult.getNumber());
 		map.put("totalItems", pageResult.getTotalElements());
 		map.put("totalPages", pageResult.getTotalPages());
+
 		return map;
 	}
 

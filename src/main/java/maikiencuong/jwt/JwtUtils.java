@@ -30,9 +30,11 @@ public class JwtUtils {
 
 		AccountDetailsImpl userPrincipal = (AccountDetailsImpl) authentication.getPrincipal();
 
-		return Jwts.builder().setSubject((userPrincipal.getUsername())).setIssuedAt(new Date())
+		return Jwts.builder().setSubject((userPrincipal.getUsername()))
+				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+				.signWith(SignatureAlgorithm.HS512, jwtSecret)
+				.compact();
 	}
 
 	public String getUserNameFromJwtToken(String token) {

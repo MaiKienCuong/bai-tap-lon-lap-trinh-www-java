@@ -29,6 +29,7 @@ import maikiencuong.dto.SizeInventoryDTO;
 import maikiencuong.entity.Product;
 import maikiencuong.entity.SubProduct;
 import maikiencuong.handler.MyExcetion;
+import maikiencuong.payload.response.MessageResponse;
 import maikiencuong.service.ProductServ;
 import maikiencuong.service.SubProductServ;
 
@@ -54,11 +55,12 @@ public class ProductApi {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
 		Page<Product> pageResult = productServ.findAll(pageable);
 		Map<String, Object> map = getMapProductResult(pageResult);
+
 		return ResponseEntity.ok(map);
 	}
 
 	@RequestMapping("/product/search")
-	public ResponseEntity<?> search(@RequestParam(defaultValue = "8") int size,
+	public ResponseEntity<?> findByProductNameOrCateGoryName(@RequestParam(defaultValue = "8") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(required = false, value = "q") String query,
 			@RequestParam(defaultValue = "name-asc") String[] sort) throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);
@@ -69,11 +71,12 @@ public class ProductApi {
 		} else {
 			pageResult = productServ.findAllByNameLikeOrCategory_NameLike(query, query, pageable);
 		}
+
 		return ResponseEntity.ok(getMapProductResult(pageResult));
 	}
 
 	@RequestMapping("/product/category")
-	public ResponseEntity<?> findByCategory(@RequestParam(defaultValue = "8") int size,
+	public ResponseEntity<?> findByCategoryName(@RequestParam(defaultValue = "8") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(required = false, value = "q") String query,
 			@RequestParam(defaultValue = "name-asc") String[] sort) throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);
@@ -84,6 +87,7 @@ public class ProductApi {
 		} else {
 			pageResult = productServ.findAllByCategory_NameLike(query, pageable);
 		}
+
 		return ResponseEntity.ok(getMapProductResult(pageResult));
 	}
 
@@ -92,7 +96,8 @@ public class ProductApi {
 		Product result = productServ.findById(id);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
-		return ResponseEntity.ok("Không tìm thấy sản phẩm");
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy sản phẩm"));
 	}
 
 	@GetMapping("/product/sizes/{id}")
@@ -103,7 +108,8 @@ public class ProductApi {
 			}.getType());
 			return ResponseEntity.ok(set);
 		}
-		return ResponseEntity.ok("Danh sách trống");
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
 	}
 
 	@GetMapping("/product/colors/{id}")
@@ -114,22 +120,25 @@ public class ProductApi {
 			}.getType());
 			return ResponseEntity.ok(set);
 		}
-		return ResponseEntity.ok("Danh sách trống");
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
 	}
 
 	@GetMapping("/product/size-and-inventory")
-	public ResponseEntity<?> listSizeByIdAndColor(@RequestParam("id") Long id, @RequestParam("color") String color) {
+	public ResponseEntity<?> listSizeAndInventoryByIdAndColor(@RequestParam("id") Long id,
+			@RequestParam("color") String color) {
 		List<SubProduct> list = subProductServ.findAllByProduct_IdAndColor(id, color);
 		if (!list.isEmpty()) {
 			Set<SizeInventoryDTO> set = modelMapper.map(list, new TypeToken<Set<SizeInventoryDTO>>() {
 			}.getType());
 			return ResponseEntity.ok(set);
 		}
-		return ResponseEntity.ok("Danh sách trống");
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
 	}
 
 	@GetMapping("/product/marker")
-	public ResponseEntity<?> listProductByMarker(@RequestParam(defaultValue = "8") int size,
+	public ResponseEntity<?> findByMarker(@RequestParam(defaultValue = "8") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort,
 			@RequestParam(defaultValue = "HOT", value = "marker") String[] markers) throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);
@@ -144,6 +153,7 @@ public class ProductApi {
 		} else if (direction.equals("desc")) {
 			return Sort.Direction.DESC;
 		}
+
 		return Sort.Direction.ASC;
 	}
 
@@ -161,6 +171,7 @@ public class ProductApi {
 		} catch (Exception e) {
 			throw new MyExcetion("Lỗi: Vui lòng kiểm tra lại tham số sort");
 		}
+
 		return orders;
 	}
 
@@ -172,6 +183,7 @@ public class ProductApi {
 		map.put("currentPage", pageResult.getNumber());
 		map.put("totalItems", pageResult.getTotalElements());
 		map.put("totalPages", pageResult.getTotalPages());
+
 		return map;
 	}
 

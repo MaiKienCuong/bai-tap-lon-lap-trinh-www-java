@@ -1,5 +1,7 @@
 package maikiencuong.handler;
 
+import java.util.List;
+
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.data.mapping.PropertyReferenceException;
@@ -11,6 +13,7 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -37,12 +40,16 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		BindingResult bindingResult = ex.getBindingResult();
-		return ResponseEntity.badRequest().body(new MessageResponse(bindingResult.getFieldError().getDefaultMessage()));
+		if (bindingResult.hasFieldErrors()) {
+			List<FieldError> errors = bindingResult.getFieldErrors();
+			return ResponseEntity.badRequest().body(new MessageResponse(errors.get(0).getDefaultMessage()));
+		}
+		return ResponseEntity.badRequest().body(new MessageResponse("handleMethodArgumentNotValid"));
 	}
 
 	@ExceptionHandler(JpaSystemException.class)
 	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
-		return ResponseEntity.badRequest().body(new MessageResponse("Không thể thêm hay cập nhật dữ liệu"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi khi thêm hoặc cập nhật dữ liệu"));
 	}
 
 	@ExceptionHandler(PropertyReferenceException.class)

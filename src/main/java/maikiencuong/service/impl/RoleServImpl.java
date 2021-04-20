@@ -1,10 +1,9 @@
 package maikiencuong.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +27,8 @@ public class RoleServImpl implements RoleServ {
 
 	@Override
 	@Transactional
-	public Page<Role> findAll(Pageable pageable) {
-		return roleRepo.findAll(pageable);
+	public List<Role> findAll() {
+		return roleRepo.findAll();
 	}
 
 	@Override

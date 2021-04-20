@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
@@ -65,6 +66,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		viewResolver.setViewClass(JstlView.class);
 		viewResolver.setPrefix("/WEB-INF/");
 		viewResolver.setSuffix(".jsp");
+
 		return viewResolver;
 	}
 
@@ -77,6 +79,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		dataSource.setUsername(evn.getRequiredProperty(PROP_DATABASE_USERNAME));
 		dataSource.setPassword(evn.getRequiredProperty(PROP_DATABASE_PASSWORD));
 		dataSource.setDriverClassName(evn.getRequiredProperty(PROP_DATABASE_DRIVER));
+
 		return dataSource;
 	}
 
@@ -87,6 +90,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
 		entityManagerFactoryBean.setPackagesToScan(evn.getRequiredProperty(PROP_ENTITYMANAGER_PACKAGES_TO_SCAN));
 		entityManagerFactoryBean.setJpaProperties(hibernateProperties());
+
 		return entityManagerFactoryBean;
 	}
 
@@ -94,6 +98,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	public JpaTransactionManager transactionManager() {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
 		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+
 		return transactionManager;
 	}
 
@@ -102,6 +107,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
 		modelMapper.getConfiguration().setSkipNullEnabled(true);
+
 		return modelMapper;
 	}
 
@@ -112,7 +118,10 @@ public class SpringWebConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-		EntityManager entityManager = entityManagerFactory().getObject().createEntityManager();
+		EntityManagerFactory em = entityManagerFactory().getObject();
+		EntityManager entityManager = null;
+		if (em != null)
+			entityManager = em.createEntityManager();
 		argumentResolvers.add(new DTOModelMapper(objectMapper(), entityManager, modelMapper()));
 	}
 
@@ -127,6 +136,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		properties.setProperty(PROP_HIBERNATE_FORMAT_SQL, evn.getProperty(PROP_HIBERNATE_FORMAT_SQL));
 		properties.setProperty(PROP_HIBERNATE_SHOW_SQL, evn.getProperty(PROP_HIBERNATE_SHOW_SQL));
 		properties.setProperty(PROP_HIBERNATE_HBM2DDL_AUTO, evn.getProperty(PROP_HIBERNATE_HBM2DDL_AUTO));
+
 		return properties;
 	}
 

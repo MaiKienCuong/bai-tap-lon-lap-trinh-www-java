@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import maikiencuong.entity.Order;
+import maikiencuong.entity.Orderr;
 import maikiencuong.repository.OrderRepo;
 import maikiencuong.service.OrderServ;
 
@@ -20,26 +20,26 @@ public class OrderServImpl implements OrderServ {
 
 	@Override
 	@Transactional
-	public Page<Order> findAll(Pageable pageable) {
+	public Page<Orderr> findAll(Pageable pageable) {
 		return orderRepo.findAll(pageable);
 	}
 
 	@Override
 	@Transactional
-	public Order findById(Long id) {
-		Optional<Order> optional = orderRepo.findById(id);
+	public Orderr findById(Long id) {
+		Optional<Orderr> optional = orderRepo.findById(id);
 		return optional.isPresent() ? optional.get() : null;
 	}
 
 	@Override
 	@Transactional
-	public Order add(Order order) {
+	public Orderr add(Orderr order) {
 		return orderRepo.save(order);
 	}
 
 	@Override
 	@Transactional
-	public Order update(Order order) {
+	public Orderr update(Orderr order) {
 		return orderRepo.saveAndFlush(order);
 	}
 
@@ -51,7 +51,7 @@ public class OrderServImpl implements OrderServ {
 
 	@Override
 	@Transactional
-	public Page<Order> findAllByCustomer_Id(Long id, Pageable pageable) {
+	public Page<Orderr> findAllByCustomer_Id(Long id, Pageable pageable) {
 		return orderRepo.findAllByCustomer_Id(id, pageable);
 	}
 

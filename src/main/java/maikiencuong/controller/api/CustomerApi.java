@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,7 +50,8 @@ public class CustomerApi {
 		List<Order> orders = getListSortOrder(sort);
 		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
 		Page<Customer> pageResult = customerServ.findAll(pageable);
-		return ResponseEntity.ok(getMapProductResult(pageResult));
+
+		return ResponseEntity.ok(getMapCustomerResult(pageResult));
 	}
 
 	@GetMapping("/customer/{id}")
@@ -59,7 +59,8 @@ public class CustomerApi {
 		Customer result = customerServ.findById(id);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, CustomerDTO.class));
-		return ResponseEntity.ok(new MessageResponse("Không tìm thấy khách hàng"));
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy khách hàng"));
 	}
 
 	@PostMapping("/customer")
@@ -67,7 +68,8 @@ public class CustomerApi {
 		Customer result = customerServ.add(customer);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, CustomerDTO.class));
-		return ResponseEntity.badRequest().body(new MessageResponse("Thêm khách hàng không thành công"));
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Thêm không thành công"));
 	}
 
 	@PutMapping("/customer")
@@ -75,17 +77,8 @@ public class CustomerApi {
 		Customer result = customerServ.update(customer);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, CustomerDTO.class));
-		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật khách hàng không thành công"));
-	}
 
-	@DeleteMapping("/customer/{id}")
-	public ResponseEntity<?> deleteCustomer(@PathVariable("id") Long id) {
-		try {
-			customerServ.delete(id);
-			return ResponseEntity.ok(new MessageResponse("Xóa thành công khách hàng"));
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Xóa khách hàng không thành công"));
-		}
+		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật không thành công"));
 	}
 
 	/*
@@ -98,6 +91,7 @@ public class CustomerApi {
 		} else if (direction.equals("desc")) {
 			return Sort.Direction.DESC;
 		}
+
 		return Sort.Direction.ASC;
 	}
 
@@ -115,10 +109,11 @@ public class CustomerApi {
 		} catch (Exception e) {
 			throw new MyExcetion("Lỗi: Vui lòng kiểm tra lại tham số sort");
 		}
+
 		return orders;
 	}
 
-	private Map<String, Object> getMapProductResult(Page<Customer> pageResult) {
+	private Map<String, Object> getMapCustomerResult(Page<Customer> pageResult) {
 		Map<String, Object> map = new HashMap<>();
 		List<CustomerDTO> list = modelMapper.map(pageResult.getContent(), new TypeToken<List<CustomerDTO>>() {
 		}.getType());
@@ -126,6 +121,7 @@ public class CustomerApi {
 		map.put("currentPage", pageResult.getNumber());
 		map.put("totalItems", pageResult.getTotalElements());
 		map.put("totalPages", pageResult.getTotalPages());
+
 		return map;
 	}
 

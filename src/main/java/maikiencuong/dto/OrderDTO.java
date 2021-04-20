@@ -22,16 +22,16 @@ public class OrderDTO implements Serializable {
 
 	private Long id;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
-	private LocalDateTime orderDate;
-
 	private String shipAddress;
 
 	private EnumStatusOrder status;
+	
+	private EnumPaymentMethod paymentMethod;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
+	private LocalDateTime orderDate;
 
 	private Double total;
-
-	private EnumPaymentMethod paymentMethod;
 
 	private CustomerDTO customer;
 

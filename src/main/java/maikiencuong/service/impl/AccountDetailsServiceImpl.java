@@ -14,8 +14,9 @@ import maikiencuong.repository.AccountRepo;
 
 @Service
 public class AccountDetailsServiceImpl implements UserDetailsService {
+	
 	@Autowired
-	AccountRepo accountRepo;
+	private AccountRepo accountRepo;
 
 	@Override
 	@Transactional

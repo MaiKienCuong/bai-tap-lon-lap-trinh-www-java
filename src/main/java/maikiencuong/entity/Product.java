@@ -82,8 +82,6 @@ public class Product {
 	@Column(name = "updated_at", columnDefinition = "datetime")
 	private LocalDateTime updatedAt;
 
-	// -----------------
-
 	@PrePersist
 	public void prePersist() {
 		createdAt = LocalDateTime.now();

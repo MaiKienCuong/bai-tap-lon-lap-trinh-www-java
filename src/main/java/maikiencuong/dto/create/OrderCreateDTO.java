@@ -8,13 +8,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import maikiencuong.enumvalue.EnumPaymentMethod;
 import maikiencuong.enumvalue.EnumStatusOrder;
 
 @Getter
 @Setter
-@ToString
 public class OrderCreateDTO implements Serializable {
 
 	/**
@@ -31,9 +29,9 @@ public class OrderCreateDTO implements Serializable {
 	@JsonIgnore
 	private EnumStatusOrder status = EnumStatusOrder.PENDING;
 
-	private String shipAddress;
-
 	private EnumPaymentMethod paymentMethod;
+
+	private String shipAddress;
 
 	private String customerId;
 

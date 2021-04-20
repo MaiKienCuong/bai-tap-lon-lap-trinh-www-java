@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import maikiencuong.dto.OrderDetailDTO;
 import maikiencuong.entity.OrderDetail;
-import maikiencuong.handler.MyExcetion;
 import maikiencuong.payload.response.MessageResponse;
 import maikiencuong.service.OrderDetailServ;
 
@@ -30,13 +29,14 @@ public class OrderDetailApi {
 	private ModelMapper modelMapper;
 
 	@GetMapping("/order-detail/order/{id}")
-	public ResponseEntity<?> findAllByOrderId(@PathVariable("id") Long id) throws MyExcetion {
+	public ResponseEntity<?> findAllByOrderId(@PathVariable("id") Long id) {
 		List<OrderDetail> list = orderDetailServ.findAllByOrder_Id(id);
 		if (!list.isEmpty()) {
-			List<OrderDetailDTO> listDto = modelMapper.map(list, new TypeToken<List<OrderDetailDTO>>() {
+			List<OrderDetailDTO> result = modelMapper.map(list, new TypeToken<List<OrderDetailDTO>>() {
 			}.getType());
-			return ResponseEntity.ok(listDto);
+			return ResponseEntity.ok(result);
 		}
+
 		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
 	}
 
