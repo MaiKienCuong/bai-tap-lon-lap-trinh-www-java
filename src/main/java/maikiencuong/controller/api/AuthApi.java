@@ -46,18 +46,22 @@ public class AuthApi {
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> signin(@Valid @RequestBody LoginRequest request) {
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
-		AccountDetailsImpl accountDetails = (AccountDetailsImpl) authentication.getPrincipal();
+		try {
+			Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			String jwt = jwtUtils.generateJwtToken(authentication);
+			AccountDetailsImpl accountDetails = (AccountDetailsImpl) authentication.getPrincipal();
 
-		AccountDTO accountDTO = modelMapper.map(accountDetails.getAccount(), AccountDTO.class);
-		Customer customer = accountDetails.getAccount().getCustomer();
-		if (customer != null)
-			return ResponseEntity.ok(new JwtResponse(jwt, modelMapper.map(customer, CustomerDTO.class), accountDTO));
-
-		return ResponseEntity.ok(new JwtResponse(jwt, null, accountDTO));
+			AccountDTO accountDTO = modelMapper.map(accountDetails.getAccount(), AccountDTO.class);
+			Customer customer = accountDetails.getAccount().getCustomer();
+			if (customer != null)
+				return ResponseEntity
+						.ok(new JwtResponse(jwt, modelMapper.map(customer, CustomerDTO.class), accountDTO));
+			return ResponseEntity.ok(new JwtResponse(jwt, null, accountDTO));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(new MessageResponse("Đăng nhập không thành công"));
+		}
 	}
 
 	@PostMapping("/signup")

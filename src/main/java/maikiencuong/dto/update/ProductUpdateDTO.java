@@ -1,8 +1,8 @@
-package maikiencuong.dto.create;
+package maikiencuong.dto.update;
 
 import java.io.Serializable;
-import java.util.List;
 
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -13,12 +13,16 @@ import maikiencuong.dto.SupplierDTO;
 
 @Getter
 @Setter
-public class ProductCreateDTO implements Serializable {
+public class ProductUpdateDTO implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	@Id
+	@NotNull(message = "Id sản phẩm không được để trống")
+	private Long id;
 
 	@NotBlank(message = "Tên sản phẩm không được để trống")
 	private String name;
@@ -33,7 +37,7 @@ public class ProductCreateDTO implements Serializable {
 
 	private String marker;
 
-	private double discount = 0;
+	private double discount;
 
 	@NotBlank(message = "Chưa có xuất xứ sản phẩm")
 	private String origin;
@@ -55,8 +59,5 @@ public class ProductCreateDTO implements Serializable {
 
 	@NotNull(message = "Chưa có thông tin loại sản phẩm")
 	private CategoryDTO category;
-
-	@NotNull(message = "Chưa có danh sách sản phẩm con")
-	private List<SubProductCreateDTO> subProducts;
 
 }

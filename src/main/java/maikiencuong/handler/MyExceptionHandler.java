@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.orm.jpa.JpaSystemException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -44,17 +45,24 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 			List<FieldError> errors = bindingResult.getFieldErrors();
 			return ResponseEntity.badRequest().body(new MessageResponse(errors.get(0).getDefaultMessage()));
 		}
-		return ResponseEntity.badRequest().body(new MessageResponse("handleMethodArgumentNotValid"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi: Tham số gửi lên không hợp lệ"));
 	}
 
 	@ExceptionHandler(JpaSystemException.class)
-	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
-		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi khi thêm hoặc cập nhật dữ liệu"));
+	public final ResponseEntity<Object> handleAllExceptions(JpaSystemException ex, WebRequest request) {
+		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi: Không thể thêm hoặc cập nhật dữ liệu"));
 	}
 
 	@ExceptionHandler(PropertyReferenceException.class)
-	public final ResponseEntity<Object> handlePropertyReferenceException(Exception ex, WebRequest request) {
+	public final ResponseEntity<Object> handlePropertyReferenceException(PropertyReferenceException ex,
+			WebRequest request) {
 		return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));
+	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	public final ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
+		return ResponseEntity.badRequest()
+				.body(new MessageResponse("Lỗi: Truy cập bị từ chối. Không có quyền truy cập"));
 	}
 
 	@ExceptionHandler(MyExcetion.class)
@@ -65,8 +73,7 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		return ResponseEntity.badRequest()
-				.body(new MessageResponse("handleHttpRequestMethodNotSupported " + ex.getMessage()));
+		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi: Phương thức không được hỗ trợ"));
 	}
 
 	@Override
@@ -113,14 +120,14 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
 		return ResponseEntity.badRequest()
-				.body(new MessageResponse("Kiểu dữ liệu không hợp lệ. Không thể chuyển đổi kiểu"));
+				.body(new MessageResponse("Lỗi: Kiểu dữ liệu không hợp lệ. Không thể chuyển đổi kiểu"));
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		return ResponseEntity.badRequest()
-				.body(new MessageResponse("Dữ liệu không hợp lệ. Không thể đọc được dữ liệu"));
+				.body(new MessageResponse("Lỗi: Dữ liệu không hợp lệ. Không thể đọc được dữ liệu"));
 	}
 
 	@Override
