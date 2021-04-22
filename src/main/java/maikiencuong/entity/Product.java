@@ -85,6 +85,9 @@ public class Product {
 	@PrePersist
 	public void prePersist() {
 		createdAt = LocalDateTime.now();
+		updatedAt = createdAt;
+		views = 0;
+		active = true;
 	}
 
 	@PreUpdate

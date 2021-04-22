@@ -1,15 +1,17 @@
 package maikiencuong.dto.create;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
 import maikiencuong.enumvalue.EnumPaymentMethod;
-import maikiencuong.enumvalue.EnumStatusOrder;
 
 @Getter
 @Setter
@@ -23,18 +25,17 @@ public class OrderCreateDTO implements Serializable {
 	@JsonIgnore
 	private Long id;
 
-	@JsonIgnore
-	private LocalDateTime orderDate = LocalDateTime.now();
-
-	@JsonIgnore
-	private EnumStatusOrder status = EnumStatusOrder.PENDING;
-
+	@NotNull(message = "Chưa có phương thức thanh toán")
 	private EnumPaymentMethod paymentMethod;
 
+	@NotBlank(message = "Địa chỉ giao hàng không được để trống")
 	private String shipAddress;
 
+	@NotBlank(message = "Chưa có thông tin khách hàng")
 	private String customerId;
 
+	@Valid
+	@NotNull(message = "Hóa đơn trống")
 	private List<OrderDetailCreateDTO> orderDetails;
 
 }

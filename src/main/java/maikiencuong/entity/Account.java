@@ -1,5 +1,7 @@
 package maikiencuong.entity;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,6 +27,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import maikiencuong.enumvalue.EnumRole;
 
 @Builder
 @Entity
@@ -59,5 +63,11 @@ public class Account {
 	@ToString.Exclude
 	@OneToOne(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Customer customer;
+
+	@PrePersist
+	public void prePersist() {
+		enable = true;
+		roles = new HashSet<>(Arrays.asList(new Role(EnumRole.ROLE_CUSTOMER)));
+	}
 
 }

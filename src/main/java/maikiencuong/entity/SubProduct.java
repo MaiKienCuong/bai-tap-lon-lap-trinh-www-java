@@ -59,6 +59,7 @@ public class SubProduct {
 	@PrePersist
 	public void prePersist() {
 		createdAt = LocalDateTime.now();
+		updatedAt = createdAt;
 	}
 
 	@PreUpdate

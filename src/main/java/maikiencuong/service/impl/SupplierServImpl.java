@@ -12,7 +12,7 @@ import maikiencuong.entity.Supplier;
 import maikiencuong.repository.SupplierRepo;
 
 @Service
-public class SupplierServ implements maikiencuong.service.SupplierServ {
+public class SupplierServImpl implements maikiencuong.service.SupplierServ {
 
 	@Autowired
 	private SupplierRepo supplierRepo;

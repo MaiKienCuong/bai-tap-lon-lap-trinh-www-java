@@ -55,12 +55,14 @@ public class Orderr {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "payment_method", columnDefinition = "nvarchar(255)")
 	private EnumPaymentMethod paymentMethod;
-	
+
 	@Column(name = "total")
 	private Double total;
 
 	@PrePersist
 	public void prePersist() {
+		orderDate = LocalDateTime.now();
+		status = EnumStatusOrder.PENDING;
 		sumTotal();
 	}
 
