@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,7 @@ public class CategoryApi {
 	private ModelMapper modelMapper;
 
 	@GetMapping("/categories")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort)
 			throws MyExcetion {
