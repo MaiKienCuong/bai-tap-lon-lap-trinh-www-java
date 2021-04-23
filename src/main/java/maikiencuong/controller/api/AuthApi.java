@@ -60,7 +60,8 @@ public class AuthApi {
 						.ok(new JwtResponse(jwt, modelMapper.map(customer, CustomerDTO.class), accountDTO));
 			return ResponseEntity.ok(new JwtResponse(jwt, null, accountDTO));
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Đăng nhập không thành công"));
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Đăng nhập không thành công. Tài khoản hoặc mật khẩu không đúng"));
 		}
 	}
 

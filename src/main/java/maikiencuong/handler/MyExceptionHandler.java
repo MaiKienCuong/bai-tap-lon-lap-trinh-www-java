@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.orm.jpa.JpaSystemException;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -50,6 +49,7 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(JpaSystemException.class)
 	public final ResponseEntity<Object> handleAllExceptions(JpaSystemException ex, WebRequest request) {
+		ex.printStackTrace();
 		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi: Không thể thêm hoặc cập nhật dữ liệu"));
 	}
 
@@ -57,12 +57,6 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 	public final ResponseEntity<Object> handlePropertyReferenceException(PropertyReferenceException ex,
 			WebRequest request) {
 		return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));
-	}
-
-	@ExceptionHandler(AccessDeniedException.class)
-	public final ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
-		return ResponseEntity.badRequest()
-				.body(new MessageResponse("Lỗi: Truy cập bị từ chối. Không có quyền truy cập"));
 	}
 
 	@ExceptionHandler(MyExcetion.class)

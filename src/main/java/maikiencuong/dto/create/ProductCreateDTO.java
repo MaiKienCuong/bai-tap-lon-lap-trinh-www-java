@@ -35,19 +35,15 @@ public class ProductCreateDTO implements Serializable {
 
 	private double discount = 0;
 
-	@NotBlank(message = "Chưa có xuất xứ sản phẩm")
 	private String origin;
 
 	@NotNull(message = "Chưa nhập thuế sản phẩm")
 	private double tax;
 
-	@NotBlank(message = "Chưa có mô tả ngắn về sản phẩm")
 	private String shortDescription;
 
-	@NotBlank(message = "Chưa có mô tả dài về sản phẩm")
 	private String longDescription;
 
-	@NotBlank(message = "Chưa có chất liệu sản phẩm")
 	private String material;
 
 	@NotNull(message = "Chưa có thông tin nhà cung cấp")

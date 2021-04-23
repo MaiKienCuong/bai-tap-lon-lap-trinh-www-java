@@ -10,6 +10,6 @@ import maikiencuong.entity.Orderr;
 @Repository
 public interface OrderRepo extends JpaRepository<Orderr, Long> {
 
-	public Page<Orderr> findAllByCustomer_Id(Long id, Pageable pageable);
+	public Page<Orderr> findAllByCustomer_IdOrderByOrderDateDesc(Long id, Pageable pageable);
 	
 }

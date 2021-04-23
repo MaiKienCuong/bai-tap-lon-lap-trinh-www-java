@@ -52,7 +52,7 @@ public class OrderServImpl implements OrderServ {
 	@Override
 	@Transactional
 	public Page<Orderr> findAllByCustomer_Id(Long id, Pageable pageable) {
-		return orderRepo.findAllByCustomer_Id(id, pageable);
+		return orderRepo.findAllByCustomer_IdOrderByOrderDateDesc(id, pageable);
 	}
 
 }

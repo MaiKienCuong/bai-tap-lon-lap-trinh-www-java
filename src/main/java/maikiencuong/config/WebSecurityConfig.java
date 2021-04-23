@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import maikiencuong.jwt.AccessDeniedHandlerJwt;
 import maikiencuong.jwt.AuthEntryPointJwt;
 import maikiencuong.jwt.AuthTokenFilter;
 
@@ -28,7 +29,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
-
+	
+	@Autowired
+	private AccessDeniedHandlerJwt accessDeniedHandle;
+	
 	@Bean
 	public AuthTokenFilter authenticationJwtTokenFilter() {
 		return new AuthTokenFilter();
@@ -60,6 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/src/**").permitAll()
 			.antMatchers("/api/**").permitAll()
 			.anyRequest().authenticated()
+			.and().exceptionHandling().accessDeniedHandler(accessDeniedHandle)
 			.and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
 			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

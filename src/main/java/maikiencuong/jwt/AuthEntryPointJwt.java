@@ -2,7 +2,6 @@ package maikiencuong.jwt;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,11 +22,12 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException authException) throws IOException, ServletException {
+			AuthenticationException authException) throws IOException {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		response.getWriter().println(mapper.writeValueAsString(new MessageResponse("Lỗi xác thực. Vui lòng đăng nhập")));
+		response.getWriter()
+				.println(mapper.writeValueAsString(new MessageResponse("Lỗi xác thực. Vui lòng đăng nhập")));
 	}
 
 }
