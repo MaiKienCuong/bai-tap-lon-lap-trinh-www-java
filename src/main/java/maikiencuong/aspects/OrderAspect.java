@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import maikiencuong.entity.Customer;
 import maikiencuong.entity.OrderDetail;
 import maikiencuong.entity.Orderr;
 import maikiencuong.entity.SubProduct;
@@ -29,7 +30,11 @@ public class OrderAspect {
 	@Before("execution(* maikiencuong.controller.api.OrderApi.addOrder(..))")
 	public void beforeAddOrder(JoinPoint joinPoint) throws MyExcetion {
 		Orderr newOrder = (Orderr) joinPoint.getArgs()[0];
-		newOrder.setCustomer(customerServ.findById(newOrder.getCustomer().getId()));
+
+		Customer customer = customerServ.findById(newOrder.getCustomer().getId());
+		if (customer == null)
+			throw new MyExcetion("Lỗi: Không tìm thấy thông tin của khách hàng");
+		newOrder.setCustomer(customer);
 
 		List<OrderDetail> details = newOrder.getOrderDetails();
 		for (Iterator<?> iterator = details.iterator(); iterator.hasNext();) {
@@ -38,14 +43,10 @@ public class OrderAspect {
 			if (subProduct != null) {
 				odd.setSubProduct(subProduct);
 				odd.setOrder(newOrder);
-				if (subProduct.getInventory() >= odd.getQuantity()) {
-					subProduct.setInventory(subProduct.getInventory() - odd.getQuantity());
-					subProductServ.update(subProduct);
-				} else
+				if (subProduct.getInventory() < odd.getQuantity())
 					throw new MyExcetion("Số lượng tồn của sản phẩm " + subProduct.getName() + " không đủ");
-			} else {
+			} else
 				throw new MyExcetion("Sản phẩm " + odd.getSubProduct().getId() + " không tồn tại");
-			}
 		}
 	}
 

@@ -2,6 +2,7 @@ package maikiencuong.dto.create;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -29,6 +30,7 @@ public class SubProductCreateDTO implements Serializable {
 	private String size;
 
 	@NotNull(message = "Số lượng tồn không được để trống")
+	@Min(value = 1, message = "Số lượng tồn phải lớn hơn 0")
 	private Integer inventory;
 
 }

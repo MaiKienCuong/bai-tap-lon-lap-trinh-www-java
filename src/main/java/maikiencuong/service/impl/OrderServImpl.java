@@ -1,5 +1,7 @@
 package maikiencuong.service.impl;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +10,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import maikiencuong.entity.OrderDetail;
 import maikiencuong.entity.Orderr;
+import maikiencuong.entity.SubProduct;
 import maikiencuong.repository.OrderRepo;
 import maikiencuong.service.OrderServ;
+import maikiencuong.service.SubProductServ;
 
 @Service
 public class OrderServImpl implements OrderServ {
 
 	@Autowired
 	private OrderRepo orderRepo;
+	
+	@Autowired
+	private SubProductServ  subProductServ;
 
 	@Override
 	@Transactional
@@ -34,7 +42,17 @@ public class OrderServImpl implements OrderServ {
 	@Override
 	@Transactional
 	public Orderr add(Orderr order) {
-		return orderRepo.save(order);
+		Orderr result = orderRepo.save(order);
+		if(result!=null) {
+			List<OrderDetail> orderDetails = order.getOrderDetails();
+			for (Iterator<?> iterator = orderDetails.iterator(); iterator.hasNext();) {
+				OrderDetail odd = (OrderDetail) iterator.next();
+				SubProduct subProduct = odd.getSubProduct();
+				subProduct.setInventory(subProduct.getInventory()-odd.getQuantity());
+				subProductServ.update(subProduct);
+			}
+		}
+		return result;
 	}
 
 	@Override
