@@ -15,7 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,7 +23,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import maikiencuong.enumvalue.EnumRole;
@@ -35,7 +33,6 @@ import maikiencuong.enumvalue.EnumRole;
 @Setter
 @ToString
 @Table(name = "Account")
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = { "id", "username" })
 public class Account {
@@ -56,7 +53,7 @@ public class Account {
 	private boolean enable;
 
 	@ToString.Exclude
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "Account_Role", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 
@@ -64,8 +61,7 @@ public class Account {
 	@OneToOne(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Customer customer;
 
-	@PrePersist
-	public void prePersist() {
+	public Account() {
 		enable = true;
 		roles = new HashSet<>(Arrays.asList(new Role(EnumRole.ROLE_CUSTOMER)));
 	}

@@ -18,8 +18,6 @@ public class SubProductCreateDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String sku;
-
 	@NotBlank(message = "Tên không được để trống")
 	private String name;
 

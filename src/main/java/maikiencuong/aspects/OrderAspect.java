@@ -30,10 +30,9 @@ public class OrderAspect {
 	@Before("execution(* maikiencuong.controller.api.OrderApi.addOrder(..))")
 	public void beforeAddOrder(JoinPoint joinPoint) throws MyExcetion {
 		Orderr newOrder = (Orderr) joinPoint.getArgs()[0];
-
 		Customer customer = customerServ.findById(newOrder.getCustomer().getId());
 		if (customer == null)
-			throw new MyExcetion("Lỗi: Không tìm thấy thông tin của khách hàng");
+			throw new MyExcetion("Không tìm thấy thông tin của khách hàng");
 		newOrder.setCustomer(customer);
 
 		List<OrderDetail> details = newOrder.getOrderDetails();
@@ -43,10 +42,10 @@ public class OrderAspect {
 			if (subProduct != null) {
 				odd.setSubProduct(subProduct);
 				odd.setOrder(newOrder);
-				if (subProduct.getInventory() < odd.getQuantity())
-					throw new MyExcetion("Số lượng tồn của sản phẩm " + subProduct.getName() + " không đủ");
+				if (odd.getQuantity() > subProduct.getInventory())
+					throw new MyExcetion("Sản phẩm " + subProduct.getName() + " không đủ số lượng");
 			} else
-				throw new MyExcetion("Sản phẩm " + odd.getSubProduct().getId() + " không tồn tại");
+				throw new MyExcetion("Sản phẩm Id=" + odd.getSubProduct().getId() + " không tồn tại");
 		}
 	}
 

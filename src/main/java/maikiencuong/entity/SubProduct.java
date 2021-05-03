@@ -2,6 +2,7 @@ package maikiencuong.entity;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,9 +37,6 @@ public class SubProduct {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "sku", columnDefinition = "varchar(50)")
-	private String sku;
-
 	@Column(name = "name", columnDefinition = "nvarchar(255)")
 	private String name;
 
@@ -68,7 +66,7 @@ public class SubProduct {
 	}
 
 	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
 	private Product product;
 

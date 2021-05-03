@@ -23,8 +23,6 @@ public class SubProductUpdateDTO implements Serializable {
 	@NotNull(message = "Id sản phẩm không được để trống")
 	private Long id;
 
-	private String sku;
-
 	@NotBlank(message = "Tên không được để trống")
 	private String name;
 

@@ -44,7 +44,7 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 			List<FieldError> errors = bindingResult.getFieldErrors();
 			return ResponseEntity.badRequest().body(new MessageResponse(errors.get(0).getDefaultMessage()));
 		}
-		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi: Tham số gửi lên không hợp lệ"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi: Dữ liệu hoặc tham số không hợp lệ"));
 	}
 
 	@ExceptionHandler(JpaSystemException.class)
@@ -113,15 +113,14 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
-		return ResponseEntity.badRequest()
-				.body(new MessageResponse("Lỗi: Kiểu dữ liệu không hợp lệ. Không thể chuyển đổi kiểu"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi: Kiểu dữ liệu không hợp lệ."));
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		return ResponseEntity.badRequest()
-				.body(new MessageResponse("Lỗi: Dữ liệu không hợp lệ. Không thể đọc được dữ liệu"));
+				.body(new MessageResponse("Lỗi: Dữ liệu không hợp lệ hoặc sai cú pháp. Không thể đọc được dữ liệu"));
 	}
 
 	@Override

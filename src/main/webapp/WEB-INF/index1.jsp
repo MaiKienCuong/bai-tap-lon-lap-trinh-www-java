@@ -105,6 +105,13 @@
 	<br>
 	<mark>api/orders</mark>
 	<a href="api/orders">tất cả hóa đơn</a>
+	
+	<form action="/SPRING-SECURITY-CUSTOMLOGIN/api/file/upload" method="post" enctype="multipart/form-data">
+		<input type="file" name="file"> 
+		<input type="text" name="product">
+		<input type="submit"
+			name="submit" value="gui">
+	</form>
 
 </body>
 </html>

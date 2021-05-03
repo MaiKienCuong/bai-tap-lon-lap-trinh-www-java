@@ -2,8 +2,12 @@ package maikiencuong.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,6 +19,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,11 +51,11 @@ public class Product {
 	@Column(name = "price")
 	private Double price;
 
-	@Column(name = "url", columnDefinition = "varchar(255)")
-	private String url;
-
-	@Column(name = "images_folder", columnDefinition = "varchar(255)")
-	private String imagesFolder;
+	@ElementCollection
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@CollectionTable(name = "Images", joinColumns = @JoinColumn(name = "product_id"))
+	@Column(name = "url", nullable = false, columnDefinition = "nvarchar(1000)")
+	private Set<String> imagesUrl;
 
 	@Column(name = "marker", columnDefinition = "nvarchar(50)")
 	private String marker;
@@ -82,6 +89,20 @@ public class Product {
 	@Column(name = "updated_at", columnDefinition = "datetime")
 	private LocalDateTime updatedAt;
 
+	@ManyToOne
+	@ToString.Exclude
+	@JoinColumn(name = "supplier_id")
+	private Supplier supplier;
+
+	@ManyToOne
+	@ToString.Exclude
+	@JoinColumn(name = "category_id")
+	private Category category;
+
+	@ToString.Exclude
+	@OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<SubProduct> subProducts;
+
 	@PrePersist
 	public void prePersist() {
 		views = 0;
@@ -94,19 +115,5 @@ public class Product {
 	public void preUpdate() {
 		updatedAt = LocalDateTime.now();
 	}
-
-	@ManyToOne
-	@ToString.Exclude
-	@JoinColumn(name = "supplier_id")
-	private Supplier supplier;
-
-	@ToString.Exclude
-	@OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-	private List<SubProduct> subProducts;
-
-	@ManyToOne
-	@ToString.Exclude
-	@JoinColumn(name = "category_id")
-	private Category category;
 
 }

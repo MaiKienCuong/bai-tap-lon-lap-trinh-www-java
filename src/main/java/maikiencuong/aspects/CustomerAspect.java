@@ -63,7 +63,6 @@ public class CustomerAspect {
 
 	@Before("execution(* maikiencuong.controller.api.CustomerApi.updateCustomer(..))")
 	public void validUpdateCustomer(JoinPoint joinPoint) throws MyExcetion {
-
 		Customer updateCustomer = (Customer) joinPoint.getArgs()[0];
 		Customer existsCustomer = customerServ.findByEmail(updateCustomer.getEmail());
 		if (existsCustomer != null && !existsCustomer.equals(updateCustomer))

@@ -22,9 +22,9 @@ public class OrderServImpl implements OrderServ {
 
 	@Autowired
 	private OrderRepo orderRepo;
-	
+
 	@Autowired
-	private SubProductServ  subProductServ;
+	private SubProductServ subProductServ;
 
 	@Override
 	@Transactional
@@ -43,14 +43,12 @@ public class OrderServImpl implements OrderServ {
 	@Transactional
 	public Orderr add(Orderr order) {
 		Orderr result = orderRepo.save(order);
-		if(result!=null) {
-			List<OrderDetail> orderDetails = order.getOrderDetails();
-			for (Iterator<?> iterator = orderDetails.iterator(); iterator.hasNext();) {
-				OrderDetail odd = (OrderDetail) iterator.next();
-				SubProduct subProduct = odd.getSubProduct();
-				subProduct.setInventory(subProduct.getInventory()-odd.getQuantity());
-				subProductServ.update(subProduct);
-			}
+		List<OrderDetail> orderDetails = order.getOrderDetails();
+		for (Iterator<?> iterator = orderDetails.iterator(); iterator.hasNext();) {
+			OrderDetail odd = (OrderDetail) iterator.next();
+			SubProduct subProduct = odd.getSubProduct();
+			subProduct.setInventory(subProduct.getInventory() - odd.getQuantity());
+			subProductServ.update(subProduct);
 		}
 		return result;
 	}

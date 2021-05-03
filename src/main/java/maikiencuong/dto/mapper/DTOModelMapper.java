@@ -51,6 +51,7 @@ public class DTOModelMapper extends RequestResponseBodyMethodProcessor {
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+
 		Object dto = super.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
 		if (dto == null)
 			throw new MyExcetion("Dữ liệu trống");

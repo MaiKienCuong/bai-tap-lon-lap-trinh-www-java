@@ -31,8 +31,8 @@ public class OrderCreateDTO implements Serializable {
 	@NotBlank(message = "Địa chỉ giao hàng không được để trống")
 	private String shipAddress;
 
-	@NotBlank(message = "Chưa có thông tin khách hàng")
-	private String customerId;
+	@NotNull(message = "Chưa có thông tin khách hàng")
+	private Long customerId;
 
 	@Valid
 	@NotNull(message = "Hóa đơn trống")

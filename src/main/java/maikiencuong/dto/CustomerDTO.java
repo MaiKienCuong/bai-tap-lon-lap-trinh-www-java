@@ -2,6 +2,8 @@ package maikiencuong.dto;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +26,7 @@ public class CustomerDTO implements Serializable {
 
 	private String address;
 
+	@JsonIgnore
 	private AccountDTO account;
 
 }

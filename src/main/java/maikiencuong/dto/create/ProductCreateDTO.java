@@ -2,24 +2,30 @@ package maikiencuong.dto.create;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
-import maikiencuong.dto.CategoryDTO;
-import maikiencuong.dto.SupplierDTO;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class ProductCreateDTO implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	@JsonIgnore
+	private Long id;
 
 	@NotBlank(message = "Tên sản phẩm không được để trống")
 	private String name;
@@ -28,15 +34,12 @@ public class ProductCreateDTO implements Serializable {
 	@Min(value = 0, message = "Giá của sản phẩm phải lớn hơn hoặc bằng 0")
 	private Double price;
 
-	@NotBlank(message = "Chưa có thumbnail sản phẩm")
-	private String url;
-
-	private String imagesFolder;
-
 	private String marker;
 
 	@Min(value = 0, message = "Giảm giá phải lớn hơn hoặc bằng 0")
 	private double discount = 0;
+
+	private Set<String> imagesUrl;
 
 	private String origin;
 
@@ -51,10 +54,10 @@ public class ProductCreateDTO implements Serializable {
 	private String material;
 
 	@NotNull(message = "Chưa có thông tin nhà cung cấp")
-	private SupplierDTO supplier;
+	private Long supplierId;
 
 	@NotNull(message = "Chưa có thông tin loại sản phẩm")
-	private CategoryDTO category;
+	private Long categoryId;
 
 	@NotNull(message = "Chưa có danh sách sản phẩm con")
 	private List<SubProductCreateDTO> subProducts;

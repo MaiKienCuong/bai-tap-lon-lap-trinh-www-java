@@ -3,10 +3,9 @@ package maikiencuong.dto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,9 +25,7 @@ public class ProductDTO implements Serializable {
 
 	private Double price;
 
-	private String url;
-
-	private String imagesFolder;
+	private Set<String> imagesUrl;
 
 	private String marker;
 
@@ -58,7 +55,6 @@ public class ProductDTO implements Serializable {
 
 	private CategoryDTO category;
 
-	@JsonProperty(access = Access.WRITE_ONLY)
 	private List<SubProductDTO> subProducts;
 
 }

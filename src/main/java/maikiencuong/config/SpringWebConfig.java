@@ -25,6 +25,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -106,7 +107,6 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	public ModelMapper modelMapper() {
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		modelMapper.getConfiguration().setSkipNullEnabled(true);
 
 		return modelMapper;
 	}
@@ -114,6 +114,14 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	@Bean
 	public ObjectMapper objectMapper() {
 		return Jackson2ObjectMapperBuilder.json().applicationContext(applicationContext).build();
+	}
+
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+		multipartResolver.setDefaultEncoding("UTF-8");
+		multipartResolver.setMaxUploadSize(10000000);
+		return multipartResolver;
 	}
 
 	@Override
