@@ -1,4 +1,3 @@
-```diff
 - xóa db cũ
 
 - chạy script tạo db
@@ -11,13 +10,17 @@ cho khách hàng sửa username với điều kiện không trùng
 email không được trùng
 address k nhập thì lưu null vào db
 
-- đăng nhập POST - api/auth/signin
+
+# đăng nhập POST - api/auth/signin
+```diff
 {
     "username": "admin",
     "password":"admin"
 }
+```
 
-- đăng ký POST - api/auth/signup
+# đăng ký POST - api/auth/signup
+```diff
 {
     "name": "Cường Mai Kiên",
     "phone": "0961516942",
@@ -28,6 +31,7 @@ address k nhập thì lưu null vào db
         "password":"12345678"
     }
 }
+```
 
 + các tham số size, page, sort dùng để phân trang, nếu không truyền thì lấy giá trị mặc định, không bắt buộc phải truyền đủ 3 tham số
 
@@ -35,23 +39,27 @@ address k nhập thì lưu null vào db
 
 - loại sản phẩm theo id GET api/category/{id}
 
-- thêm loại sản phẩm POST api/category
+# thêm loại sản phẩm POST - api/category
+```diff
 {
     "name":"áo thu đông trẻ em nam"
 }
-
-- cập nhật loại sản phẩm PUT api/category
+```
+# cập nhật loại sản phẩm PUT api/category
+```diff
 {
     "id":"5",
     "name":"áo thun trẻ em nam"
 }
+```
 - xóa sản phẩm theo id DELETE api/category/{id}
 
 - tất cả khách hàng GET api/customers?size=10&page=1&sort=name-asc
 
 - khách hàng theo id GET api/customer/{id}
 
-- khách hàng đăng ký mới: POST - api/customer
+# khách hàng đăng ký mới: POST - api/customer
+```diff
 {
     "name": "Cường Mai Kiên",
     "phone": "0961516942",
@@ -62,7 +70,9 @@ address k nhập thì lưu null vào db
         "password":"12345678"
     }
 }
-- khách hàng sửa thông tin: PUT - api/customer
+```
+# khách hàng sửa thông tin: PUT - api/customer
+```diff
 {
     "id":66,
     "name": "Cường Mai Kiên",
@@ -75,11 +85,13 @@ address k nhập thì lưu null vào db
         "enable": true,
     }
 }
+```
 - xóa khách hàng DELETE - api/customer/{id}
 
 - tất cả hóa đơn GET - api/orders?size=10&page=1&sort=orderDate-desc
 
-- thêm hóa đơn POST - api/order
+# thêm hóa đơn POST - api/order
+```diff
 paymantMethod phải là COD hoặc STORE
 {
    "shipAddress": "ha thanh ha trung thanh hoa city",
@@ -103,6 +115,7 @@ paymantMethod phải là COD hoặc STORE
         }
     ]
 }
+```
 
 - lấy danh sách tất cả hóa đơn của 1 khách hàng GET - api/orders/customer/{id}?size=10&page=1&sort=total-desc
 
@@ -127,5 +140,3 @@ paymantMethod phải là COD hoặc STORE
 - sản phẩm đang gairm giá GET api/product/marker?marker=DIS
 
 - sản phẩm đang vừa hot vừa giảm giá GET api/product/marker?marker=HOT,DIS
-
-```
