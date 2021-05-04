@@ -30,7 +30,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -45,15 +44,14 @@ import maikiencuong.dto.mapper.DTOModelMapper;
 @EnableJpaRepositories("maikiencuong.repository")
 public class SpringWebConfig implements WebMvcConfigurer {
 
-	private static final String PROP_DATABASE_URL = "db.url";
-	private static final String PROP_DATABASE_DRIVER = "db.driver";
-	private static final String PROP_DATABASE_PASSWORD = "db.password";
-	private static final String PROP_DATABASE_USERNAME = "db.username";
-	private static final String PROP_HIBERNATE_DIALECT = "hibernate.dialect";
-	private static final String PROP_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
-	private static final String PROP_HIBERNATE_FORMAT_SQL = "hibernate.format_sql";
-	private static final String PROP_HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
-	private static final String PROP_ENTITYMANAGER_PACKAGES_TO_SCAN = "db.entitymanager.packages.to.scan";
+	private static final String PROP_DATABASE_URL = "spring.datasource.url";
+	private static final String PROP_DATABASE_DRIVER = "spring.datasource.driver-class-name";
+	private static final String PROP_DATABASE_PASSWORD = "spring.datasource.password";
+	private static final String PROP_DATABASE_USERNAME = "spring.datasource.username";
+	private static final String PROP_HIBERNATE_DIALECT = "spring.jpa.database-platform";
+	private static final String PROP_HIBERNATE_SHOW_SQL = "spring.jpa.show-sql";
+	private static final String PROP_HIBERNATE_FORMAT_SQL = "spring.jpa.properties.hibernate.format_sql";
+	private static final String PROP_HIBERNATE_HBM2DDL_AUTO = "spring.jpa.hibernate.ddl-auto";
 
 	@Autowired
 	private Environment evn;
@@ -64,7 +62,6 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setViewClass(JstlView.class);
 		viewResolver.setPrefix("/WEB-INF/");
 		viewResolver.setSuffix(".jsp");
 
@@ -89,7 +86,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setDataSource(dataSource());
 		entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-		entityManagerFactoryBean.setPackagesToScan(evn.getRequiredProperty(PROP_ENTITYMANAGER_PACKAGES_TO_SCAN));
+		entityManagerFactoryBean.setPackagesToScan("maikiencuong");
 		entityManagerFactoryBean.setJpaProperties(hibernateProperties());
 
 		return entityManagerFactoryBean;
