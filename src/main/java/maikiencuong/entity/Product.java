@@ -2,12 +2,9 @@ package maikiencuong.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,9 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,11 +45,8 @@ public class Product {
 	@Column(name = "price")
 	private Double price;
 
-	@ElementCollection
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@CollectionTable(name = "Images", joinColumns = @JoinColumn(name = "product_id"))
-	@Column(name = "url", nullable = false, columnDefinition = "nvarchar(1000)")
-	private Set<String> imagesUrl;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+	private List<Image> imagesUrl;
 
 	@Column(name = "marker", columnDefinition = "nvarchar(50)")
 	private String marker;

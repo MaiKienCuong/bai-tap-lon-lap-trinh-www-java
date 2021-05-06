@@ -3,7 +3,6 @@ package maikiencuong.dto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -25,7 +24,7 @@ public class ProductDTO implements Serializable {
 
 	private Double price;
 
-	private Set<String> imagesUrl;
+	private List<String> imagesUrl;
 
 	private String marker;
 

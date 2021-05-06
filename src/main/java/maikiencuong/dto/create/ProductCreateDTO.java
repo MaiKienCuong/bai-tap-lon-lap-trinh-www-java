@@ -2,7 +2,6 @@ package maikiencuong.dto.create;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import maikiencuong.entity.Image;
 
 @Getter
 @Setter
@@ -39,7 +39,7 @@ public class ProductCreateDTO implements Serializable {
 	@Min(value = 0, message = "Giảm giá phải lớn hơn hoặc bằng 0")
 	private double discount = 0;
 
-	private Set<String> imagesUrl;
+	private List<Image> imagesUrl;
 
 	private String origin;
 

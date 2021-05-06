@@ -44,14 +44,14 @@ import maikiencuong.dto.mapper.DTOModelMapper;
 @EnableJpaRepositories("maikiencuong.repository")
 public class SpringWebConfig implements WebMvcConfigurer {
 
-	private static final String PROP_DATABASE_URL = "spring.datasource.url";
-	private static final String PROP_DATABASE_DRIVER = "spring.datasource.driver-class-name";
-	private static final String PROP_DATABASE_PASSWORD = "spring.datasource.password";
-	private static final String PROP_DATABASE_USERNAME = "spring.datasource.username";
-	private static final String PROP_HIBERNATE_DIALECT = "spring.jpa.database-platform";
-	private static final String PROP_HIBERNATE_SHOW_SQL = "spring.jpa.show-sql";
-	private static final String PROP_HIBERNATE_FORMAT_SQL = "spring.jpa.properties.hibernate.format_sql";
-	private static final String PROP_HIBERNATE_HBM2DDL_AUTO = "spring.jpa.hibernate.ddl-auto";
+	private static final String DATABASE_URL = "spring.datasource.url";
+	private static final String DATABASE_DRIVER = "spring.datasource.driver-class-name";
+	private static final String DATABASE_PASSWORD = "spring.datasource.password";
+	private static final String DATABASE_USERNAME = "spring.datasource.username";
+	private static final String HIBERNATE_DIALECT = "spring.jpa.database-platform";
+	private static final String HIBERNATE_SHOW_SQL = "spring.jpa.show-sql";
+	private static final String HIBERNATE_FORMAT_SQL = "spring.jpa.properties.hibernate.format_sql";
+	private static final String HIBERNATE_HBM2DDL_AUTO = "spring.jpa.hibernate.ddl-auto";
 
 	@Autowired
 	private Environment evn;
@@ -73,10 +73,10 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setUrl(evn.getRequiredProperty(PROP_DATABASE_URL));
-		dataSource.setUsername(evn.getRequiredProperty(PROP_DATABASE_USERNAME));
-		dataSource.setPassword(evn.getRequiredProperty(PROP_DATABASE_PASSWORD));
-		dataSource.setDriverClassName(evn.getRequiredProperty(PROP_DATABASE_DRIVER));
+		dataSource.setUrl(evn.getRequiredProperty(DATABASE_URL));
+		dataSource.setUsername(evn.getRequiredProperty(DATABASE_USERNAME));
+		dataSource.setPassword(evn.getRequiredProperty(DATABASE_PASSWORD));
+		dataSource.setDriverClassName(evn.getRequiredProperty(DATABASE_DRIVER));
 
 		return dataSource;
 	}
@@ -137,10 +137,10 @@ public class SpringWebConfig implements WebMvcConfigurer {
 
 	private Properties hibernateProperties() {
 		Properties properties = new Properties();
-		properties.setProperty(PROP_HIBERNATE_DIALECT, evn.getProperty(PROP_HIBERNATE_DIALECT));
-		properties.setProperty(PROP_HIBERNATE_FORMAT_SQL, evn.getProperty(PROP_HIBERNATE_FORMAT_SQL));
-		properties.setProperty(PROP_HIBERNATE_SHOW_SQL, evn.getProperty(PROP_HIBERNATE_SHOW_SQL));
-		properties.setProperty(PROP_HIBERNATE_HBM2DDL_AUTO, evn.getProperty(PROP_HIBERNATE_HBM2DDL_AUTO));
+		properties.setProperty("hibernate.dialect", evn.getProperty(HIBERNATE_DIALECT));
+		properties.setProperty("hibernate.format_sql", evn.getProperty(HIBERNATE_FORMAT_SQL));
+		properties.setProperty("hibernate.show_sql", evn.getProperty(HIBERNATE_SHOW_SQL));
+		properties.setProperty("hibernate.hbm2ddl.auto", evn.getProperty(HIBERNATE_HBM2DDL_AUTO));
 
 		return properties;
 	}

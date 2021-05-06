@@ -45,7 +45,7 @@ public class AccountApi {
 			if (accountServ.update(existsAccount) != null)
 				return ResponseEntity.ok(new MessageResponse("Đổi mật khẩu thành công"));
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Mật khẩu cũ không đúng"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Tài khoản hoặc mật khẩu cũ không đúng"));
 		}
 
 		return ResponseEntity.badRequest().body(new MessageResponse("Đổi mật khẩu không thành công"));
