@@ -1,15 +1,11 @@
-- xóa db cũ
-
-- chạy script tạo db
-
-account customer 1: anhem 123456
-account customer 1: emem 123456
-account admin:  admin admin
-
-cho khách hàng sửa username với điều kiện không trùng
-email không được trùng
-address k nhập thì lưu null vào db
-
+# đổi mật khẩu PUT -api/account
+```diff
+{
+    "username":"fff",
+    "oldPassword":"1234567",
+    "newPassword":"123456"
+}
+```
 
 # đăng nhập POST - api/auth/signin
 ```diff
@@ -19,25 +15,29 @@ address k nhập thì lưu null vào db
 }
 ```
 
-# đăng ký POST - api/auth/signup
+# đăng ký tài khoản cho khách hàng mới POST - api/auth/signup
 ```diff
 {
     "name": "Cường Mai Kiên",
-    "phone": "0961516942",
-    "email": "kiencuongsasuke@gmail.com",
-    "address":"Dương Quảng Hàm Gò Vấp TP Hồ Chí Minh",
+    "phone": "1234567890",
+    "email": "cuong@gmail.com",
+    "address":"Gò Vấp TP Hồ Chí Minh",
     "account": {
         "username":"anhem",
-        "password":"12345678"
+        "password":"123456"
     }
 }
 ```
 
 + các tham số size, page, sort dùng để phân trang, nếu không truyền thì lấy giá trị mặc định, không bắt buộc phải truyền đủ 3 tham số
 
-- tất cả loại sản phẩm GET api/categories?size=10&page=1&sort=name-asc
+# tất cả loại sản phẩm GET - api/categories
+```diff
+```
 
-- loại sản phẩm theo id GET api/category/{id}
+# loại sản phẩm theo id GET - api/category/{id}
+```diff
+```
 
 # thêm loại sản phẩm POST - api/category
 ```diff
@@ -52,49 +52,55 @@ address k nhập thì lưu null vào db
     "name":"áo thun trẻ em nam"
 }
 ```
-- xóa sản phẩm theo id DELETE api/category/{id}
+# xóa sản phẩm theo id DELETE - api/category/{id}
+```diff
+```
 
-- tất cả khách hàng GET api/customers?size=10&page=1&sort=name-asc
+# tất cả khách hàng GET - api/customers
+```diff
+```
 
-- khách hàng theo id GET api/customer/{id}
+# khách hàng theo id GET - api/customer/{id}
+```diff
+```
 
-# khách hàng đăng ký mới: POST - api/customer
+# khách hàng đăng ký mới : POST - api/customer - giống với api/signup
 ```diff
 {
     "name": "Cường Mai Kiên",
-    "phone": "0961516942",
-    "email": "kiencuongsasuke@gmail.com",
-    "address":"Dương Quảng Hàm Gò Vấp TP Hồ Chí Minh",
+    "phone": "1234567890",
+    "email": "cuong@gmail.com",
+    "address":"Gò Vấp TP Hồ Chí Minh",
     "account": {
         "username":"anhem",
-        "password":"12345678"
+        "password":"123456"
     }
 }
 ```
-# khách hàng sửa thông tin: PUT - api/customer
+# cập nhật thông tin khách hàng: PUT - api/customer
 ```diff
 {
     "id":66,
     "name": "Cường Mai Kiên",
-    "phone": "0961516942",
-    "email": "kiencuongsasuke@gmail.com",
-    "address":"Dương Quảng Hàm Gò Vấp TP Hồ Chí Minh",
+    "phone": "1234567890",
+    "email": "cuong@gmail.com",
+    "address":"Gò Vấp TP Hồ Chí Minh",
     "account": {
         "username":"anhem",
-        "password":"12345678",
-        "enable": true,
+        "password":"123456"
     }
 }
 ```
-- xóa khách hàng DELETE - api/customer/{id}
 
-- tất cả hóa đơn GET - api/orders?size=10&page=1&sort=orderDate-desc
+# tất cả hóa đơn GET - api/orders
+```diff
+```
 
 # thêm hóa đơn POST - api/order
 ```diff
 paymantMethod phải là COD hoặc STORE
 {
-   "shipAddress": "ha thanh ha trung thanh hoa city",
+   "shipAddress": "ho chi minh",
     "paymentMethod": "STORE",
     "customerId":63,
     "orderDetails": [
@@ -117,26 +123,151 @@ paymantMethod phải là COD hoặc STORE
 }
 ```
 
-- lấy danh sách tất cả hóa đơn của 1 khách hàng GET - api/orders/customer/{id}?size=10&page=1&sort=total-desc
+# lấy danh sách tất cả hóa đơn của 1 khách hàng GET - api/orders/customer/{id}
+```diff
+```
 
-- xem chi tiết hóa đơn của hóa đơn theo mã hóa đơn GET - api/order-detail/order/{id}
+# xem chi tiết hóa đơn của 1 hóa đơn theo mã GET - api/order-detail/order/{id}
+```diff
+```
 
-- tất cả sản phẩm GET api/products?size=10&page=1&sort=price-desc
+# tất cả sản phẩm GET api/products
+```diff
+```
 
-- tìm sản phẩm theo từ khóa GET api/product/search?q=áo thun
+# thêm sản phẩm
+```diff
+{
+    "name": "Áo thun nam kẻ sọc",
+    "price": 12,
+    "marker": "121",
+    "discount": 121,
+    "origin": "asa",
+    "tax": 12,
+    "shortDescription": "12!",
+    "longDescription": "asda",
+    "material": "1221",
+    "supplierId": 1,
+    "categoryId": 2,
+    "subProducts": [
+        {
+            "name": "Áo thun nam kẻ sọc màu Đỏ size M",
+            "color": "Đỏ",
+            "size": "M",
+            "inventory": 12
+        },
+        {
+            "name": "Áo thun nam kẻ sọc màu Đỏ size L",
+            "color": "Đỏ",
+            "size": "L",
+            "inventory": 12
+        }
+    ],
+    "imagesUrl":[
+            "sadmaksndnand","sadmaksndnanddmkm"
+    ]
+}
+```
+# xóa sản phẩm DELETE - api/product/{id}
+```diff
+```
 
-- tìm sản phẩm theo loại GET api/product/category?q=áo thun
+# tìm sản phẩm theo từ khóa GET - api/product/search?q=áo thun
+```diff
+```
 
-- sản phẩm theo id GET api/product/{id}
+# tìm sản phẩm theo loại GET - api/product/category?q=áo thun
+```diff
+```
 
-- tất cả size của 1 sản phẩm GET api/product/sizes/{id}
+# sản phẩm theo id GET - api/product/{id}
+```diff
+```
 
-- tất cả màu của 1 sản phẩm GET api/product/colors/{id}
+# tất cả size của 1 sản phẩm GET - api/product/sizes/{id}
+```diff
+kết quả
+[
+    {
+        "size": "L"
+    },
+    {
+        "size": "M"
+    }
+]
+```
 
-- lấy size và số lượng tồn theo màu GET api/product/size-and-inventory?id=1&color=đỏ
+# tất cả màu của 1 sản phẩm GET - api/product/colors/{id}
+```diff
+kết quả
+[
+    {
+        "color": "Xanh"
+    },
+    {
+        "color": "Đỏ"
+    }
+]
+```
 
-- sản phẩm đang nhiều lượt xem GET api/product/marker?marker=HOT
+# lấy size và số lượng tồn theo màu GET - api/product/size-and-inventory?id=1&color=đỏ
+```diff
+kết quả
+[
+    {
+        "size": "M",
+        "inventory": 11,
+        "subProductId": 1
+    },
+    {
+        "size": "L",
+        "inventory": 12,
+        "subProductId": 2
+    }
+]
+```
 
-- sản phẩm đang gairm giá GET api/product/marker?marker=DIS
+# sản phẩm đang nhiều lượt xem GET api/product/marker?marker=HOT
+```diff
+```
 
-- sản phẩm đang vừa hot vừa giảm giá GET api/product/marker?marker=HOT,DIS
+# sản phẩm đang gairm giá GET api/product/marker?marker=DIS
+```diff
+```
+
+# sản phẩm đang vừa hot vừa giảm giá GET api/product/marker?marker=HOT,DIS
+```diff
+```
+
+# tất cả nhà cung cấp GET - api/suppliers
+```diff
+```
+
+# nhà cung cấp theo id GET - api/supplier/{id}
+```diff
+```
+
+# thêm nhà cung cấp POST - api/supplier
+```diff
+{
+    "name": "may việt tiến",
+    "phone": "1234567890",
+    "email": "maikiencuongiuh@gmail.com",
+    "address": "Hồ Chí Minhhhhhhhhhhhhhhhhhhhh"
+}
+```
+
+# cập nhật nhà cung cấp PUT - api/supplier
+```diff
+{
+    "id":1,
+    "name": "may việt tiến",
+    "phone": "1234567890",
+    "email": "maikiencuongiuh@gmail.com",
+    "address": "Hồ Chí Minhhhhhhhhhhhhhhhhhhhh"
+}
+```
+
+# xóa nhà cung cấp DELETE - api/supplier/{id}
+```diff
+```
