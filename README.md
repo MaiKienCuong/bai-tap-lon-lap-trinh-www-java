@@ -164,7 +164,12 @@ paymantMethod phải là COD hoặc STORE
         }
     ],
     "imagesUrl":[
-            "sadmaksndnand","sadmaksndnanddmkm"
+        {
+            "url": "sadmaksndnand"
+        },
+        {
+            "url": "sadmaksndnanddmkm"
+        }
     ]
 }
 ```
