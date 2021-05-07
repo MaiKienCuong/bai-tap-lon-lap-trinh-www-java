@@ -1,5 +1,7 @@
 package maikiencuong.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +21,11 @@ public class ImageServImpl implements ImageServ {
 	public void deleteById(Long id) {
 		imageRepo.deleteById(id);
 	}
-	
+
 	@Override
 	@Transactional
-	public void update(Image image) {
-		imageRepo.saveAndFlush(image);
+	public List<Image> findAllByProduct_Id(Long id) {
+		return imageRepo.findAllByProduct_Id(id);
 	}
 
 }

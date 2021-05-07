@@ -1,6 +1,5 @@
 package maikiencuong.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +37,7 @@ public class Image {
 
 	@JsonIgnore
 	@ToString.Exclude
-	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
 

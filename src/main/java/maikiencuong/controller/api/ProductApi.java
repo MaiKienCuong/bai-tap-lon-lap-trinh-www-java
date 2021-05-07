@@ -16,11 +16,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,28 +71,26 @@ public class ProductApi {
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
 		return ResponseEntity.badRequest().body(new MessageResponse("Thêm sản phẩm không thành công"));
-//		return ResponseEntity.ok(modelMapper.map(product, ProductDTO.class));
 
 	}
 
 	@PutMapping(value = "/product")
-	public ResponseEntity<?> updateProduct(@DTO(ProductUpdateDTO.class) Product product) {
-		Product result = productServ.add(product);
+	public ResponseEntity<?> updateProduct(@RequestBody ProductUpdateDTO productUpdate) {
+		Product product = modelMapper.map(productUpdate, Product.class);
+		Product result = productServ.update(product);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
 		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật không thành công"));
 
 	}
-
-	@DeleteMapping("/product/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-		try {
-			productServ.delete(id);
-			return ResponseEntity.ok(new MessageResponse("Xóa thành công"));
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Xóa không thành công"));
-		}
-	}
+//	@PutMapping(value = "/product")
+//	public ResponseEntity<?> updateProduct(@DTO(ProductUpdateDTO.class) Product product) {
+//		Product result = productServ.update(product);
+//		if (result != null)
+//			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
+//		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật không thành công"));
+//		
+//	}
 
 	@RequestMapping("/product/search")
 	public ResponseEntity<?> findByProductNameOrCateGoryName(@RequestParam(defaultValue = "8") int size,

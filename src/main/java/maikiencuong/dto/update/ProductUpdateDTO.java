@@ -10,11 +10,13 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import maikiencuong.dto.create.SubProductCreateDTO;
 import maikiencuong.entity.Image;
 
 @Getter
 @Setter
+@ToString
 public class ProductUpdateDTO implements Serializable {
 
 	/**

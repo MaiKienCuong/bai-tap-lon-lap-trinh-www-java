@@ -1,5 +1,6 @@
 package maikiencuong.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,18 @@ public class SupplierServImpl implements maikiencuong.service.SupplierServ {
 	@Transactional
 	public Page<Supplier> findAll(Pageable pageable) {
 		return supplierRepo.findAll(pageable);
+	}
+
+	@Override
+	@Transactional
+	public List<Supplier> findAllByNameLikeOrPhoneLike(String name, String phone) {
+		return supplierRepo.findAllByNameLikeOrPhoneLike("%" + name + "%", "%" + phone + "%");
+	}
+
+	@Override
+	@Transactional
+	public List<Supplier> findAll() {
+		return supplierRepo.findAll();
 	}
 
 }

@@ -9,8 +9,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import maikiencuong.dto.CategoryDTO;
@@ -45,15 +42,15 @@ public class CategoryApi {
 	private ModelMapper modelMapper;
 
 	@GetMapping("/categories")
-//	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort)
-			throws MyExcetion {
-		List<Order> orders = getListSortOrder(sort);
-		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
-		Page<Category> pageResult = categoryServ.findAll(pageable);
+	public ResponseEntity<?> findAll() throws MyExcetion {
+		List<Category> categories = categoryServ.findAll();
+		if (!categories.isEmpty()) {
+			List<CategoryDTO> list = modelMapper.map(categories, new TypeToken<List<CategoryDTO>>() {
+			}.getType());
+			return ResponseEntity.ok(list);
+		}
+		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
 
-		return ResponseEntity.ok(getMapCategoryResult(pageResult));
 	}
 
 	@GetMapping("/category/{id}")

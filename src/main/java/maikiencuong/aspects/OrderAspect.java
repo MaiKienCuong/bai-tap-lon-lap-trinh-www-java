@@ -30,22 +30,22 @@ public class OrderAspect {
 	@Before("execution(* maikiencuong.controller.api.OrderApi.addOrder(..))")
 	public void beforeAddOrder(JoinPoint joinPoint) throws MyExcetion {
 		Orderr newOrder = (Orderr) joinPoint.getArgs()[0];
-		Customer customer = customerServ.findById(newOrder.getCustomer().getId());
-		if (customer == null)
+		Customer existsCustomer = customerServ.findById(newOrder.getCustomer().getId());
+		if (existsCustomer == null)
 			throw new MyExcetion("Không tìm thấy thông tin của khách hàng");
-		newOrder.setCustomer(customer);
+		newOrder.setCustomer(existsCustomer);
 
-		List<OrderDetail> details = newOrder.getOrderDetails();
-		for (Iterator<?> iterator = details.iterator(); iterator.hasNext();) {
-			OrderDetail odd = (OrderDetail) iterator.next();
-			SubProduct subProduct = subProductServ.findById(odd.getSubProduct().getId());
+		List<OrderDetail> orderDetails = newOrder.getOrderDetails();
+		for (Iterator<?> iterator = orderDetails.iterator(); iterator.hasNext();) {
+			OrderDetail detail = (OrderDetail) iterator.next();
+			SubProduct subProduct = subProductServ.findById(detail.getSubProduct().getId());
 			if (subProduct != null) {
-				odd.setSubProduct(subProduct);
-				odd.setOrder(newOrder);
-				if (odd.getQuantity() > subProduct.getInventory())
-					throw new MyExcetion("Sản phẩm " + subProduct.getName() + " không đủ số lượng");
+				detail.setSubProduct(subProduct);
+				detail.setOrder(newOrder);
+				if (detail.getQuantity() > subProduct.getInventory())
+					throw new MyExcetion("Sản phẩm " + subProduct.getName() + " không còn đủ số lượng");
 			} else
-				throw new MyExcetion("Sản phẩm Id=" + odd.getSubProduct().getId() + " không tồn tại");
+				throw new MyExcetion("Không tìm thấy sản phẩm có Id= " + detail.getSubProduct().getId());
 		}
 	}
 

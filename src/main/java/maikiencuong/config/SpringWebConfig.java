@@ -48,6 +48,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	private static final String DATABASE_DRIVER = "spring.datasource.driver-class-name";
 	private static final String DATABASE_PASSWORD = "spring.datasource.password";
 	private static final String DATABASE_USERNAME = "spring.datasource.username";
+	
 	private static final String HIBERNATE_DIALECT = "spring.jpa.database-platform";
 	private static final String HIBERNATE_SHOW_SQL = "spring.jpa.show-sql";
 	private static final String HIBERNATE_FORMAT_SQL = "spring.jpa.properties.hibernate.format_sql";

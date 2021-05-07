@@ -1,5 +1,6 @@
 package maikiencuong.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,18 @@ public class CategoryServImpl implements CategoryServ {
 	@Transactional
 	public Page<Category> findAll(Pageable pageable) {
 		return categoryRepo.findAll(pageable);
+	}
+
+	@Override
+	@Transactional
+	public List<Category> findAllByNameLike(String name) {
+		return categoryRepo.findAllByNameLike("%" + name + "%");
+	}
+
+	@Override
+	@Transactional
+	public List<Category> findAll() {
+		return categoryRepo.findAll();
 	}
 
 }
