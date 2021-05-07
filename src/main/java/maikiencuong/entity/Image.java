@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Builder
 @Entity
@@ -36,7 +37,8 @@ public class Image {
 	private String url;
 
 	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ToString.Exclude
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinColumn(name = "product_id")
 	private Product product;
 

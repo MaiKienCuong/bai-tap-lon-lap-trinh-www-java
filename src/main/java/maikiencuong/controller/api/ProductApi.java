@@ -67,17 +67,17 @@ public class ProductApi {
 
 	@PostMapping(value = "/product")
 	public ResponseEntity<?> addProduct(@DTO(ProductCreateDTO.class) Product product) {
-//		Product result = productServ.add(product);
-//		if (result != null)
-//			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
-//		return ResponseEntity.badRequest().body(new MessageResponse("Thêm sản phẩm không thành công"));
-		return ResponseEntity.ok(modelMapper.map(product, ProductDTO.class));
+		Product result = productServ.add(product);
+		if (result != null)
+			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
+		return ResponseEntity.badRequest().body(new MessageResponse("Thêm sản phẩm không thành công"));
+//		return ResponseEntity.ok(modelMapper.map(product, ProductDTO.class));
 
 	}
 
 	@PutMapping(value = "/product")
 	public ResponseEntity<?> updateProduct(@DTO(ProductUpdateDTO.class) Product product) {
-		Product result = productServ.update(product);
+		Product result = productServ.add(product);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
 		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật không thành công"));
