@@ -1,16 +1,10 @@
 package maikiencuong.controller.api;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +20,6 @@ import maikiencuong.dto.create.SupplierCreateDTO;
 import maikiencuong.dto.mapper.DTO;
 import maikiencuong.dto.update.SupplierUpdateDTO;
 import maikiencuong.entity.Supplier;
-import maikiencuong.handler.MyExcetion;
 import maikiencuong.payload.response.MessageResponse;
 import maikiencuong.service.SupplierServ;
 
@@ -42,7 +35,7 @@ public class SupplierApi {
 	private ModelMapper modelMapper;
 
 	@GetMapping("/suppliers")
-	public ResponseEntity<?> findAll() throws MyExcetion {
+	public ResponseEntity<?> findAll() {
 		List<Supplier> suppliers = supplierServ.findAll();
 		if (!suppliers.isEmpty()) {
 			List<SupplierDTO> list = modelMapper.map(suppliers, new TypeToken<List<SupplierDTO>>() {
@@ -90,47 +83,31 @@ public class SupplierApi {
 	}
 
 	/*
+	 * private Sort.Direction getSortDirection(String direction) { if
+	 * (direction.equals("asc")) { return Sort.Direction.ASC; } else if
+	 * (direction.equals("desc")) { return Sort.Direction.DESC; }
 	 * 
+	 * return Sort.Direction.ASC; }
+	 * 
+	 * private List<Order> getListSortOrder(String[] sort) throws MyExcetion {
+	 * List<Order> orders = new ArrayList<>(); try { if (sort[0].contains("-")) {
+	 * for (String sortOrder : sort) { String[] subSort = sortOrder.split("-");
+	 * orders.add(new Order(getSortDirection(subSort[1]), subSort[0])); } } else {
+	 * orders.add(new Order(getSortDirection(sort[1]), sort[0])); } } catch
+	 * (Exception e) { throw new
+	 * MyExcetion("Lỗi: Vui lòng kiểm tra lại tham số sort"); }
+	 * 
+	 * return orders; }
+	 * 
+	 * private Map<String, Object> getMapSupplierResult(Page<Supplier> pageResult) {
+	 * Map<String, Object> map = new HashMap<>(); List<SupplierDTO> list =
+	 * modelMapper.map(pageResult.getContent(), new TypeToken<List<SupplierDTO>>() {
+	 * }.getType()); map.put("suppliers", list); map.put("currentPage",
+	 * pageResult.getNumber()); map.put("totalItems",
+	 * pageResult.getTotalElements()); map.put("totalPages",
+	 * pageResult.getTotalPages());
+	 * 
+	 * return map; }
 	 */
-
-	private Sort.Direction getSortDirection(String direction) {
-		if (direction.equals("asc")) {
-			return Sort.Direction.ASC;
-		} else if (direction.equals("desc")) {
-			return Sort.Direction.DESC;
-		}
-
-		return Sort.Direction.ASC;
-	}
-
-	private List<Order> getListSortOrder(String[] sort) throws MyExcetion {
-		List<Order> orders = new ArrayList<>();
-		try {
-			if (sort[0].contains("-")) {
-				for (String sortOrder : sort) {
-					String[] subSort = sortOrder.split("-");
-					orders.add(new Order(getSortDirection(subSort[1]), subSort[0]));
-				}
-			} else {
-				orders.add(new Order(getSortDirection(sort[1]), sort[0]));
-			}
-		} catch (Exception e) {
-			throw new MyExcetion("Lỗi: Vui lòng kiểm tra lại tham số sort");
-		}
-
-		return orders;
-	}
-
-	private Map<String, Object> getMapSupplierResult(Page<Supplier> pageResult) {
-		Map<String, Object> map = new HashMap<>();
-		List<SupplierDTO> list = modelMapper.map(pageResult.getContent(), new TypeToken<List<SupplierDTO>>() {
-		}.getType());
-		map.put("suppliers", list);
-		map.put("currentPage", pageResult.getNumber());
-		map.put("totalItems", pageResult.getTotalElements());
-		map.put("totalPages", pageResult.getTotalPages());
-
-		return map;
-	}
 
 }

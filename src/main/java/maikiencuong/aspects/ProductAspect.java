@@ -1,5 +1,7 @@
 package maikiencuong.aspects;
 
+import java.util.List;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import maikiencuong.dto.update.ProductUpdateDTO;
 import maikiencuong.entity.Category;
+import maikiencuong.entity.Image;
 import maikiencuong.entity.Product;
 import maikiencuong.entity.Supplier;
 import maikiencuong.service.CategoryServ;
@@ -45,10 +48,11 @@ public class ProductAspect {
 	public void beforeUpdateProduct(JoinPoint joinPoint) {
 		ProductUpdateDTO updateProduct = (ProductUpdateDTO) joinPoint.getArgs()[0];
 
-		imageServ.findAllByProduct_Id(updateProduct.getId()).forEach(image -> imageServ.deleteById(image.getId()));
+		List<Image> images = imageServ.findAllByProduct_Id(updateProduct.getId());
+		images.forEach(image -> imageServ.deleteById(image.getId()));
 
-		updateProduct.getImagesUrl()
-				.forEach(image -> image.setProduct(Product.builder().id(updateProduct.getId()).build()));
+		Product productEntity = Product.builder().id(updateProduct.getId()).build();
+		updateProduct.getImagesUrl().forEach(image -> image.setProduct(productEntity));
 
 	}
 

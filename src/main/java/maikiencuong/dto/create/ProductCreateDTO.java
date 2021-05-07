@@ -11,12 +11,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import maikiencuong.entity.Image;
 
 @Getter
 @Setter
-@ToString
 public class ProductCreateDTO implements Serializable {
 
 	/**

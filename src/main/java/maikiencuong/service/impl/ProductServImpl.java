@@ -56,6 +56,7 @@ public class ProductServImpl implements ProductServ {
 	}
 
 	@Override
+	@Transactional
 	public void delete(Long id) {
 		productRepo.deleteById(id);
 	}

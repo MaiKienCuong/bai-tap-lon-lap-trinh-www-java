@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +77,7 @@ public class ProductApi {
 	}
 
 	@PutMapping(value = "/product")
-	public ResponseEntity<?> updateProduct(@RequestBody ProductUpdateDTO productUpdate) {
+	public ResponseEntity<?> updateProduct(@Valid @RequestBody ProductUpdateDTO productUpdate) {
 		Product product = modelMapper.map(productUpdate, Product.class);
 		Product result = productServ.update(product);
 		if (result != null)
@@ -83,14 +85,6 @@ public class ProductApi {
 		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật không thành công"));
 
 	}
-//	@PutMapping(value = "/product")
-//	public ResponseEntity<?> updateProduct(@DTO(ProductUpdateDTO.class) Product product) {
-//		Product result = productServ.update(product);
-//		if (result != null)
-//			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
-//		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật không thành công"));
-//		
-//	}
 
 	@RequestMapping("/product/search")
 	public ResponseEntity<?> findByProductNameOrCateGoryName(@RequestParam(defaultValue = "8") int size,
