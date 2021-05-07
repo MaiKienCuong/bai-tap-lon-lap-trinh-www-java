@@ -52,7 +52,7 @@
     "name":"áo thun trẻ em nam"
 }
 ```
-# xóa sản phẩm theo id DELETE - api/category/{id}
+# xóa loại sản phẩm theo id DELETE - api/category/{id}
 ```diff
 ```
 
@@ -172,9 +172,6 @@ paymantMethod phải là COD hoặc STORE
         }
     ]
 }
-```
-# xóa sản phẩm DELETE - api/product/{id}
-```diff
 ```
 
 # tìm sản phẩm theo từ khóa GET - api/product/search?q=áo thun
