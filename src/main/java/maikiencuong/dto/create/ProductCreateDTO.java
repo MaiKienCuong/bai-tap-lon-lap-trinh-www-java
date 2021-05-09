@@ -42,7 +42,7 @@ public class ProductCreateDTO implements Serializable {
 	private String origin;
 
 	@NotNull(message = "Chưa nhập thuế sản phẩm")
-	@Min(value = 0, message = "Giá của sản phẩm phải lớn hơn hoặc bằng 0")
+	@Min(value = 0, message = "Thuế của sản phẩm phải lớn hơn hoặc bằng 0")
 	private double tax;
 
 	private String shortDescription;

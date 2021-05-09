@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import maikiencuong.entity.Orderr;
+import maikiencuong.enumvalue.EnumStatusOrder;
 
 public interface OrderServ {
 
@@ -18,5 +19,7 @@ public interface OrderServ {
 	public Page<Orderr> findAll(Pageable pageable);
 
 	public Page<Orderr> findAllByCustomer_Id(Long id, Pageable pageable);
+	
+	public Page<Orderr> findAllByStatusIn(EnumStatusOrder[] status, Pageable pageable);
 
 }

@@ -1,5 +1,6 @@
 package maikiencuong.controller.api;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +57,7 @@ public class ProductApi {
 	private ModelMapper modelMapper;
 
 	@GetMapping("/products")
-	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
+	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort)
 			throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);
@@ -78,7 +79,13 @@ public class ProductApi {
 
 	@PutMapping(value = "/product")
 	public ResponseEntity<?> updateProduct(@Valid @RequestBody ProductUpdateDTO productUpdate) {
-		Product product = modelMapper.map(productUpdate, Product.class);
+		Product product = productServ.findById(productUpdate.getId());
+		Integer views = product.getViews();
+		LocalDateTime createdAt = product.getCreatedAt();
+		
+		product = modelMapper.map(productUpdate, Product.class);
+		product.setViews(views);
+		product.setCreatedAt(createdAt);
 		Product result = productServ.update(product);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
@@ -87,7 +94,7 @@ public class ProductApi {
 	}
 
 	@RequestMapping("/product/search")
-	public ResponseEntity<?> findByProductNameOrCateGoryName(@RequestParam(defaultValue = "8") int size,
+	public ResponseEntity<?> findByProductNameOrCateGoryName(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(required = false, value = "q") String query,
 			@RequestParam(defaultValue = "name-asc") String[] sort) throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);
@@ -103,7 +110,7 @@ public class ProductApi {
 	}
 
 	@RequestMapping("/product/category")
-	public ResponseEntity<?> findByCategoryName(@RequestParam(defaultValue = "8") int size,
+	public ResponseEntity<?> findByCategoryName(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(required = false, value = "q") String query,
 			@RequestParam(defaultValue = "name-asc") String[] sort) throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);
@@ -121,8 +128,11 @@ public class ProductApi {
 	@GetMapping("/product/{id}")
 	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
 		Product result = productServ.findById(id);
-		if (result != null)
+		if (result != null) {
+			result.setViews(result.getViews() + 1);
+			productServ.update(result);
 			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
+		}
 
 		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy sản phẩm"));
 	}
@@ -165,7 +175,7 @@ public class ProductApi {
 	}
 
 	@GetMapping("/product/marker")
-	public ResponseEntity<?> findByMarker(@RequestParam(defaultValue = "8") int size,
+	public ResponseEntity<?> findByMarker(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort,
 			@RequestParam(defaultValue = "HOT", value = "marker") String[] markers) throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);

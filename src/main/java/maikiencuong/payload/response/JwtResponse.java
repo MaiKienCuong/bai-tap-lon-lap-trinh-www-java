@@ -23,7 +23,7 @@ public class JwtResponse implements Serializable {
 
 	private CustomerDTO customer;
 
-	private String tokenType = "Bearer";
+	private String tokenType;
 
 	private String accessToken;
 
@@ -31,6 +31,7 @@ public class JwtResponse implements Serializable {
 		this.accessToken = accessToken;
 		this.customer = customer;
 		this.account = account;
+		tokenType = "Bearer";
 	}
 
 }

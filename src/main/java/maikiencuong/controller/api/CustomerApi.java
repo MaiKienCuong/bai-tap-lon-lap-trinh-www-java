@@ -44,7 +44,7 @@ public class CustomerApi {
 	private ModelMapper modelMapper;
 
 	@GetMapping("/customers")
-	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
+	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort)
 			throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);

@@ -35,9 +35,9 @@ public class Image {
 	@Column(name = "url", columnDefinition = "nvarchar(1000)")
 	private String url;
 
+	@ManyToOne
 	@JsonIgnore
 	@ToString.Exclude
-	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
 

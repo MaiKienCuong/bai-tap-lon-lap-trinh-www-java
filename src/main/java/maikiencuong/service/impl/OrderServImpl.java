@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import maikiencuong.entity.OrderDetail;
 import maikiencuong.entity.Orderr;
 import maikiencuong.entity.SubProduct;
+import maikiencuong.enumvalue.EnumStatusOrder;
 import maikiencuong.repository.OrderRepo;
 import maikiencuong.service.OrderServ;
 import maikiencuong.service.SubProductServ;
@@ -68,7 +69,13 @@ public class OrderServImpl implements OrderServ {
 	@Override
 	@Transactional
 	public Page<Orderr> findAllByCustomer_Id(Long id, Pageable pageable) {
-		return orderRepo.findAllByCustomer_IdOrderByOrderDateDesc(id, pageable);
+		return orderRepo.findAllByCustomer_Id(id, pageable);
+	}
+
+	@Override
+	@Transactional
+	public Page<Orderr> findAllByStatusIn(EnumStatusOrder[] status, Pageable pageable) {
+		return orderRepo.findAllByStatusIn(status, pageable);
 	}
 
 }

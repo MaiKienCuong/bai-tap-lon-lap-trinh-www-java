@@ -26,6 +26,7 @@ import maikiencuong.dto.OrderDTO;
 import maikiencuong.dto.create.OrderCreateDTO;
 import maikiencuong.dto.mapper.DTO;
 import maikiencuong.entity.Orderr;
+import maikiencuong.enumvalue.EnumStatusOrder;
 import maikiencuong.handler.MyExcetion;
 import maikiencuong.payload.response.MessageResponse;
 import maikiencuong.service.OrderServ;
@@ -42,19 +43,23 @@ public class OrderApi {
 	private ModelMapper modelMapper;
 
 	@GetMapping("/orders")
-	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "id-asc") String[] sort)
-			throws MyExcetion {
+	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "12") int size,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "orderDate-desc") String[] sort,
+			@RequestParam(required = false) EnumStatusOrder[] status) throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);
 		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
-		Page<Orderr> pageResult = orderServ.findAll(pageable);
+		Page<Orderr> pageResult;
+		if (status != null)
+			pageResult = orderServ.findAllByStatusIn(status, pageable);
+		else
+			pageResult = orderServ.findAll(pageable);
 
 		return ResponseEntity.ok(getMapOrderResult(pageResult));
 	}
 
 	@GetMapping("/orders/customer/{id}")
-	public ResponseEntity<?> findAllByCustomerId(@RequestParam(defaultValue = "8") int size,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "id-asc") String[] sort,
+	public ResponseEntity<?> findAllByCustomerId(@RequestParam(defaultValue = "12") int size,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "orderDate-desc") String[] sort,
 			@PathVariable("id") Long id) throws MyExcetion {
 		List<Order> orders = getListSortOrder(sort);
 		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));

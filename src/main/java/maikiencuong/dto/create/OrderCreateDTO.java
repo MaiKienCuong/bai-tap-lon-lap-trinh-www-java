@@ -25,7 +25,7 @@ public class OrderCreateDTO implements Serializable {
 	@JsonIgnore
 	private Long id;
 
-	@NotNull(message = "Chưa có phương thức thanh toán")
+	@NotNull(message = "Chưa có phương thức thanh toán (STORE/COD)")
 	private EnumPaymentMethod paymentMethod;
 
 	@NotBlank(message = "Địa chỉ giao hàng không được để trống")
@@ -35,7 +35,7 @@ public class OrderCreateDTO implements Serializable {
 	private Long customerId;
 
 	@Valid
-	@NotNull(message = "Hóa đơn trống")
+	@NotNull(message = "Chưa có sản phẩm nào trong hóa đơn")
 	private List<OrderDetailCreateDTO> orderDetails;
 
 }

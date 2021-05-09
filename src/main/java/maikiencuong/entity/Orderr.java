@@ -78,7 +78,7 @@ public class Orderr {
 	public Double sumTotal() {
 		total = 0d;
 		if (!orderDetails.isEmpty()) {
-			orderDetails.forEach(x -> total += x.lineTotal());
+			orderDetails.forEach(detail -> total += detail.lineTotal());
 		}
 		return total;
 	}

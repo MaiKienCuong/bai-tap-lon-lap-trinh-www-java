@@ -6,10 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import maikiencuong.entity.Orderr;
+import maikiencuong.enumvalue.EnumStatusOrder;
 
 @Repository
 public interface OrderRepo extends JpaRepository<Orderr, Long> {
 
-	public Page<Orderr> findAllByCustomer_IdOrderByOrderDateDesc(Long id, Pageable pageable);
+	public Page<Orderr> findAllByCustomer_Id(Long id, Pageable pageable);
+	
+	public Page<Orderr> findAllByStatusIn(EnumStatusOrder[] status, Pageable pageable);
 	
 }
