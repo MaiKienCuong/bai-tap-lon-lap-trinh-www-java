@@ -127,6 +127,18 @@ paymantMethod phải là COD hoặc STORE
 ```diff
 ```
 
+# danh sách hóa đơn đang chờ xử lý GET - api/orders?status=PENDING
+```diff
+```
+
+# danh sách hóa đơn đã hoàn tất GET - api/orders?status=COMPLETED
+```diff
+```
+
+# hoặc GET - api/orders?status=PROCESSING&status=PENDING
+```diff
+```
+
 # xem chi tiết hóa đơn của 1 hóa đơn theo mã GET - api/order-detail/order/{id}
 ```diff
 ```
