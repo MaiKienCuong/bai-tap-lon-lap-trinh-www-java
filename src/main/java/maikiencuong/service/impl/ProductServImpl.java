@@ -1,5 +1,6 @@
 package maikiencuong.service.impl;
 
+import java.util.Iterator;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +10,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import maikiencuong.entity.Product;
+import maikiencuong.entity.SubProduct;
 import maikiencuong.repository.ProductRepo;
 import maikiencuong.service.ProductServ;
+import maikiencuong.service.SubProductServ;
 
 @Service
 public class ProductServImpl implements ProductServ {
 
 	@Autowired
 	private ProductRepo productRepo;
+
+	@Autowired
+	private SubProductServ subProductServ;
 
 	@Override
 	@Transactional
@@ -64,6 +70,12 @@ public class ProductServImpl implements ProductServ {
 	@Override
 	@Transactional
 	public Product update(Product product) {
+		for (Iterator<SubProduct> iterator = product.getSubProducts().iterator(); iterator.hasNext();) {
+			SubProduct subProduct = iterator.next();
+			if (subProduct.getId() != null)
+				subProduct.setCreatedAt(subProductServ.findById(subProduct.getId()).getCreatedAt());
+			subProduct.setProduct(product);
+		}
 		return productRepo.saveAndFlush(product);
 	}
 

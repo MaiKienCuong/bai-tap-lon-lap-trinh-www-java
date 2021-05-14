@@ -56,6 +56,15 @@ public class ProductApi {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	/**
+	 * Find all.
+	 *
+	 * @param size the size
+	 * @param page the page
+	 * @param sort the sort
+	 * @return the response entity
+	 * @throws MyExcetion the my excetion
+	 */
 	@GetMapping("/products")
 	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort)
@@ -63,36 +72,151 @@ public class ProductApi {
 		List<Order> orders = getListSortOrder(sort);
 		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
 		Page<Product> pageResult = productServ.findAll(pageable);
-		Map<String, Object> map = getMapProductResult(pageResult);
 
-		return ResponseEntity.ok(map);
+		return ResponseEntity.ok(getMapProductResult(pageResult));
 	}
 
+	/**
+	 * Add the product.
+	 *
+	 * @param newProduct the new product
+	 * @return the response entity
+	 */
 	@PostMapping(value = "/product")
-	public ResponseEntity<?> addProduct(@DTO(ProductCreateDTO.class) Product product) {
-		Product result = productServ.add(product);
+	public ResponseEntity<?> addProduct(@DTO(ProductCreateDTO.class) Product newProduct) {
+		Product result = productServ.add(newProduct);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
 		return ResponseEntity.badRequest().body(new MessageResponse("Thêm sản phẩm không thành công"));
 
 	}
 
+	/**
+	 * Update product.
+	 *
+	 * @param productUpdateDTO the product update DTO
+	 * @return the response entity
+	 */
 	@PutMapping(value = "/product")
-	public ResponseEntity<?> updateProduct(@Valid @RequestBody ProductUpdateDTO productUpdate) {
-		Product product = productServ.findById(productUpdate.getId());
+	public ResponseEntity<?> updateProduct(@Valid @RequestBody ProductUpdateDTO productUpdateDTO) {
+		Product product = productServ.findById(productUpdateDTO.getId());
 		Integer views = product.getViews();
 		LocalDateTime createdAt = product.getCreatedAt();
-		
-		product = modelMapper.map(productUpdate, Product.class);
+
+		product = modelMapper.map(productUpdateDTO, Product.class);
 		product.setViews(views);
 		product.setCreatedAt(createdAt);
 		Product result = productServ.update(product);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
-		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật không thành công"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật sản phẩm không thành công"));
 
 	}
 
+	/**
+	 * Find by id.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
+	@GetMapping("/product/{id}")
+	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+		Product result = productServ.findById(id);
+		if (result != null) {
+			result.setViews(result.getViews() + 1);
+			productServ.update(result);
+			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
+		}
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy sản phẩm"));
+	}
+
+	/**
+	 * List size by id.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
+	@GetMapping("/product/sizes/{id}")
+	public ResponseEntity<?> listSizeById(@PathVariable("id") Long id) {
+		List<SubProduct> list = subProductServ.findAllByProduct_Id(id);
+		if (!list.isEmpty()) {
+			Set<SizeDTO> set = modelMapper.map(list, new TypeToken<Set<SizeDTO>>() {
+			}.getType());
+			return ResponseEntity.ok(set);
+		}
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
+	}
+
+	/**
+	 * List color by id.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
+	@GetMapping("/product/colors/{id}")
+	public ResponseEntity<?> listColorById(@PathVariable("id") Long id) {
+		List<SubProduct> list = subProductServ.findAllByProduct_Id(id);
+		if (!list.isEmpty()) {
+			Set<ColorDTO> set = modelMapper.map(list, new TypeToken<Set<ColorDTO>>() {
+			}.getType());
+			return ResponseEntity.ok(set);
+		}
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
+	}
+
+	/**
+	 * List size and inventory by id and color.
+	 *
+	 * @param id    the id
+	 * @param color the color
+	 * @return the response entity
+	 */
+	@GetMapping("/product/size-and-inventory")
+	public ResponseEntity<?> listSizeAndInventoryByIdAndColor(@RequestParam("id") Long id,
+			@RequestParam("color") String color) {
+		List<SubProduct> list = subProductServ.findAllByProduct_IdAndColor(id, color);
+		if (!list.isEmpty()) {
+			Set<SizeInventoryDTO> set = modelMapper.map(list, new TypeToken<Set<SizeInventoryDTO>>() {
+			}.getType());
+			return ResponseEntity.ok(set);
+		}
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
+	}
+
+	/**
+	 * Find by marker.
+	 *
+	 * @param size    the size
+	 * @param page    the page
+	 * @param sort    the sort
+	 * @param markers the markers
+	 * @return the response entity
+	 * @throws MyExcetion the my excetion
+	 */
+	@GetMapping("/product/marker")
+	public ResponseEntity<?> findByMarker(@RequestParam(defaultValue = "12") int size,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort,
+			@RequestParam(defaultValue = "HOT", value = "marker") String[] markers) throws MyExcetion {
+		List<Order> orders = getListSortOrder(sort);
+		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
+		Page<Product> pageResult = productServ.findAllByMarkerIn(markers, pageable);
+		return ResponseEntity.ok(getMapProductResult(pageResult));
+	}
+
+	/**
+	 * Find by product name or cate gory name.
+	 *
+	 * @param size  the size
+	 * @param page  the page
+	 * @param query the query
+	 * @param sort  the sort
+	 * @return the response entity
+	 * @throws MyExcetion the my excetion
+	 */
 	@RequestMapping("/product/search")
 	public ResponseEntity<?> findByProductNameOrCateGoryName(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(required = false, value = "q") String query,
@@ -109,6 +233,16 @@ public class ProductApi {
 		return ResponseEntity.ok(getMapProductResult(pageResult));
 	}
 
+	/**
+	 * Find by category name.
+	 *
+	 * @param size  the size
+	 * @param page  the page
+	 * @param query the query
+	 * @param sort  the sort
+	 * @return the response entity
+	 * @throws MyExcetion the my excetion
+	 */
 	@RequestMapping("/product/category")
 	public ResponseEntity<?> findByCategoryName(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(required = false, value = "q") String query,
@@ -125,65 +259,12 @@ public class ProductApi {
 		return ResponseEntity.ok(getMapProductResult(pageResult));
 	}
 
-	@GetMapping("/product/{id}")
-	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
-		Product result = productServ.findById(id);
-		if (result != null) {
-			result.setViews(result.getViews() + 1);
-			productServ.update(result);
-			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
-		}
-
-		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy sản phẩm"));
-	}
-
-	@GetMapping("/product/sizes/{id}")
-	public ResponseEntity<?> listSizeById(@PathVariable("id") Long id) {
-		List<SubProduct> list = subProductServ.findAllByProduct_Id(id);
-		if (!list.isEmpty()) {
-			Set<SizeDTO> set = modelMapper.map(list, new TypeToken<Set<SizeDTO>>() {
-			}.getType());
-			return ResponseEntity.ok(set);
-		}
-
-		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
-	}
-
-	@GetMapping("/product/colors/{id}")
-	public ResponseEntity<?> listColorById(@PathVariable("id") Long id) {
-		List<SubProduct> list = subProductServ.findAllByProduct_Id(id);
-		if (!list.isEmpty()) {
-			Set<ColorDTO> set = modelMapper.map(list, new TypeToken<Set<ColorDTO>>() {
-			}.getType());
-			return ResponseEntity.ok(set);
-		}
-
-		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
-	}
-
-	@GetMapping("/product/size-and-inventory")
-	public ResponseEntity<?> listSizeAndInventoryByIdAndColor(@RequestParam("id") Long id,
-			@RequestParam("color") String color) {
-		List<SubProduct> list = subProductServ.findAllByProduct_IdAndColor(id, color);
-		if (!list.isEmpty()) {
-			Set<SizeInventoryDTO> set = modelMapper.map(list, new TypeToken<Set<SizeInventoryDTO>>() {
-			}.getType());
-			return ResponseEntity.ok(set);
-		}
-
-		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
-	}
-
-	@GetMapping("/product/marker")
-	public ResponseEntity<?> findByMarker(@RequestParam(defaultValue = "12") int size,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort,
-			@RequestParam(defaultValue = "HOT", value = "marker") String[] markers) throws MyExcetion {
-		List<Order> orders = getListSortOrder(sort);
-		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
-		Page<Product> pageResult = productServ.findAllByMarkerIn(markers, pageable);
-		return ResponseEntity.ok(getMapProductResult(pageResult));
-	}
-
+	/**
+	 * Gets the sort direction.
+	 *
+	 * @param direction the direction
+	 * @return the sort direction
+	 */
 	private Sort.Direction getSortDirection(String direction) {
 		if (direction.equals("asc")) {
 			return Sort.Direction.ASC;
@@ -194,16 +275,23 @@ public class ProductApi {
 		return Sort.Direction.ASC;
 	}
 
+	/**
+	 * Gets the list sort order.
+	 *
+	 * @param sort the sort
+	 * @return the list sort order
+	 * @throws MyExcetion the my excetion
+	 */
 	private List<Order> getListSortOrder(String[] sort) throws MyExcetion {
 		List<Order> orders = new ArrayList<>();
 		try {
-			if (sort[0].contains("-")) {
-				for (String sortOrder : sort) {
-					String[] subSort = sortOrder.split("-");
-					orders.add(new Order(getSortDirection(subSort[1]), subSort[0]));
+			for (int i = 0; i < sort.length; i++) {
+				if (sort[i].contains("-")) {
+					for (String sortOrder : sort) {
+						String[] subSort = sortOrder.split("-");
+						orders.add(new Order(getSortDirection(subSort[1]), subSort[0]));
+					}
 				}
-			} else {
-				orders.add(new Order(getSortDirection(sort[1]), sort[0]));
 			}
 		} catch (Exception e) {
 			throw new MyExcetion("Lỗi: Vui lòng kiểm tra lại tham số sort");
@@ -212,6 +300,12 @@ public class ProductApi {
 		return orders;
 	}
 
+	/**
+	 * Gets the map product result.
+	 *
+	 * @param pageResult the page result
+	 * @return the map product result
+	 */
 	private Map<String, Object> getMapProductResult(Page<Product> pageResult) {
 		Map<String, Object> map = new HashMap<>();
 		List<ProductDTO> list = modelMapper.map(pageResult.getContent(), new TypeToken<List<ProductDTO>>() {

@@ -28,7 +28,7 @@ import maikiencuong.service.CustomerServ;
 import maikiencuong.service.impl.AccountDetailsImpl;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthApi {
 
@@ -44,11 +44,17 @@ public class AuthApi {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
+	/**
+	 * Signin.
+	 *
+	 * @param loginRequest the login request
+	 * @return the response entity
+	 */
 	@PostMapping("/signin")
-	public ResponseEntity<?> signin(@Valid @RequestBody LoginRequest request) {
+	public ResponseEntity<?> signin(@Valid @RequestBody LoginRequest loginRequest) {
 		try {
 			Authentication authentication = authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtUtils.generateJwtToken(authentication);
 			AccountDetailsImpl accountDetails = (AccountDetailsImpl) authentication.getPrincipal();
@@ -65,9 +71,15 @@ public class AuthApi {
 		}
 	}
 
+	/**
+	 * Signup.
+	 *
+	 * @param newCustomer the new customer
+	 * @return the response entity
+	 */
 	@PostMapping("/signup")
-	public ResponseEntity<?> signup(@DTO(CustomerCreateDTO.class) Customer customer) {
-		if (customerServ.add(customer) != null)
+	public ResponseEntity<?> signup(@DTO(CustomerCreateDTO.class) Customer newCustomer) {
+		if (customerServ.add(newCustomer) != null)
 			return ResponseEntity.ok(new MessageResponse("Đăng ký tài khoản thành công"));
 
 		return ResponseEntity.badRequest().body(new MessageResponse("Đăng ký không thành công"));

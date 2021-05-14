@@ -34,6 +34,11 @@ public class SupplierApi {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	/**
+	 * Find all.
+	 *
+	 * @return the response entity
+	 */
 	@GetMapping("/suppliers")
 	public ResponseEntity<?> findAll() {
 		List<Supplier> suppliers = supplierServ.findAll();
@@ -45,6 +50,12 @@ public class SupplierApi {
 		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
 	}
 
+	/**
+	 * Find by id.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
 	@GetMapping("/supplier/{id}")
 	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
 		Supplier result = supplierServ.findById(id);
@@ -54,31 +65,49 @@ public class SupplierApi {
 		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy"));
 	}
 
+	/**
+	 * Add the supplier.
+	 *
+	 * @param newSupplier the new supplier
+	 * @return the response entity
+	 */
 	@PostMapping("/supplier")
-	public ResponseEntity<?> addSupplier(@DTO(SupplierCreateDTO.class) Supplier supplier) {
-		Supplier result = supplierServ.add(supplier);
+	public ResponseEntity<?> addSupplier(@DTO(SupplierCreateDTO.class) Supplier newSupplier) {
+		Supplier result = supplierServ.add(newSupplier);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, SupplierDTO.class));
 
-		return ResponseEntity.badRequest().body(new MessageResponse("Thêm không thành công"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Thêm nhà cung cấp không thành công"));
 	}
 
+	/**
+	 * Update supplier.
+	 *
+	 * @param updateSupplier the update supplier
+	 * @return the response entity
+	 */
 	@PutMapping("/supplier")
-	public ResponseEntity<?> updateSupplier(@DTO(SupplierUpdateDTO.class) Supplier supplier) {
-		Supplier result = supplierServ.update(supplier);
+	public ResponseEntity<?> updateSupplier(@DTO(SupplierUpdateDTO.class) Supplier updateSupplier) {
+		Supplier result = supplierServ.update(updateSupplier);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, SupplierDTO.class));
 
-		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật không thành công"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật nhà cung cấp không thành công"));
 	}
 
+	/**
+	 * Delete supplier.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
 	@DeleteMapping("/supplier/{id}")
 	public ResponseEntity<?> deleteSupplier(@PathVariable("id") Long id) {
 		try {
 			supplierServ.delete(id);
-			return ResponseEntity.ok(new MessageResponse("Xóa thành công"));
+			return ResponseEntity.ok(new MessageResponse("Xóa nhà cung cấp thành công"));
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Xóa không thành công"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Xóa nhà cung cấp không thành công"));
 		}
 	}
 

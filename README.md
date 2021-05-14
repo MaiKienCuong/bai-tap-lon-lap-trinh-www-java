@@ -1,3 +1,25 @@
+
+# account theo id - api/account/{id}
+```diff
+```
+
+# số lượng hóa đơn và tổng tiền của 1 account - api/account/order/{id}
+```diff
+ket qua
+{
+    "sumOrders": 4200000.0,
+    "countOrders": 4,
+    "account": {
+        "id": 1,
+        "username": "customer1",
+        "enable": true,
+        "roles": [
+            "ROLE_CUSTOMER"
+        ]
+    }
+}
+```
+
 # đổi mật khẩu PUT -api/account
 ```diff
 {
@@ -7,7 +29,7 @@
 }
 ```
 
-# đăng nhập POST - api/auth/signin
+# đăng nhập POST - api/signin
 ```diff
 {
     "username": "admin",
@@ -15,7 +37,7 @@
 }
 ```
 
-# đăng ký tài khoản cho khách hàng mới POST - api/auth/signup
+# đăng ký tài khoản cho khách hàng mới POST - api/signup
 ```diff
 {
     "name": "Cường Mai Kiên",

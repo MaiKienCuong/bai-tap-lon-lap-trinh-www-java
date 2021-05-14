@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
-import maikiencuong.dto.create.SubProductCreateDTO;
 import maikiencuong.entity.Image;
 
 @Getter
@@ -61,6 +60,6 @@ public class ProductUpdateDTO implements Serializable {
 	private Long categoryId;
 
 	@NotNull(message = "Chưa có danh sách sản phẩm con")
-	private List<SubProductCreateDTO> subProducts;
+	private List<SubProductUpdateDTO> subProducts;
 
 }

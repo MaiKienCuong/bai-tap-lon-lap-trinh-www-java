@@ -1,5 +1,7 @@
 package maikiencuong.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,6 +19,8 @@ public interface OrderServ {
 	public void delete(Long id);
 
 	public Page<Orderr> findAll(Pageable pageable);
+	
+	public List<Orderr> findAllByCustomer_Id(Long id);
 
 	public Page<Orderr> findAllByCustomer_Id(Long id, Pageable pageable);
 	

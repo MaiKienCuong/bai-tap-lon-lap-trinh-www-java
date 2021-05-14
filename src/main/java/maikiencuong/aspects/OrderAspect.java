@@ -27,6 +27,12 @@ public class OrderAspect {
 	@Autowired
 	private SubProductServ subProductServ;
 
+	/**
+	 * Before add order.
+	 *
+	 * @param joinPoint the join point
+	 * @throws MyExcetion the my excetion
+	 */
 	@Before("execution(* maikiencuong.controller.api.OrderApi.addOrder(..))")
 	public void beforeAddOrder(JoinPoint joinPoint) throws MyExcetion {
 		Orderr newOrder = (Orderr) joinPoint.getArgs()[0];

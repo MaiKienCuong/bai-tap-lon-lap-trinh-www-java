@@ -34,6 +34,11 @@ public class CategoryApi {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	/**
+	 * Find all.
+	 *
+	 * @return the response entity
+	 */
 	@GetMapping("/categories")
 	public ResponseEntity<?> findAll() {
 		List<Category> categories = categoryServ.findAll();
@@ -46,6 +51,12 @@ public class CategoryApi {
 		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
 	}
 
+	/**
+	 * Find by id.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
 	@GetMapping("/category/{id}")
 	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
 		Category result = categoryServ.findById(id);
@@ -55,31 +66,49 @@ public class CategoryApi {
 		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy loại sản phẩm nào"));
 	}
 
+	/**
+	 * Add the category.
+	 *
+	 * @param newCategory the new category
+	 * @return the response entity
+	 */
 	@PostMapping("/category")
-	public ResponseEntity<?> addCategory(@DTO(CategoryCreateDTO.class) Category category) {
-		Category result = categoryServ.add(category);
+	public ResponseEntity<?> addCategory(@DTO(CategoryCreateDTO.class) Category newCategory) {
+		Category result = categoryServ.add(newCategory);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, CategoryDTO.class));
 
-		return ResponseEntity.badRequest().body(new MessageResponse("Thêm không thành công"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Thêm loại sản phẩm không thành công"));
 	}
 
+	/**
+	 * Update category.
+	 *
+	 * @param updateCategory the update category
+	 * @return the response entity
+	 */
 	@PutMapping("/category")
-	public ResponseEntity<?> updateCategory(@DTO(CategoryUpdateDTO.class) Category category) {
-		Category result = categoryServ.update(category);
+	public ResponseEntity<?> updateCategory(@DTO(CategoryUpdateDTO.class) Category updateCategory) {
+		Category result = categoryServ.update(updateCategory);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, CategoryDTO.class));
 
-		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật không thành công"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật loại sản phẩm không thành công"));
 	}
 
+	/**
+	 * Delete category.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
 	@DeleteMapping("/category/{id}")
 	public ResponseEntity<?> deleteCategory(@PathVariable("id") Long id) {
 		try {
 			categoryServ.delete(id);
 			return ResponseEntity.ok(new MessageResponse("Xóa thành công"));
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Xóa không thành công"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Xóa loại sản phẩm không thành công"));
 		}
 	}
 

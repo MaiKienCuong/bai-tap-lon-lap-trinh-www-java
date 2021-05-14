@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import maikiencuong.dto.OrderDTO;
 import maikiencuong.dto.create.OrderCreateDTO;
 import maikiencuong.dto.mapper.DTO;
+import maikiencuong.dto.update.OrderUpdateDTO;
 import maikiencuong.entity.Orderr;
 import maikiencuong.enumvalue.EnumStatusOrder;
 import maikiencuong.handler.MyExcetion;
@@ -42,6 +44,16 @@ public class OrderApi {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	/**
+	 * Find all.
+	 *
+	 * @param size   the size
+	 * @param page   the page
+	 * @param sort   the sort
+	 * @param status the status
+	 * @return the response entity
+	 * @throws MyExcetion the my excetion
+	 */
 	@GetMapping("/orders")
 	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "orderDate-desc") String[] sort,
@@ -57,6 +69,16 @@ public class OrderApi {
 		return ResponseEntity.ok(getMapOrderResult(pageResult));
 	}
 
+	/**
+	 * Find all by customer id.
+	 *
+	 * @param size the size
+	 * @param page the page
+	 * @param sort the sort
+	 * @param id   the id
+	 * @return the response entity
+	 * @throws MyExcetion the my excetion
+	 */
 	@GetMapping("/orders/customer/{id}")
 	public ResponseEntity<?> findAllByCustomerId(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "orderDate-desc") String[] sort,
@@ -68,15 +90,45 @@ public class OrderApi {
 		return ResponseEntity.ok(getMapOrderResult(pageResult));
 	}
 
+	/**
+	 * Add the order.
+	 *
+	 * @param newOrderr the new orderr
+	 * @return the response entity
+	 */
 	@PostMapping("/order")
-	public ResponseEntity<?> addOrder(@DTO(OrderCreateDTO.class) Orderr order) {
-		Orderr result = orderServ.add(order);
+	public ResponseEntity<?> addOrder(@DTO(OrderCreateDTO.class) Orderr newOrderr) {
+		Orderr result = orderServ.add(newOrderr);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, OrderDTO.class));
 
-		return ResponseEntity.badRequest().body(new MessageResponse("Thêm không thành công"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Thêm hóa đơn không thành công"));
 	}
 
+	/**
+	 * Update status order.
+	 *
+	 * @param updateOrderr the update orderr
+	 * @return the response entity
+	 */
+	@PutMapping("/order")
+	public ResponseEntity<?> updateStatusOrder(@DTO(OrderUpdateDTO.class) Orderr updateOrderr) {
+		EnumStatusOrder statusOrder = updateOrderr.getStatus();
+		Orderr existsOrder = orderServ.findById(updateOrderr.getId());
+		existsOrder.setStatus(statusOrder);
+		Orderr result = orderServ.update(existsOrder);
+		if (result != null)
+			return ResponseEntity.ok(modelMapper.map(result, OrderDTO.class));
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật hóa đơn không thành công"));
+	}
+
+	/**
+	 * Gets the sort direction.
+	 *
+	 * @param direction the direction
+	 * @return the sort direction
+	 */
 	private Sort.Direction getSortDirection(String direction) {
 		if (direction.equals("asc")) {
 			return Sort.Direction.ASC;
@@ -87,16 +139,23 @@ public class OrderApi {
 		return Sort.Direction.ASC;
 	}
 
+	/**
+	 * Gets the list sort order.
+	 *
+	 * @param sort the sort
+	 * @return the list sort order
+	 * @throws MyExcetion the my excetion
+	 */
 	private List<Order> getListSortOrder(String[] sort) throws MyExcetion {
 		List<Order> orders = new ArrayList<>();
 		try {
-			if (sort[0].contains("-")) {
-				for (String sortOrder : sort) {
-					String[] subSort = sortOrder.split("-");
-					orders.add(new Order(getSortDirection(subSort[1]), subSort[0]));
+			for (int i = 0; i < sort.length; i++) {
+				if (sort[i].contains("-")) {
+					for (String sortOrder : sort) {
+						String[] subSort = sortOrder.split("-");
+						orders.add(new Order(getSortDirection(subSort[1]), subSort[0]));
+					}
 				}
-			} else {
-				orders.add(new Order(getSortDirection(sort[1]), sort[0]));
 			}
 		} catch (Exception e) {
 			throw new MyExcetion("Lỗi: Vui lòng kiểm tra lại tham số sort");
@@ -105,6 +164,12 @@ public class OrderApi {
 		return orders;
 	}
 
+	/**
+	 * Gets the map order result.
+	 *
+	 * @param pageResult the page result
+	 * @return the map order result
+	 */
 	private Map<String, Object> getMapOrderResult(Page<Orderr> pageResult) {
 		Map<String, Object> map = new HashMap<>();
 		List<OrderDTO> list = modelMapper.map(pageResult.getContent(), new TypeToken<List<OrderDTO>>() {

@@ -20,7 +20,7 @@ public class SubProductUpdateDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@NotNull(message = "Id sản phẩm không được để trống")
+//	@NotNull(message = "Id sản phẩm không được để trống")
 	private Long id;
 
 	@NotBlank(message = "Tên không được để trống")

@@ -1,5 +1,7 @@
 package maikiencuong.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +14,8 @@ import maikiencuong.enumvalue.EnumStatusOrder;
 public interface OrderRepo extends JpaRepository<Orderr, Long> {
 
 	public Page<Orderr> findAllByCustomer_Id(Long id, Pageable pageable);
+	
+	public List<Orderr> findAllByCustomer_Id(Long id);
 	
 	public Page<Orderr> findAllByStatusIn(EnumStatusOrder[] status, Pageable pageable);
 	

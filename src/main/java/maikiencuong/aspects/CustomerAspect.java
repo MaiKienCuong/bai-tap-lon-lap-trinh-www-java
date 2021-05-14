@@ -36,17 +36,23 @@ public class CustomerAspect {
 	private CustomerServ customerServ;
 
 	@Pointcut("execution(* maikiencuong.controller.api.AuthApi.signup(..))")
-	public void validSignupCustomer() {
+	public void beforeSignupCustomer() {
 
 	}
 
 	@Pointcut("execution(* maikiencuong.controller.api.CustomerApi.addCustomer(..))")
-	public void validAddCustomer() {
+	public void beforeAddCustomer() {
 
 	}
 
-	@Before("validSignupCustomer() || validAddCustomer()")
-	public void validCustomer(JoinPoint joinPoint) throws MyExcetion {
+	/**
+	 * Before add or signup customer.
+	 *
+	 * @param joinPoint the join point
+	 * @throws MyExcetion the my excetion
+	 */
+	@Before("beforeAddCustomer() || beforeSignupCustomer()")
+	public void beforeAddOrSignupCustomer(JoinPoint joinPoint) throws MyExcetion {
 		Customer newCustomer = (Customer) joinPoint.getArgs()[0];
 		Account newAccount = newCustomer.getAccount();
 		if (accountServ.existsByUsername(newAccount.getUsername()))
@@ -61,8 +67,14 @@ public class CustomerAspect {
 		newAccount.setPassword(encoder.encode(newAccount.getPassword()));
 	}
 
+	/**
+	 * Before update customer.
+	 *
+	 * @param joinPoint the join point
+	 * @throws MyExcetion the my excetion
+	 */
 	@Before("execution(* maikiencuong.controller.api.CustomerApi.updateCustomer(..))")
-	public void validUpdateCustomer(JoinPoint joinPoint) throws MyExcetion {
+	public void beforeUpdateCustomer(JoinPoint joinPoint) throws MyExcetion {
 		Customer updateCustomer = (Customer) joinPoint.getArgs()[0];
 		Customer existsCustomer = customerServ.findByEmail(updateCustomer.getEmail());
 		if (existsCustomer != null && !existsCustomer.equals(updateCustomer))

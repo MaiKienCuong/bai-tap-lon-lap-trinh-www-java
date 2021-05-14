@@ -78,4 +78,10 @@ public class OrderServImpl implements OrderServ {
 		return orderRepo.findAllByStatusIn(status, pageable);
 	}
 
+	@Override
+	@Transactional
+	public List<Orderr> findAllByCustomer_Id(Long id) {
+		return orderRepo.findAllByCustomer_Id(id);
+	}
+
 }

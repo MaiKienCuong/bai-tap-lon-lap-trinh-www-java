@@ -43,6 +43,15 @@ public class CustomerApi {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	/**
+	 * Find all.
+	 *
+	 * @param size the size
+	 * @param page the page
+	 * @param sort the sort
+	 * @return the response entity
+	 * @throws MyExcetion the my excetion
+	 */
 	@GetMapping("/customers")
 	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort)
@@ -54,37 +63,61 @@ public class CustomerApi {
 		return ResponseEntity.ok(getMapCustomerResult(pageResult));
 	}
 
+	/**
+	 * Find by id.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
 	@GetMapping("/customer/{id}")
 	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
 		Customer result = customerServ.findById(id);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, CustomerDTO.class));
 
-		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy khách hàng"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy khách hàng nào"));
 	}
 
+	/**
+	 * Add the customer.
+	 *
+	 * @param newCustomer the new customer
+	 * @return the response entity
+	 */
 	@PostMapping("/customer")
-	public ResponseEntity<?> addCustomer(@DTO(CustomerCreateDTO.class) Customer customer) {
-		Customer result = customerServ.add(customer);
+	public ResponseEntity<?> addCustomer(@DTO(CustomerCreateDTO.class) Customer newCustomer) {
+		Customer result = customerServ.add(newCustomer);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, CustomerDTO.class));
 
-		return ResponseEntity.badRequest().body(new MessageResponse("Thêm không thành công"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Thêm khách hàng không thành công"));
 	}
 
+	/**
+	 * Update customer.
+	 *
+	 * @param updateCustomer the update customer
+	 * @return the response entity
+	 */
 	@PutMapping("/customer")
-	public ResponseEntity<?> updateCustomer(@DTO(CustomerUpdateDTO.class) Customer customer) {
-		Customer result = customerServ.update(customer);
+	public ResponseEntity<?> updateCustomer(@DTO(CustomerUpdateDTO.class) Customer updateCustomer) {
+		Customer result = customerServ.update(updateCustomer);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, CustomerDTO.class));
 
-		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật không thành công"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật khách hàng không thành công"));
 	}
 
 	/*
 	 * 
 	 */
 
+	/**
+	 * Gets the sort direction.
+	 *
+	 * @param direction the direction
+	 * @return the sort direction
+	 */
 	private Sort.Direction getSortDirection(String direction) {
 		if (direction.equals("asc")) {
 			return Sort.Direction.ASC;
@@ -95,16 +128,23 @@ public class CustomerApi {
 		return Sort.Direction.ASC;
 	}
 
+	/**
+	 * Gets the list sort order.
+	 *
+	 * @param sort the sort
+	 * @return the list sort order
+	 * @throws MyExcetion the my excetion
+	 */
 	private List<Order> getListSortOrder(String[] sort) throws MyExcetion {
 		List<Order> orders = new ArrayList<>();
 		try {
-			if (sort[0].contains("-")) {
-				for (String sortOrder : sort) {
-					String[] subSort = sortOrder.split("-");
-					orders.add(new Order(getSortDirection(subSort[1]), subSort[0]));
+			for (int i = 0; i < sort.length; i++) {
+				if (sort[i].contains("-")) {
+					for (String sortOrder : sort) {
+						String[] subSort = sortOrder.split("-");
+						orders.add(new Order(getSortDirection(subSort[1]), subSort[0]));
+					}
 				}
-			} else {
-				orders.add(new Order(getSortDirection(sort[1]), sort[0]));
 			}
 		} catch (Exception e) {
 			throw new MyExcetion("Lỗi: Vui lòng kiểm tra lại tham số sort");
@@ -113,6 +153,12 @@ public class CustomerApi {
 		return orders;
 	}
 
+	/**
+	 * Gets the map customer result.
+	 *
+	 * @param pageResult the page result
+	 * @return the map customer result
+	 */
 	private Map<String, Object> getMapCustomerResult(Page<Customer> pageResult) {
 		Map<String, Object> map = new HashMap<>();
 		List<CustomerDTO> list = modelMapper.map(pageResult.getContent(), new TypeToken<List<CustomerDTO>>() {

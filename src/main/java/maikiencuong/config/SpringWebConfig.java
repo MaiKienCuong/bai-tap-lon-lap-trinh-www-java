@@ -25,7 +25,6 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -114,13 +113,12 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		return Jackson2ObjectMapperBuilder.json().applicationContext(applicationContext).build();
 	}
 
-	@Bean
-	public CommonsMultipartResolver multipartResolver() {
-		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-		multipartResolver.setDefaultEncoding("UTF-8");
-		multipartResolver.setMaxUploadSize(10000000);
-		return multipartResolver;
-	}
+	/*
+	 * @Bean public CommonsMultipartResolver multipartResolver() {
+	 * CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+	 * multipartResolver.setDefaultEncoding("UTF-8");
+	 * multipartResolver.setMaxUploadSize(10000000); return multipartResolver; }
+	 */
 
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {

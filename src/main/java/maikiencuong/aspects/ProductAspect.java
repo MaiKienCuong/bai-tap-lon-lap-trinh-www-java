@@ -30,6 +30,11 @@ public class ProductAspect {
 	@Autowired
 	private ImageServ imageServ;
 
+	/**
+	 * Before add product.
+	 *
+	 * @param joinPoint the join point
+	 */
 	@Before("execution(* maikiencuong.controller.api.ProductApi.addProduct(..))")
 	public void beforeAddProduct(JoinPoint joinPoint) {
 		Product newProduct = (Product) joinPoint.getArgs()[0];
@@ -44,6 +49,11 @@ public class ProductAspect {
 
 	}
 
+	/**
+	 * Before update product.
+	 *
+	 * @param joinPoint the join point
+	 */
 	@Before("execution(* maikiencuong.controller.api.ProductApi.updateProduct(..))")
 	public void beforeUpdateProduct(JoinPoint joinPoint) {
 		ProductUpdateDTO updateProduct = (ProductUpdateDTO) joinPoint.getArgs()[0];

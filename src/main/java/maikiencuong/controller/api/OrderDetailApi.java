@@ -28,6 +28,12 @@ public class OrderDetailApi {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	/**
+	 * Find all by order id.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
 	@GetMapping("/order-detail/order/{id}")
 	public ResponseEntity<?> findAllByOrderId(@PathVariable("id") Long id) {
 		List<OrderDetail> list = orderDetailServ.findAllByOrder_Id(id);
