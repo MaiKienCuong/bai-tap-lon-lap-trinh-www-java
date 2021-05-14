@@ -1,9 +1,58 @@
 
-# account theo id - api/account/{id}
 ```diff
+- account theo id - api/account/{id}
 ```
 
-# số lượng hóa đơn và tổng tiền của 1 account - api/account/order/{id}
+```diff
+- cập nhật sản phẩm PUT - api/product
+```
+
+```diff
+{
+    "id": 15,
+    "name": "Quần jeans dài cho bé trai từ 1 - 6 tuổi màu Đen size L",
+    "price": 200000.0,
+    "imagesUrl": [
+        {
+            "url":"âmknjnn"
+        }
+    ],
+    "marker": "",
+    "discount": 0.0,
+    "origin": "Hồ Chí Minh Việt Nam",
+    "tax": 0.0,
+    "shortDescription": "Quần jeans dài cho bé trai từ 1 - 6 tuổi mộc trơn wash rách nhẹ sành điệu, 2 màu trắng đen cơ bản cho bé lựa chọn dễ mix đồ.",
+    "longDescription": "Quần jeans chắc chắn là món đồ bé nào cũng phải có với sự tiện lợi và dễ mặc. Chất liệu thun co giãn nhẹ mang đến cho bé sự thoải mái hết cỡ khi mặc. Quần có túi wash rách nhẹ, mặc ngắn trên mắc cá chân.sành điệu.",
+    "material": "Jean thun co giãn ",
+    "active": true,
+    "supplierId": 2,
+    "categoryId":2,
+    "subProducts": [
+        {
+            "id": 96,
+            "name": "Quần jeans dài cho bé trai từ 1 - 6 tuổi màu Đen size L",
+            "createdAt": "2021-05-07 10:40:12",
+            "updatedAt": "2021-05-07 10:40:12",
+            "color": "Đen",
+            "size": "L",
+            "inventory": 10
+        },
+        {
+            "name": "Quần jeans dài cho bé trai từ 1 - 6 tuổi màu Đen size L",
+            "createdAt": "2021-05-07 10:40:12",
+            "updatedAt": "2021-05-07 10:40:12",
+            "color": "Đen",
+            "size": "L",
+            "inventory": 11
+        }
+    ]
+}
+```
+
+```diff
+- số lượng hóa đơn và tổng tiền của 1 account - api/account/order/{id}
+```
+
 ```diff
 ket qua
 {
