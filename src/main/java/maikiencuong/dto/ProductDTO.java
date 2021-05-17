@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.Setter;
+import maikiencuong.entity.Image;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class ProductDTO implements Serializable {
 
 	private Double price;
 
-	private List<String> imagesUrl;
+	private List<Image> imagesUrl;
 
 	private String marker;
 

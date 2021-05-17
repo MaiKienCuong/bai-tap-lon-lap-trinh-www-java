@@ -22,6 +22,7 @@ import lombok.ToString;
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "ImagesUrl")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,10 +41,5 @@ public class Image {
 	@ToString.Exclude
 	@JoinColumn(name = "product_id")
 	private Product product;
-
-	@Override
-	public String toString() {
-		return url;
-	}
 
 }
