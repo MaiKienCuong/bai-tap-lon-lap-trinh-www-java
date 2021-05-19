@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import maikiencuong.dto.AccountDTO;
+import maikiencuong.dto.CustomerDTO;
 import maikiencuong.dto.update.AccountUpdateDTO;
 import maikiencuong.entity.Account;
 import maikiencuong.entity.Orderr;
@@ -110,7 +111,7 @@ public class AccountApi {
 			}
 			Map<String, Object> map = new HashMap<>();
 			map.put("account", modelMapper.map(existsAccount, AccountDTO.class));
-			map.put("customer", existsAccount.getCustomer());
+			map.put("customer", modelMapper.map(existsAccount.getCustomer(), CustomerDTO.class));
 			map.put("countOrders", ordersbyCustomerId.size());
 			map.put("sumOrders", sum);
 

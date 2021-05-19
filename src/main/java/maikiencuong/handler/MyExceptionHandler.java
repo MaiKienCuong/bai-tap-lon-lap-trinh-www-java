@@ -118,6 +118,18 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));
 	}
 
+	/**
+	 * Handle null pointer exception.
+	 *
+	 * @param ex      the ex
+	 * @param request the request
+	 * @return the response entity
+	 */
+	@ExceptionHandler(NullPointerException.class)
+	public final ResponseEntity<Object> handleNullPointerException(NullPointerException ex, WebRequest request) {
+		return ResponseEntity.badRequest().body(new MessageResponse(null));
+	}
+
 	@Override
 	protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {

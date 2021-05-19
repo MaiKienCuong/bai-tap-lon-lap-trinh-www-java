@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -46,6 +48,7 @@ public class Customer {
 	@Column(name = "address", columnDefinition = "nvarchar(255)")
 	private String address;
 
+	@JsonIgnore
 	@ToString.Exclude
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "account_id", columnDefinition = "bigint")
