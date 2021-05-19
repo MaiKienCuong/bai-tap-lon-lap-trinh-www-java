@@ -50,7 +50,7 @@
 ```
 
 ```diff
-- số lượng hóa đơn và tổng tiền của 1 account - api/account/order/{id}
+- số lượng hóa đơn và tổng tiền của 1 account - api/account/order/{accountId}
 ```
 
 ```diff
@@ -65,6 +65,13 @@ ket qua
         "roles": [
             "ROLE_CUSTOMER"
         ]
+    },
+    "customer": {
+        "id": 1,
+        "name": "Nguyễn Lan Anh",
+        "phone": "0961514852",
+        "email": "nguyenlananh15@gmail.com",
+        "address": "15 Nguyễn Thái Sơn Quận Gò Vấp Thành Hồ Chí Minh"
     }
 }
 ```
