@@ -17,6 +17,13 @@ import maikiencuong.service.CategoryServ;
 import maikiencuong.service.ImageServ;
 import maikiencuong.service.SupplierServ;
 
+/**
+ * The Class ProductAspect.
+ * 
+ * @Aspect danh dau day la mot class aspect, dung de pre-process cac phuong thuc
+ *         addProduct, updateProduct trong controller
+ * 
+ */
 @Aspect
 @Component
 public class ProductAspect {
@@ -32,6 +39,11 @@ public class ProductAspect {
 
 	/**
 	 * Before add product.
+	 * 
+	 * <p>
+	 * Phuong thuc nay se duoc thuc hien truoc khi phuong thuc addProduct trong
+	 * controller duoc goi, dung de kiem tra san pham truoc khi them vao database
+	 * </p>
 	 *
 	 * @param joinPoint the join point
 	 */
@@ -51,6 +63,11 @@ public class ProductAspect {
 
 	/**
 	 * Before update product.
+	 * 
+	 * <p>
+	 * Phuong thuc nay se duoc thuc hien truoc khi phuong thuc updateProduct trong
+	 * controller duoc goi
+	 * </p>
 	 *
 	 * @param joinPoint the join point
 	 */

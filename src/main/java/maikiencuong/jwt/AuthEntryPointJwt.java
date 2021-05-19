@@ -14,6 +14,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import maikiencuong.payload.response.MessageResponse;
 
+/**
+ * The Class AuthEntryPointJwt.
+ * 
+ * <p>
+ * Class nay de xu ly loi khi truy cap vao cac tai nguyen duoc bao ve ma chua
+ * dang nhap (loi 401)
+ * </p>
+ */
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 

@@ -53,6 +53,9 @@ public class AccountApi {
 
 	/**
 	 * Update account.
+	 * 
+	 * @Valid danh dau de cho spring kiem tra tinh hop le cua du lieu
+	 * @RequestBody danh dau de spring tu dong map body cua request sang DTO
 	 *
 	 * @param accountUpdateDTO the account update DTO
 	 * @return the response entity
@@ -107,6 +110,7 @@ public class AccountApi {
 			}
 			Map<String, Object> map = new HashMap<>();
 			map.put("account", modelMapper.map(existsAccount, AccountDTO.class));
+			map.put("customer", existsAccount.getCustomer());
 			map.put("countOrders", ordersbyCustomerId.size());
 			map.put("sumOrders", sum);
 

@@ -67,6 +67,9 @@ public class SupplierApi {
 
 	/**
 	 * Add the supplier.
+	 * 
+	 * @DTO danh dau body cua request gui len la dang DTO, nhung argument co
+	 *      annotation DTO se duoc modelMaper tu dong chuyen qua entity
 	 *
 	 * @param newSupplier the new supplier
 	 * @return the response entity
@@ -82,6 +85,9 @@ public class SupplierApi {
 
 	/**
 	 * Update supplier.
+	 * 
+	 * @DTO danh dau body cua request gui len la dang DTO, nhung argument co
+	 *      annotation DTO se duoc modelMaper tu dong chuyen qua entity
 	 *
 	 * @param updateSupplier the update supplier
 	 * @return the response entity
@@ -110,33 +116,5 @@ public class SupplierApi {
 			return ResponseEntity.badRequest().body(new MessageResponse("Xóa nhà cung cấp không thành công"));
 		}
 	}
-
-	/*
-	 * private Sort.Direction getSortDirection(String direction) { if
-	 * (direction.equals("asc")) { return Sort.Direction.ASC; } else if
-	 * (direction.equals("desc")) { return Sort.Direction.DESC; }
-	 * 
-	 * return Sort.Direction.ASC; }
-	 * 
-	 * private List<Order> getListSortOrder(String[] sort) throws MyExcetion {
-	 * List<Order> orders = new ArrayList<>(); try { if (sort[0].contains("-")) {
-	 * for (String sortOrder : sort) { String[] subSort = sortOrder.split("-");
-	 * orders.add(new Order(getSortDirection(subSort[1]), subSort[0])); } } else {
-	 * orders.add(new Order(getSortDirection(sort[1]), sort[0])); } } catch
-	 * (Exception e) { throw new
-	 * MyExcetion("Lỗi: Vui lòng kiểm tra lại tham số sort"); }
-	 * 
-	 * return orders; }
-	 * 
-	 * private Map<String, Object> getMapSupplierResult(Page<Supplier> pageResult) {
-	 * Map<String, Object> map = new HashMap<>(); List<SupplierDTO> list =
-	 * modelMapper.map(pageResult.getContent(), new TypeToken<List<SupplierDTO>>() {
-	 * }.getType()); map.put("suppliers", list); map.put("currentPage",
-	 * pageResult.getNumber()); map.put("totalItems",
-	 * pageResult.getTotalElements()); map.put("totalPages",
-	 * pageResult.getTotalPages());
-	 * 
-	 * return map; }
-	 */
 
 }

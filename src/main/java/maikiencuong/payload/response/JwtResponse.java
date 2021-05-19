@@ -9,6 +9,13 @@ import lombok.Setter;
 import maikiencuong.dto.AccountDTO;
 import maikiencuong.dto.CustomerDTO;
 
+/**
+ * The Class JwtResponse.
+ * 
+ * <p>
+ * Sau khi dang nhap thanh cong thi tra ve cho Client doi tuong cua class nay
+ * </p>
+ */
 @Getter
 @Setter
 public class JwtResponse implements Serializable {

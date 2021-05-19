@@ -8,12 +8,16 @@ import org.springframework.stereotype.Repository;
 import maikiencuong.entity.Product;
 
 /**
- * cac phuong thuc khong co Annotation @query se duoc JPA tu dong tao ra cau
- * truy van theo ten cua phuong thuc nhung phuong thuc co thm Annotation @query
- * thi chung ta phai chi dinh cau truy van cho no
+ * The Interface ProductRepo.
  * 
- * @author maikiencuong
- *
+ * <p>
+ * Cac phuong thuc trong class nay dat ten theo dung quy dinh (Query method
+ * JpaRepository) thi Jpa se tu dong tao ra cau truy van, neu khong thi phai
+ * khai bao cau query cho method bang annotation Query<br>
+ * Khong can tao class implements interface nay
+ * </p>
+ * 
+ * @Repository danh dau day la class Repository, dung de giao tiep voi database
  */
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Long> {

@@ -15,6 +15,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import maikiencuong.payload.response.MessageResponse;
 
+/**
+ * The Class AccessDeniedHandlerJwt.
+ * 
+ * <p>
+ * Class nay de xu ly loi AccessDenied (loi 403)
+ * </p>
+ * 
+ */
 @Component
 public class AccessDeniedHandlerJwt implements AccessDeniedHandler {
 

@@ -92,6 +92,9 @@ public class OrderApi {
 
 	/**
 	 * Add the order.
+	 * 
+	 * @DTO danh dau body cua request gui len la dang DTO, nhung argument co
+	 *      annotation DTO se duoc modelMaper tu dong chuyen qua entity
 	 *
 	 * @param newOrderr the new orderr
 	 * @return the response entity
@@ -107,6 +110,9 @@ public class OrderApi {
 
 	/**
 	 * Update status order.
+	 * 
+	 * @DTO danh dau body cua request gui len la dang DTO, nhung argument co
+	 *      annotation DTO se duoc modelMaper tu dong chuyen qua entity
 	 *
 	 * @param updateOrderr the update orderr
 	 * @return the response entity

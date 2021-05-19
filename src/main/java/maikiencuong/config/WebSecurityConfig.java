@@ -19,6 +19,13 @@ import maikiencuong.jwt.AccessDeniedHandlerJwt;
 import maikiencuong.jwt.AuthEntryPointJwt;
 import maikiencuong.jwt.AuthTokenFilter;
 
+/**
+ * The Class WebSecurityConfig.
+ * 
+ * <p>
+ * Config security cho ung dung
+ * </p>
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
@@ -29,20 +36,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
-	
+
 	@Autowired
 	private AccessDeniedHandlerJwt accessDeniedHandle;
-	
+
 	@Bean
 	public AuthTokenFilter authenticationJwtTokenFilter() {
 		return new AuthTokenFilter();
 	}
-	
+
+	/**
+	 * Password encoder.
+	 * 
+	 * <p>
+	 * Doi tuong dung de bam mat khau plain text sang ma Bcrypt
+	 * </p>
+	 *
+	 * @return the password encoder
+	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -57,17 +73,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			.cors().and()
-			.csrf().disable()
-			.authorizeRequests()
-			.antMatchers("/").permitAll()
-			.antMatchers("/src/**").permitAll()
-			.antMatchers("/api/**").permitAll()
-			.anyRequest().authenticated()
-			.and().exceptionHandling().accessDeniedHandler(accessDeniedHandle)
-			.and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		.cors()
+		.and().csrf().disable()
+		.authorizeRequests()
+		.antMatchers("/").permitAll()
+		.antMatchers("/src/**").permitAll()
+		.antMatchers("/api/**").permitAll()
+		.anyRequest().authenticated()
+		.and().exceptionHandling()
+		.accessDeniedHandler(accessDeniedHandle)
+		.and().exceptionHandling()
+		.authenticationEntryPoint(unauthorizedHandler)
+		.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
-	
+
 }

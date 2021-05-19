@@ -19,6 +19,12 @@ import maikiencuong.service.AccountServ;
 import maikiencuong.service.CustomerServ;
 import maikiencuong.service.RoleServ;
 
+/**
+ * The Class CustomerAspect.
+ * 
+ * @Aspect danh dau day la mot class aspect, dung de pre-process cac phuong thuc
+ *         dang ky tai khoan va them khach hang moi trong conntroller api
+ */
 @Aspect
 @Component
 public class CustomerAspect {
@@ -35,11 +41,23 @@ public class CustomerAspect {
 	@Autowired
 	private CustomerServ customerServ;
 
+	/**
+	 * Before signup customer.
+	 * 
+	 * @Pointcut danh dau day la mot diem giao cat, no se duoc xen vao khi goi
+	 *           phuong thuc signup trong controller
+	 */
 	@Pointcut("execution(* maikiencuong.controller.api.AuthApi.signup(..))")
 	public void beforeSignupCustomer() {
 
 	}
 
+	/**
+	 * Before add customer.
+	 * 
+	 * @Pointcut danh dau day la mot diem giao cat, no se duoc xen vao khi goi
+	 *           phuong thuc addCutomer trong controller
+	 */
 	@Pointcut("execution(* maikiencuong.controller.api.CustomerApi.addCustomer(..))")
 	public void beforeAddCustomer() {
 
@@ -47,7 +65,14 @@ public class CustomerAspect {
 
 	/**
 	 * Before add or signup customer.
-	 *
+	 * 
+	 * </p>
+	 * Khi phuong thuc signup hoac addCustomer trong controller duoc goi thi phuong
+	 * thuc nay se duoc thuc hien truoc, dung de kiem tra tinh hop le cua du lieu
+	 * </p>
+	 * 
+	 * @Before danh dau la no se duoc thuc hien truoc hai phuong thuc signup va
+	 *         addCustomer trong controller
 	 * @param joinPoint the join point
 	 * @throws MyExcetion the my excetion
 	 */
@@ -69,7 +94,12 @@ public class CustomerAspect {
 
 	/**
 	 * Before update customer.
-	 *
+	 * 
+	 * <p>
+	 * Phuong thuc nay se duoc goi truoc khi thuc hien phuong thuc updateCustomer
+	 * trong controller, dung de kiem tra tinh hop le cua du lieu
+	 * </p>
+	 * 
 	 * @param joinPoint the join point
 	 * @throws MyExcetion the my excetion
 	 */

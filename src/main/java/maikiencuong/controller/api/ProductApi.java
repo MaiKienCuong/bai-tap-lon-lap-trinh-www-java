@@ -78,6 +78,9 @@ public class ProductApi {
 
 	/**
 	 * Add the product.
+	 * 
+	 * @DTO danh dau body cua request gui len la dang DTO, nhung argument co
+	 *      annotation DTO se duoc modelMaper tu dong chuyen qua entity
 	 *
 	 * @param newProduct the new product
 	 * @return the response entity
@@ -93,6 +96,9 @@ public class ProductApi {
 
 	/**
 	 * Update product.
+	 * 
+	 * @Valid danh dau de cho spring kiem tra tinh hop le cua du lieu
+	 * @RequestBody danh dau de spring tu dong map body cua request sang DTO
 	 *
 	 * @param productUpdateDTO the product update DTO
 	 * @return the response entity

@@ -26,6 +26,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import maikiencuong.handler.MyExcetion;
 
+/**
+ * The Class DTOModelMapper.
+ * 
+ * <p>
+ * Class nay la pre-process cho cac phuong thuc co requestBody hoac responsebody
+ * </p>
+ */
 public class DTOModelMapper extends RequestResponseBodyMethodProcessor {
 
 	private ModelMapper modelMapper;
@@ -38,16 +45,54 @@ public class DTOModelMapper extends RequestResponseBodyMethodProcessor {
 		this.modelMapper = modelMapper;
 	}
 
+	/**
+	 * Supports parameter.
+	 * 
+	 * <p>
+	 * Khai bao nhung annotation nao se duoc class nay xu ly. O day cho co
+	 * annotation DTO
+	 * </p>
+	 *
+	 * @param parameter the parameter
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
 		return parameter.hasParameterAnnotation(DTO.class);
 	}
 
+	/**
+	 * Validate if applicable.
+	 *
+	 * <p>
+	 * Kiem tra tinh hop le cuaa du lieu, tuong duong voi annotation Valid
+	 * </p>
+	 *
+	 * @param binder    the binder
+	 * @param parameter the parameter
+	 */
 	@Override
 	protected void validateIfApplicable(WebDataBinder binder, MethodParameter parameter) {
 		binder.validate();
 	}
 
+	/**
+	 * Resolve argument.
+	 * 
+	 * <p>
+	 * Xu ly cac argument. Neu DTO gui len co thuoc tinh id (duoc danh dau bang
+	 * annotation @Id) thi entityManager se tim no trong database sau do modelMapper
+	 * se map no qua entity. Neu DTO gui len khong co thuoc tinh @ID thi no se duoc
+	 * map qua entity luon
+	 * </p>
+	 *
+	 * @param parameter     the parameter
+	 * @param mavContainer  the mav container
+	 * @param webRequest    the web request
+	 * @param binderFactory the binder factory
+	 * @return the object
+	 * @throws Exception the exception
+	 */
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
@@ -78,6 +123,17 @@ public class DTOModelMapper extends RequestResponseBodyMethodProcessor {
 		throw new RuntimeException();
 	}
 
+	/**
+	 * Gets the entity id.
+	 * 
+	 * <p>
+	 * Neu DTO gui len co thuoc tinh nao duoc danh dau bang annotation @Id thi se
+	 * lay ra gia tri cua Field do
+	 * </p>
+	 *
+	 * @param dto the dto
+	 * @return the entity id
+	 */
 	private Object getEntityId(Object dto) {
 		for (Field field : dto.getClass().getDeclaredFields()) {
 			if (field.getAnnotation(Id.class) != null) {

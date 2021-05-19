@@ -32,10 +32,31 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import maikiencuong.payload.response.MessageResponse;
 
+/**
+ * The Class MyExceptionHandler.
+ * 
+ * <p>
+ * Class nay de xu ly cac Exception
+ * </p>
+ */
 @ControllerAdvice
 @RestController
 public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 
+	/**
+	 * Handle method argument not valid.
+	 * 
+	 * <p>
+	 * Phuong thuc nay se duoc goi neu phuong thuc trong controller nhan argument
+	 * khong hop le
+	 * </p>
+	 *
+	 * @param ex      the ex
+	 * @param headers the headers
+	 * @param status  the status
+	 * @param request the request
+	 * @return the response entity
+	 */
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -47,18 +68,51 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi: Dữ liệu hoặc tham số không hợp lệ"));
 	}
 
+	/**
+	 * Handle jpa system exception.
+	 * 
+	 * <p>
+	 * Hanlde JpaSystemException
+	 * </p>
+	 *
+	 * @param ex      the ex
+	 * @param request the request
+	 * @return the response entity
+	 */
 	@ExceptionHandler(JpaSystemException.class)
-	public final ResponseEntity<Object> handleAllExceptions(JpaSystemException ex, WebRequest request) {
+	public final ResponseEntity<Object> handleJpaSystemException(JpaSystemException ex, WebRequest request) {
 		ex.printStackTrace();
 		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi: Không thể thêm hoặc cập nhật dữ liệu"));
 	}
 
+	/**
+	 * Handle property reference exception.
+	 * 
+	 * <p>
+	 * Hanlde PropertyReferenceException
+	 * </p>
+	 *
+	 * @param ex      the ex
+	 * @param request the request
+	 * @return the response entity
+	 */
 	@ExceptionHandler(PropertyReferenceException.class)
 	public final ResponseEntity<Object> handlePropertyReferenceException(PropertyReferenceException ex,
 			WebRequest request) {
 		return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));
 	}
 
+	/**
+	 * Handle my exception.
+	 * 
+	 * <p>
+	 * Hanlde Exception tu dinh nghia
+	 * </p>
+	 *
+	 * @param ex      the ex
+	 * @param request the request
+	 * @return the response entity
+	 */
 	@ExceptionHandler(MyExcetion.class)
 	public final ResponseEntity<Object> handleMyException(MyExcetion ex, WebRequest request) {
 		return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));

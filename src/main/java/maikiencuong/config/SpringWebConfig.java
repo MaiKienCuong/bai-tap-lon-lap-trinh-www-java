@@ -34,6 +34,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import maikiencuong.dto.mapper.DTOModelMapper;
 
+/**
+ * The Class SpringWebConfig.
+ * 
+ * <p>
+ * Config Spring app <br>
+ * EnableAspectJAutoProxy cho phep su dung cac class aspect o trong project<br>
+ * EnableJpaRepositories khai bao package chua cac class repository, cho phep su
+ * dung jparepository trong project
+ * </p>
+ */
 @EnableWebMvc
 @Configuration
 @EnableAspectJAutoProxy
@@ -53,12 +63,29 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	private static final String HIBERNATE_FORMAT_SQL = "spring.jpa.properties.hibernate.format_sql";
 	private static final String HIBERNATE_HBM2DDL_AUTO = "spring.jpa.hibernate.ddl-auto";
 
+	/**
+	 * The evn.
+	 * 
+	 * <p>
+	 * Bien environment dung de chua cac gia tri cua file properties trong
+	 * PropertySource
+	 * </p>
+	 */
 	@Autowired
 	private Environment evn;
 
 	@Autowired
 	private ApplicationContext applicationContext;
 
+	/**
+	 * View resolver.
+	 * 
+	 * <p>
+	 * Config viewResolver, khai bao duong dan chua cac view jsp
+	 * </p>
+	 *
+	 * @return the internal resource view resolver
+	 */
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -68,8 +95,15 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		return viewResolver;
 	}
 
-	/* config jpa */
-
+	/**
+	 * Data source.
+	 * 
+	 * <p>
+	 * Config datasource de ket noi den database
+	 * </p>
+	 *
+	 * @return the data source
+	 */
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -81,6 +115,15 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		return dataSource;
 	}
 
+	/**
+	 * Entity manager factory.
+	 * 
+	 * <p>
+	 * Config entityManager Factory
+	 * </p>
+	 *
+	 * @return the local container entity manager factory bean
+	 */
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -92,6 +135,15 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		return entityManagerFactoryBean;
 	}
 
+	/**
+	 * Transaction manager.
+	 * 
+	 * <p>
+	 * Config transaction manager
+	 * </p>
+	 *
+	 * @return the jpa transaction manager
+	 */
 	@Bean
 	public JpaTransactionManager transactionManager() {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
@@ -100,6 +152,17 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		return transactionManager;
 	}
 
+	/**
+	 * Model mapper.
+	 * 
+	 * <p>
+	 * Config doi tuong modelMapper, dung de tu dong anh xa cac thuoc tinh trong cac
+	 * class DTO sang cac class entity va nguoc lai, ma khong phai anh xa thu cong
+	 * tung thuoc tinh
+	 * </p>
+	 *
+	 * @return the model mapper
+	 */
 	@Bean
 	public ModelMapper modelMapper() {
 		ModelMapper modelMapper = new ModelMapper();
@@ -108,18 +171,37 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		return modelMapper;
 	}
 
+	/**
+	 * Object mapper.
+	 * 
+	 * <p>
+	 * Khai bao doi tuong objectMapper dung de map cac doi tuong sang json va nguoc
+	 * lai
+	 * </p>
+	 *
+	 * @return the object mapper
+	 */
 	@Bean
 	public ObjectMapper objectMapper() {
 		return Jackson2ObjectMapperBuilder.json().applicationContext(applicationContext).build();
 	}
 
-	/*
-	 * @Bean public CommonsMultipartResolver multipartResolver() {
-	 * CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-	 * multipartResolver.setDefaultEncoding("UTF-8");
-	 * multipartResolver.setMaxUploadSize(10000000); return multipartResolver; }
+	/**
+	 * Adds the argument resolvers.
+	 * 
+	 * <p>
+	 * Config doi tuong de handle cac argument trong cac phuong thuc, cac phuong
+	 * thuc trong controller co tham so thi se duoc cac doi tuong nay xu ly.
+	 * </p>
+	 * <p>
+	 * O day chi them doi tuong DTOMapper de no tu dong chuyen cac tham so DTO trong
+	 * phuong thuc cua controller ma client gui len thanh cac entity, khi do
+	 * controller chi can quan tam den viec xu ly maf khong can quan tam den viec
+	 * chuyen tu DTO sang entity
+	 * </p>
+	 *
+	 * @param argumentResolvers the argument resolvers
 	 */
-
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		EntityManagerFactory em = entityManagerFactory().getObject();
@@ -129,11 +211,29 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		argumentResolvers.add(new DTOModelMapper(objectMapper(), entityManager, modelMapper()));
 	}
 
+	/**
+	 * Add the resource handlers.
+	 * 
+	 * <p>
+	 * khai bao cac duong dan cho cac tai nguyen tinh nhu html, css, image,...
+	 * </p>
+	 *
+	 * @param registry the registry
+	 */
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/src/**").addResourceLocations("/src/");
 	}
 
+	/**
+	 * Hibernate properties.
+	 * 
+	 * <p>
+	 * Config file properties cho hibernate
+	 * </p>
+	 *
+	 * @return the properties
+	 */
 	private Properties hibernateProperties() {
 		Properties properties = new Properties();
 		properties.setProperty("hibernate.dialect", evn.getProperty(HIBERNATE_DIALECT));

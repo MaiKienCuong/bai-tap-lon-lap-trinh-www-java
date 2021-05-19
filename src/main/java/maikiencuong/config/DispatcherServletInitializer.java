@@ -2,6 +2,13 @@ package maikiencuong.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+/**
+ * The Class DispatcherServletInitializer.
+ * 
+ * <p>
+ * Config Dispatcher Servlet
+ * </p>
+ */
 public class DispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override

@@ -58,7 +58,7 @@ public class Account {
 	private Set<Role> roles;
 
 	@ToString.Exclude
-	@OneToOne(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Customer customer;
 
 	public Account() {

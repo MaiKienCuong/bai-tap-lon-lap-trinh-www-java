@@ -12,6 +12,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import maikiencuong.entity.Account;
 
+/**
+ * The Class AccountDetailsImpl.
+ * 
+ * <p>
+ * Class nay ke thua {@link UserDetails} de chua thong tin ve account va
+ * authorities
+ * </p>
+ */
 @EqualsAndHashCode(of = { "account" })
 public class AccountDetailsImpl implements UserDetails {
 

@@ -17,6 +17,13 @@ import maikiencuong.handler.MyExcetion;
 import maikiencuong.service.CustomerServ;
 import maikiencuong.service.SubProductServ;
 
+/**
+ * The Class OrderAspect.
+ * 
+ * @Aspect danh dau day la mot class aspect, dung de pre-process truoc khi them
+ *         mot hoa don moi vao database
+ * 
+ */
 @Aspect
 @Component
 public class OrderAspect {
@@ -29,6 +36,11 @@ public class OrderAspect {
 
 	/**
 	 * Before add order.
+	 *
+	 * <p>
+	 * Phuong thuc nay se duoc thuc hien truoc khi phuong thuc addOrder trong
+	 * controller duoc goi, dung de kiem tra tinh hop le cua hoa don
+	 * </p>
 	 *
 	 * @param joinPoint the join point
 	 * @throws MyExcetion the my excetion
