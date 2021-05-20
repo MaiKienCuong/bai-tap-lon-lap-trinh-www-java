@@ -35,7 +35,7 @@ public class ProductUpdateDTO implements Serializable {
 
 	private String marker;
 
-
+    //fdsnfjsdmn
 	
 
 	@Min(value = 0, message = "Giảm giá phải lớn hơn hoặc bằng 0")
