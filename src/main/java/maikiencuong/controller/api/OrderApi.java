@@ -108,6 +108,15 @@ public class OrderApi {
 		return ResponseEntity.badRequest().body(new MessageResponse("Thêm hóa đơn không thành công"));
 	}
 
+	@GetMapping("/order/{id}")
+	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+		Orderr findById = orderServ.findById(id);
+		if (findById != null)
+			return ResponseEntity.ok(modelMapper.map(findById, OrderDTO.class));
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy hóa đơn"));
+	}
+
 	/**
 	 * Update status order.
 	 * 
