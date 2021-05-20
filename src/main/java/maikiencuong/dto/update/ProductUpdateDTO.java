@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Id;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -60,6 +61,7 @@ public class ProductUpdateDTO implements Serializable {
 	private Long categoryId;
 
 	@NotNull(message = "Chưa có danh sách sản phẩm con")
+	@Valid
 	private List<SubProductUpdateDTO> subProducts;
 
 }
