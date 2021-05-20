@@ -97,6 +97,7 @@ public class AccountApi {
 	@GetMapping("/accounts")
 	public ResponseEntity<?> findAll() {
 		List<Account> findAll = accountServ.findAll();
+		findAll.removeIf(x -> x.getCustomer() == null);
 		if (!findAll.isEmpty()) {
 			List<AccountDTO> list = modelMapper.map(findAll, new TypeToken<List<AccountDTO>>() {
 			}.getType());
