@@ -1,6 +1,7 @@
 package maikiencuong.service.impl;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,12 @@ public class ProductServImpl implements ProductServ {
 			subProduct.setProduct(product);
 		}
 		return productRepo.saveAndFlush(product);
+	}
+
+	@Override
+	@Transactional
+	public List<Product> findTop10ByOrderByViewsDesc() {
+		return productRepo.findTop10ByOrderByViewsDesc();
 	}
 
 }

@@ -1,5 +1,7 @@
 package maikiencuong.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -24,6 +26,8 @@ public interface ProductServ {
 	public Product findById(Long id);
 
 	public Page<Product> findAll(Pageable pageable);
+	
+	public List<Product> findTop10ByOrderByViewsDesc();
 
 	public Page<Product> findAllByMarkerIn(String[] markers, Pageable pageable);
 
