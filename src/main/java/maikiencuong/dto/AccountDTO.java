@@ -23,4 +23,6 @@ public class AccountDTO implements Serializable {
 
 	private Set<String> roles;
 
+	private CustomerDTO customer;
+
 }

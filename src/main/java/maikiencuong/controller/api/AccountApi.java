@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -90,6 +91,18 @@ public class AccountApi {
 		if (existsAccount != null)
 			return ResponseEntity.ok(existsAccount);
 		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy tài khoản nào"));
+
+	}
+
+	@GetMapping("/accounts")
+	public ResponseEntity<?> findAll() {
+		List<Account> findAll = accountServ.findAll();
+		if (!findAll.isEmpty()) {
+			List<AccountDTO> list = modelMapper.map(findAll, new TypeToken<List<AccountDTO>>() {
+			}.getType());
+			return ResponseEntity.ok(list);
+		}
+		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
 
 	}
 
