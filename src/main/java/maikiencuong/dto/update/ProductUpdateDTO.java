@@ -34,7 +34,8 @@ public class ProductUpdateDTO implements Serializable {
 	private Double price;
 
 	private String marker;
-	
+
+
 	
 
 	@Min(value = 0, message = "Giảm giá phải lớn hơn hoặc bằng 0")
