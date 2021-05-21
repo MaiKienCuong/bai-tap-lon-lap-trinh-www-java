@@ -223,6 +223,11 @@ public class ProductApi {
 	public ResponseEntity<?> findByMarker(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort,
 			@RequestParam(defaultValue = "HOT", value = "marker") String[] markers) throws MyExcetion {
+		List<Product> listHot = productServ.findAllByMarkerIn(new String[] { "HOT" });
+		listHot.forEach(prod -> {
+			prod.setMarker("DEF");
+			productServ.update(prod);
+		});
 		List<Product> list = productServ.findTop10ByOrderByViewsDesc();
 		list.forEach(product -> {
 			product.setMarker("HOT");

@@ -29,6 +29,8 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
 	public Page<Product> findAllByNameLikeOrCategory_NameLike(String name, String category, Pageable pageable);
 
 	public Page<Product> findAllByMarkerIn(String[] markers, Pageable pageable);
+	
+	public List<Product> findAllByMarkerIn(String[] markers);
 
 	public List<Product> findTop10ByOrderByViewsDesc();
 

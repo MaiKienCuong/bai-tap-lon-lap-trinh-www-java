@@ -28,6 +28,8 @@ public interface ProductServ {
 	public Page<Product> findAll(Pageable pageable);
 	
 	public List<Product> findTop10ByOrderByViewsDesc();
+	
+	public List<Product> findAllByMarkerIn(String[] markers);
 
 	public Page<Product> findAllByMarkerIn(String[] markers, Pageable pageable);
 

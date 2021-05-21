@@ -86,4 +86,10 @@ public class ProductServImpl implements ProductServ {
 		return productRepo.findTop10ByOrderByViewsDesc();
 	}
 
+	@Override
+	@Transactional
+	public List<Product> findAllByMarkerIn(String[] markers) {
+		return productRepo.findAllByMarkerIn(markers);
+	}
+
 }
