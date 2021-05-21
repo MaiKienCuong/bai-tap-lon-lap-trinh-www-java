@@ -14,7 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -112,6 +114,18 @@ public class CustomerApi {
 			return ResponseEntity.ok(modelMapper.map(result, CustomerDTO.class));
 
 		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật khách hàng không thành công"));
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping("/customer/{id}")
+	public ResponseEntity<?> deleteCustomer(@PathVariable("id") Long id) {
+		try {
+			customerServ.delete(id);
+			return ResponseEntity.ok(new MessageResponse("Xóa thành công khách hàng"));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(new MessageResponse(
+					"Xóa khách hàng không thành công. Chỉ xóa được khi khách hàng này chưa lập hóa đơn nào"));
+		}
 	}
 
 	/*

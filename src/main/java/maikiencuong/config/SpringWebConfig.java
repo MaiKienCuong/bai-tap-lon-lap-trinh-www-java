@@ -196,7 +196,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	 * <p>
 	 * O day chi them doi tuong DTOMapper de no tu dong chuyen cac tham so DTO trong
 	 * phuong thuc cua controller ma client gui len thanh cac entity, khi do
-	 * controller chi can quan tam den viec xu ly maf khong can quan tam den viec
+	 * controller chi can quan tam den viec xu ly ma khong can quan tam den viec
 	 * chuyen tu DTO sang entity
 	 * </p>
 	 *

@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -54,6 +55,39 @@ public class AccountApi {
 	private AuthenticationManager authenticationManager;
 
 	/**
+	 * Find all.
+	 *
+	 * @return the response entity
+	 */
+	@GetMapping("/accounts")
+	public ResponseEntity<?> findAll() {
+		List<Account> findAll = accountServ.findAll();
+		findAll.removeIf(x -> x.getCustomer() == null);
+		if (!findAll.isEmpty()) {
+			List<AccountDTO> list = modelMapper.map(findAll, new TypeToken<List<AccountDTO>>() {
+			}.getType());
+			return ResponseEntity.ok(list);
+		}
+		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách tài khoản trống"));
+
+	}
+
+	/**
+	 * Find by id.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
+	@GetMapping("/account/{id}")
+	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+		Account existsAccount = accountServ.findById(id);
+		if (existsAccount != null)
+			return ResponseEntity.ok(existsAccount);
+		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy tài khoản nào"));
+
+	}
+
+	/**
 	 * Update account.
 	 * 
 	 * @Valid danh dau de cho spring kiem tra tinh hop le cua du lieu
@@ -80,30 +114,20 @@ public class AccountApi {
 	}
 
 	/**
-	 * Find by id.
+	 * Delete account.
 	 *
 	 * @param id the id
 	 * @return the response entity
 	 */
-	@GetMapping("/account/{id}")
-	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
-		Account existsAccount = accountServ.findById(id);
-		if (existsAccount != null)
-			return ResponseEntity.ok(existsAccount);
-		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy tài khoản nào"));
-
-	}
-
-	@GetMapping("/accounts")
-	public ResponseEntity<?> findAll() {
-		List<Account> findAll = accountServ.findAll();
-		findAll.removeIf(x -> x.getCustomer() == null);
-		if (!findAll.isEmpty()) {
-			List<AccountDTO> list = modelMapper.map(findAll, new TypeToken<List<AccountDTO>>() {
-			}.getType());
-			return ResponseEntity.ok(list);
+	@DeleteMapping("/account/{id}")
+	public ResponseEntity<?> deleteAccount(@PathVariable("id") Long id) {
+		try {
+			accountServ.delete(id);
+			return ResponseEntity.ok(new MessageResponse("Xóa thành công tài khoản"));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(new MessageResponse(
+					"Xóa tài khoản không thành công. Chỉ xóa được khi khách hàng của tài khoản này chưa lập hóa đơn nào"));
 		}
-		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
 
 	}
 

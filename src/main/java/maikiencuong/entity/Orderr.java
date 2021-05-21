@@ -66,7 +66,7 @@ public class Orderr {
 		sumTotal();
 	}
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@ToString.Exclude
 	@JoinColumn(name = "customer_id")
 	private Customer customer;

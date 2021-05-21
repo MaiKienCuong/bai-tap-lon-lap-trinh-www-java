@@ -65,6 +65,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 
+	/**
+	 * Configure.
+	 * 
+	 * <p>
+	 * Them doi tuong userDetailsService da implement interface UserDetailService
+	 * vao AuthenticationManagerBuilder
+	 * </p>
+	 *
+	 * @param authenticationManagerBuilder the authentication manager builder
+	 * @throws Exception the exception
+	 */
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
@@ -74,16 +85,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 		.cors()
-		.and().csrf().disable()
-		.authorizeRequests()
+		.and().csrf().disable().authorizeRequests()
 		.antMatchers("/").permitAll()
 		.antMatchers("/src/**").permitAll()
 		.antMatchers("/api/**").permitAll()
 		.anyRequest().authenticated()
-		.and().exceptionHandling()
-		.accessDeniedHandler(accessDeniedHandle)
-		.and().exceptionHandling()
-		.authenticationEntryPoint(unauthorizedHandler)
+		.and().exceptionHandling().accessDeniedHandler(accessDeniedHandle)
+		.and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
 		.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}

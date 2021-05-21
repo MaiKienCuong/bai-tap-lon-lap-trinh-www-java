@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,7 +48,7 @@ public class SupplierApi {
 			}.getType());
 			return ResponseEntity.ok(list);
 		}
-		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách nhà cung cấp trống"));
 	}
 
 	/**
@@ -62,7 +63,7 @@ public class SupplierApi {
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, SupplierDTO.class));
 
-		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy nhà cung cấp nào"));
 	}
 
 	/**
@@ -74,6 +75,7 @@ public class SupplierApi {
 	 * @param newSupplier the new supplier
 	 * @return the response entity
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/supplier")
 	public ResponseEntity<?> addSupplier(@DTO(SupplierCreateDTO.class) Supplier newSupplier) {
 		Supplier result = supplierServ.add(newSupplier);
@@ -92,6 +94,7 @@ public class SupplierApi {
 	 * @param updateSupplier the update supplier
 	 * @return the response entity
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/supplier")
 	public ResponseEntity<?> updateSupplier(@DTO(SupplierUpdateDTO.class) Supplier updateSupplier) {
 		Supplier result = supplierServ.update(updateSupplier);
@@ -107,13 +110,15 @@ public class SupplierApi {
 	 * @param id the id
 	 * @return the response entity
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/supplier/{id}")
 	public ResponseEntity<?> deleteSupplier(@PathVariable("id") Long id) {
 		try {
 			supplierServ.delete(id);
-			return ResponseEntity.ok(new MessageResponse("Xóa nhà cung cấp thành công"));
+			return ResponseEntity.ok(new MessageResponse("Xóa thành công nhà cung cấp"));
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Xóa nhà cung cấp không thành công"));
+			return ResponseEntity.badRequest().body(new MessageResponse(
+					"Xóa nhà cung cấp không thành công. Chỉ xóa được khi nhà cung cấp này chưa cung cấp sản phẩm nào"));
 		}
 	}
 

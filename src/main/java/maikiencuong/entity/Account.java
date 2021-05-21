@@ -53,13 +53,13 @@ public class Account {
 	private boolean enable;
 
 	@ToString.Exclude
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinTable(name = "Account_Role", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 
 	@JsonIgnore
 	@ToString.Exclude
-	@OneToOne(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "account", cascade = { CascadeType.ALL })
 	private Customer customer;
 
 	public Account() {

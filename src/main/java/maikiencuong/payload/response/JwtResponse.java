@@ -2,6 +2,7 @@ package maikiencuong.payload.response;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class JwtResponse implements Serializable {
 	@JsonUnwrapped
 	private AccountDTO account;
 
+	@JsonIgnore
 	private CustomerDTO customer;
 
 	private String tokenType;

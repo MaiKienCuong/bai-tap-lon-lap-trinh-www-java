@@ -69,7 +69,7 @@ public class SubProduct {
 
 	@JsonIgnore
 	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinColumn(name = "product_id")
 	private Product product;
 

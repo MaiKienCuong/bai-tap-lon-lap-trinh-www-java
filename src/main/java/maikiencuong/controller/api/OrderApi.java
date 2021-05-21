@@ -70,6 +70,21 @@ public class OrderApi {
 	}
 
 	/**
+	 * Find by id.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
+	@GetMapping("/order/{id}")
+	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+		Orderr findById = orderServ.findById(id);
+		if (findById != null)
+			return ResponseEntity.ok(modelMapper.map(findById, OrderDTO.class));
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy hóa đơn nào"));
+	}
+
+	/**
 	 * Find all by customer id.
 	 *
 	 * @param size the size
@@ -106,15 +121,6 @@ public class OrderApi {
 			return ResponseEntity.ok(modelMapper.map(result, OrderDTO.class));
 
 		return ResponseEntity.badRequest().body(new MessageResponse("Thêm hóa đơn không thành công"));
-	}
-
-	@GetMapping("/order/{id}")
-	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
-		Orderr findById = orderServ.findById(id);
-		if (findById != null)
-			return ResponseEntity.ok(modelMapper.map(findById, OrderDTO.class));
-
-		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy hóa đơn"));
 	}
 
 	/**

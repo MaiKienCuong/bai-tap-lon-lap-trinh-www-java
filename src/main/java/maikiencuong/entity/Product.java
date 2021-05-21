@@ -80,12 +80,12 @@ public class Product {
 	@Column(name = "updated_at", columnDefinition = "datetime")
 	private LocalDateTime updatedAt;
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@ToString.Exclude
 	@JoinColumn(name = "supplier_id")
 	private Supplier supplier;
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@ToString.Exclude
 	@JoinColumn(name = "category_id")
 	private Category category;

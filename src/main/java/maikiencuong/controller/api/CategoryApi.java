@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,7 +49,7 @@ public class CategoryApi {
 			return ResponseEntity.ok(list);
 		}
 
-		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách loại sản phẩm trống"));
 	}
 
 	/**
@@ -75,6 +76,7 @@ public class CategoryApi {
 	 * @param newCategory the new category
 	 * @return the response entity
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/category")
 	public ResponseEntity<?> addCategory(@DTO(CategoryCreateDTO.class) Category newCategory) {
 		Category result = categoryServ.add(newCategory);
@@ -93,6 +95,7 @@ public class CategoryApi {
 	 * @param updateCategory the update category
 	 * @return the response entity
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/category")
 	public ResponseEntity<?> updateCategory(@DTO(CategoryUpdateDTO.class) Category updateCategory) {
 		Category result = categoryServ.update(updateCategory);
@@ -108,13 +111,15 @@ public class CategoryApi {
 	 * @param id the id
 	 * @return the response entity
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/category/{id}")
 	public ResponseEntity<?> deleteCategory(@PathVariable("id") Long id) {
 		try {
 			categoryServ.delete(id);
-			return ResponseEntity.ok(new MessageResponse("Xóa thành công"));
+			return ResponseEntity.ok(new MessageResponse("Xóa thành công loại sản phẩm"));
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Xóa loại sản phẩm không thành công"));
+			return ResponseEntity.badRequest().body(new MessageResponse(
+					"Xóa loại sản phẩm không thành công. Chỉ xóa được khi loại sản phẩm này chưa có sản phẩm nào"));
 		}
 	}
 

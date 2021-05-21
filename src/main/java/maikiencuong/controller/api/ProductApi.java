@@ -18,7 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,6 +79,24 @@ public class ProductApi {
 	}
 
 	/**
+	 * Find by id.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
+	@GetMapping("/product/{id}")
+	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+		Product result = productServ.findById(id);
+		if (result != null) {
+			result.setViews(result.getViews() + 1);
+			productServ.update(result);
+			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
+		}
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy sản phẩm"));
+	}
+
+	/**
 	 * Add the product.
 	 * 
 	 * @DTO danh dau body cua request gui len la dang DTO, nhung argument co
@@ -85,6 +105,7 @@ public class ProductApi {
 	 * @param newProduct the new product
 	 * @return the response entity
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = "/product")
 	public ResponseEntity<?> addProduct(@DTO(ProductCreateDTO.class) Product newProduct) {
 		Product result = productServ.add(newProduct);
@@ -103,6 +124,7 @@ public class ProductApi {
 	 * @param productUpdateDTO the product update DTO
 	 * @return the response entity
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = "/product")
 	public ResponseEntity<?> updateProduct(@Valid @RequestBody ProductUpdateDTO productUpdateDTO) {
 		Product product = productServ.findById(productUpdateDTO.getId());
@@ -119,22 +141,16 @@ public class ProductApi {
 
 	}
 
-	/**
-	 * Find by id.
-	 *
-	 * @param id the id
-	 * @return the response entity
-	 */
-	@GetMapping("/product/{id}")
-	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
-		Product result = productServ.findById(id);
-		if (result != null) {
-			result.setViews(result.getViews() + 1);
-			productServ.update(result);
-			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping("/product/{id}")
+	public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
+		try {
+			productServ.delete(id);
+			return ResponseEntity.ok(new MessageResponse("Xóa thành công sản phẩm"));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(new MessageResponse(
+					"Xóa sản phẩm không thành công. Chỉ xóa được khi sản phẩm này chưa được lập hóa đơn"));
 		}
-
-		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy sản phẩm"));
 	}
 
 	/**

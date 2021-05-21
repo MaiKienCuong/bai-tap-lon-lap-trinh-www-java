@@ -17,7 +17,7 @@ import maikiencuong.entity.Account;
  * 
  * <p>
  * Class nay ke thua {@link UserDetails} de chua thong tin ve account va
- * authorities
+ * authorities, se duoc tra ve boi phuong thuc loadUserByUsername
  * </p>
  */
 @EqualsAndHashCode(of = { "account" })
