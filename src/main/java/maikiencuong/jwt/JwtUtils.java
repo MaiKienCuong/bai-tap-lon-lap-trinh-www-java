@@ -68,6 +68,7 @@ public class JwtUtils {
 	 *
 	 * @param authToken the auth token
 	 * @return true, if successful
+	 * @throws MyExcetion
 	 */
 	public boolean validateJwtToken(String authToken) {
 		try {

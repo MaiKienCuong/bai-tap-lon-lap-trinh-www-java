@@ -21,6 +21,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -242,6 +244,25 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		properties.setProperty("hibernate.hbm2ddl.auto", evn.getProperty(HIBERNATE_HBM2DDL_AUTO));
 
 		return properties;
+	}
+
+	@Bean
+	public JavaMailSender getMailSender() {
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+
+		mailSender.setHost(evn.getProperty("spring.mail.host"));
+		mailSender.setPort(Integer.valueOf(evn.getProperty("spring.mail.port")));
+		mailSender.setUsername(evn.getProperty("spring.mail.username"));
+		mailSender.setPassword(evn.getProperty("spring.mail.password"));
+
+		Properties javaMailProperties = new Properties();
+		javaMailProperties.put("mail.smtp.starttls.enable", evn.getProperty("spring.mail.properties.mail.smtp.starttls.enable"));
+		javaMailProperties.put("mail.smtp.auth", evn.getProperty("spring.mail.properties.mail.smtp.auth"));
+		javaMailProperties.put("mail.transport.protocol", evn.getProperty("spring.mail.properties.mail.transport.protocol"));
+		javaMailProperties.put("mail.debug", evn.getProperty("spring.mail.properties.mail.debug"));
+
+		mailSender.setJavaMailProperties(javaMailProperties);
+		return mailSender;
 	}
 
 }

@@ -34,8 +34,8 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		response.getWriter()
-				.println(mapper.writeValueAsString(new MessageResponse("Lỗi xác thực. Vui lòng đăng nhập")));
+		response.getWriter().println(mapper.writeValueAsString(
+				new MessageResponse("Lỗi xác thực hoặc phiên làm việc đã hết hạn. Vui lòng đăng nhập lại")));
 	}
 
 }
