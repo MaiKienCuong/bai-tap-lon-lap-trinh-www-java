@@ -1,0 +1,173 @@
+package quanaotreem.controller.api;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.validation.Valid;
+
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import quanaotreem.dto.AccountDTO;
+import quanaotreem.dto.CustomerDTO;
+import quanaotreem.dto.update.AccountUpdateDTO;
+import quanaotreem.entity.Account;
+import quanaotreem.entity.Orderr;
+import quanaotreem.entity.Role;
+import quanaotreem.enumvalue.EnumRole;
+import quanaotreem.payload.response.MessageResponse;
+import quanaotreem.service.AccountServ;
+import quanaotreem.service.OrderServ;
+import quanaotreem.service.impl.AccountDetailsImpl;
+
+@RestController
+@RequestMapping("/api")
+@CrossOrigin(origins = "${cross.origin}", maxAge = 3600)
+public class AccountApi {
+
+	@Autowired
+	private PasswordEncoder encoder;
+
+	@Autowired
+	private AccountServ accountServ;
+
+	@Autowired
+	private OrderServ orderServ;
+
+	@Autowired
+	private ModelMapper modelMapper;
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
+	/**
+	 * Find all.
+	 *
+	 * @return the response entity
+	 */
+	@GetMapping("/accounts")
+	public ResponseEntity<?> findAll() {
+		List<Account> findAll = accountServ.findAll();
+		findAll.removeIf(x -> x.getCustomer() == null);
+		if (!findAll.isEmpty()) {
+			List<AccountDTO> list = modelMapper.map(findAll, new TypeToken<List<AccountDTO>>() {
+			}.getType());
+			return ResponseEntity.ok(list);
+		}
+		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách tài khoản trống"));
+
+	}
+
+	/**
+	 * Find by id.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
+	@GetMapping("/account/{id}")
+	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+		Account existsAccount = accountServ.findById(id);
+		if (existsAccount != null)
+			return ResponseEntity.ok(existsAccount);
+		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy tài khoản nào"));
+
+	}
+
+	/**
+	 * Update account.
+	 * 
+	 * @Valid danh dau de cho spring kiem tra tinh hop le cua du lieu
+	 * @RequestBody danh dau de spring tu dong map body cua request sang DTO
+	 *
+	 * @param accountUpdateDTO the account update DTO
+	 * @return the response entity
+	 */
+	@PutMapping("/account")
+	public ResponseEntity<?> updateAccount(@Valid @RequestBody AccountUpdateDTO accountUpdateDTO) {
+		try {
+			Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+					accountUpdateDTO.getUsername(), accountUpdateDTO.getOldPassword()));
+			AccountDetailsImpl accountDetails = (AccountDetailsImpl) authentication.getPrincipal();
+			Account existsAccount = accountDetails.getAccount();
+			existsAccount.setPassword(encoder.encode(accountUpdateDTO.getNewPassword()));
+			if (accountServ.update(existsAccount) != null)
+				return ResponseEntity.ok(new MessageResponse("Đổi mật khẩu thành công"));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(new MessageResponse("Tài khoản hoặc mật khẩu cũ không đúng"));
+		}
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Đổi mật khẩu không thành công"));
+	}
+
+	/**
+	 * Delete account.
+	 *
+	 * @param id the id
+	 * @return the response entity
+	 */
+	@DeleteMapping("/account/{id}")
+	public ResponseEntity<?> deleteAccount(@PathVariable("id") Long id) {
+		try {
+			Account account = accountServ.findById(id);
+			Set<Role> roles = account.getRoles();
+			for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext();) {
+				Role role = iterator.next();
+				if (role.getName().equals(EnumRole.ROLE_ADMIN))
+					return ResponseEntity.ok(new MessageResponse("Không có quyền xóa tài khoản này"));
+			}
+			accountServ.delete(id);
+			return ResponseEntity.ok(new MessageResponse("Xóa thành công tài khoản"));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(new MessageResponse(
+					"Xóa tài khoản không thành công. Chỉ xóa được khi khách hàng của tài khoản này chưa lập hóa đơn nào"));
+		}
+
+	}
+
+	/**
+	 * Get the account and order.
+	 *
+	 * @param id the id
+	 * @return the account and order
+	 */
+	@GetMapping("/account/order/{id}")
+	public ResponseEntity<?> getAccountAndOrder(@PathVariable("id") Long id) {
+
+		Account existsAccount = accountServ.findById(id);
+		if (existsAccount.getCustomer() != null) {
+			Double sum = Double.valueOf(0d);
+			List<Orderr> ordersbyCustomerId = orderServ.findAllByCustomer_Id(existsAccount.getCustomer().getId());
+
+			for (Iterator<Orderr> iterator = ordersbyCustomerId.iterator(); iterator.hasNext();) {
+				sum += iterator.next().sumTotal();
+			}
+			Map<String, Object> map = new HashMap<>();
+			map.put("account", modelMapper.map(existsAccount, AccountDTO.class));
+			map.put("customer", modelMapper.map(existsAccount.getCustomer(), CustomerDTO.class));
+			map.put("countOrders", ordersbyCustomerId.size());
+			map.put("sumOrders", sum);
+
+			return ResponseEntity.ok().body(map);
+		}
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
+	}
+
+}
