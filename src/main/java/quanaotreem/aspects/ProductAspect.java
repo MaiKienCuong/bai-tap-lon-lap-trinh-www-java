@@ -13,6 +13,7 @@ import quanaotreem.entity.Category;
 import quanaotreem.entity.Image;
 import quanaotreem.entity.Product;
 import quanaotreem.entity.Supplier;
+import quanaotreem.handler.MyException;
 import quanaotreem.service.CategoryServ;
 import quanaotreem.service.ImageServ;
 import quanaotreem.service.SupplierServ;
@@ -46,15 +47,19 @@ public class ProductAspect {
 	 * </p>
 	 *
 	 * @param joinPoint the join point
+	 * @throws MyException
 	 */
 	@Before("execution(* quanaotreem.controller.api.ProductApi.addProduct(..))")
-	public void beforeAddProduct(JoinPoint joinPoint) {
+	public void beforeAddProduct(JoinPoint joinPoint) throws MyException {
 		Product newProduct = (Product) joinPoint.getArgs()[0];
 
 		Category category = categoryServ.findById(newProduct.getCategory().getId());
 		Supplier supplier = supplierServ.findById(newProduct.getSupplier().getId());
 		newProduct.setCategory(category);
 		newProduct.setSupplier(supplier);
+
+		if (newProduct.getSubProducts().isEmpty())
+			throw new MyException("Danh sách sản phẩm con trống");
 
 		newProduct.getSubProducts().forEach(subProduct -> subProduct.setProduct(newProduct));
 		newProduct.getImagesUrl().forEach(image -> image.setProduct(newProduct));
@@ -73,13 +78,17 @@ public class ProductAspect {
 	 * </p>
 	 *
 	 * @param joinPoint the join point
+	 * @throws MyException
 	 */
 	@Before("execution(* quanaotreem.controller.api.ProductApi.updateProduct(..))")
-	public void beforeUpdateProduct(JoinPoint joinPoint) {
+	public void beforeUpdateProduct(JoinPoint joinPoint) throws MyException {
 		ProductUpdateDTO updateProduct = (ProductUpdateDTO) joinPoint.getArgs()[0];
 
 		List<Image> images = imageServ.findAllByProduct_Id(updateProduct.getId());
 		images.forEach(image -> imageServ.deleteById(image.getId()));
+
+		if (updateProduct.getSubProducts().isEmpty())
+			throw new MyException("Danh sách sản phẩm con trống");
 
 		Product productEntity = Product.builder().id(updateProduct.getId()).build();
 		updateProduct.getImagesUrl().forEach(image -> image.setProduct(productEntity));
