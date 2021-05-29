@@ -24,7 +24,7 @@ public class JwtUtils {
 	private String jwtSecret;
 
 	@Value("${jwtExpirationMs}")
-	private int jwtExpirationMs;
+	private long jwtExpirationMs;
 
 	/**
 	 * Generate jwt token.
