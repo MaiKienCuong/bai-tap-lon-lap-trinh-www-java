@@ -82,8 +82,8 @@ public class ProductServImpl implements ProductServ {
 
 	@Override
 	@Transactional
-	public List<Product> findTop10ByOrderByViewsDesc() {
-		return productRepo.findTop10ByOrderByViewsDesc();
+	public List<Product> findTop8ByOrderByViewsDesc() {
+		return productRepo.findTop8ByOrderByViewsDesc();
 	}
 
 	@Override

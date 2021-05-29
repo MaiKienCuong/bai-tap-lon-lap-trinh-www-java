@@ -232,7 +232,7 @@ public class ProductApi {
 			prod.setMarker("DEF");
 			productServ.update(prod);
 		});
-		List<Product> list = productServ.findTop10ByOrderByViewsDesc();
+		List<Product> list = productServ.findTop8ByOrderByViewsDesc();
 		list.forEach(product -> {
 			product.setMarker("HOT");
 			productServ.update(product);

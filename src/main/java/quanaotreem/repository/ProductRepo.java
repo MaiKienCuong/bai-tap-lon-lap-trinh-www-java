@@ -32,6 +32,6 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
 	
 	public List<Product> findAllByMarkerIn(String[] markers);
 
-	public List<Product> findTop10ByOrderByViewsDesc();
+	public List<Product> findTop8ByOrderByViewsDesc();
 
 }

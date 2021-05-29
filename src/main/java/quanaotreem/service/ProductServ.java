@@ -27,7 +27,7 @@ public interface ProductServ {
 
 	public Page<Product> findAll(Pageable pageable);
 	
-	public List<Product> findTop10ByOrderByViewsDesc();
+	public List<Product> findTop8ByOrderByViewsDesc();
 	
 	public List<Product> findAllByMarkerIn(String[] markers);
 
