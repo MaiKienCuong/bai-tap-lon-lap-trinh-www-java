@@ -68,7 +68,7 @@ public class ProductApi {
 	 * @throws MyException the my excetion
 	 */
 	@GetMapping("/products")
-	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
+	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort)
 			throws MyException {
 		List<Order> orders = getListSortOrder(sort);
