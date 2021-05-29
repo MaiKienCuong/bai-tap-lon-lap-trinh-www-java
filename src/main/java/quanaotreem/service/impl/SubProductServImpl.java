@@ -51,7 +51,7 @@ public class SubProductServImpl implements SubProductServ {
 	@Override
 	@Transactional
 	public List<SubProduct> findAllByProduct_IdAndColor(Long id, String color) {
-		return subProductRepo.findAllByProduct_IdAndColorByOrderBySize(id, color);
+		return subProductRepo.findAllByProduct_IdAndColorOrderBySize(id, color);
 	}
 
 	@Override
