@@ -22,9 +22,9 @@ import quanaotreem.entity.SubProduct;
 @Repository
 public interface SubProductRepo extends JpaRepository<SubProduct, Long> {
 
-	public List<SubProduct> findAllByProduct_Id(Long id);
+	public List<SubProduct> findAllByProduct_IdOrderBySize(Long id);
 
-	public List<SubProduct> findAllByProduct_IdAndColor(Long id, String color);
+	public List<SubProduct> findAllByProduct_IdAndColorOrderBySize(Long id, String color);
 
 	public List<SubProduct> findAllByProduct_IdAndColorAndSize(Long id, String color, String size);
 
