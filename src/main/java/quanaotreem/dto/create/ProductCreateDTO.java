@@ -33,7 +33,7 @@ public class ProductCreateDTO implements Serializable {
 	@Min(value = 0, message = "Giá của sản phẩm phải lớn hơn hoặc bằng 0")
 	private Double price;
 
-	private String marker = "DEF";
+	private String marker;
 
 	@Min(value = 0, message = "Giảm giá phải lớn hơn hoặc bằng 0")
 	private double discount = 0;

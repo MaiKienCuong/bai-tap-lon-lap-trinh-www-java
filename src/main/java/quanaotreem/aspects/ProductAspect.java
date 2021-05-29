@@ -66,6 +66,8 @@ public class ProductAspect {
 
 		if (newProduct.getDiscount() > 0)
 			newProduct.setMarker("DIS");
+		else
+			newProduct.setMarker("DEF");
 
 	}
 

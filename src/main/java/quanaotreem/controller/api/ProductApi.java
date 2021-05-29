@@ -68,7 +68,7 @@ public class ProductApi {
 	 * @throws MyException the my excetion
 	 */
 	@GetMapping("/products")
-	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "12") int size,
+	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort)
 			throws MyException {
 		List<Order> orders = getListSortOrder(sort);
@@ -129,12 +129,10 @@ public class ProductApi {
 	public ResponseEntity<?> updateProduct(@Valid @RequestBody ProductUpdateDTO productUpdateDTO) {
 		Product product = productServ.findById(productUpdateDTO.getId());
 		Integer views = product.getViews();
-		String marker = product.getMarker();
 		LocalDateTime createdAt = product.getCreatedAt();
 
 		product = modelMapper.map(productUpdateDTO, Product.class);
 		product.setViews(views);
-		product.setMarker(marker);
 		if (product.getDiscount() > 0)
 			product.setMarker("DIS");
 		else
