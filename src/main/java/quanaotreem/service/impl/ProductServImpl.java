@@ -80,14 +80,33 @@ public class ProductServImpl implements ProductServ {
 		return productRepo.save(product);
 	}
 
+	/**
+	 * Find top 8 by order by views desc.
+	 * 
+	 * <p>
+	 * Khi goi phai them @Transactional
+	 * </p>
+	 *
+	 * @return the list
+	 */
 	@Override
-	@Transactional
+//	@Transactional
 	public List<Product> findTop8ByOrderByViewsDesc() {
 		return productRepo.findTop8ByOrderByViewsDesc();
 	}
 
+	/**
+	 * Find all by marker in.
+	 *
+	 * <p>
+	 * Khi goi phai them @Transactional
+	 * </p>
+	 * 
+	 * @param markers the markers
+	 * @return the list
+	 */
 	@Override
-	@Transactional
+//	@Transactional
 	public List<Product> findAllByMarkerIn(String[] markers) {
 		return productRepo.findAllByMarkerIn(markers);
 	}

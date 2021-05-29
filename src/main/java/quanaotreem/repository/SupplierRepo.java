@@ -24,8 +24,8 @@ import quanaotreem.entity.Supplier;
 @Repository
 public interface SupplierRepo extends JpaRepository<Supplier, Long> {
 
-	public Page<Supplier> findAllByNameLikeOrPhoneLike(String name, String phone, Pageable pageable);
-
 	public List<Supplier> findAllByNameLikeOrPhoneLike(String name, String phone);
+
+	public Page<Supplier> findAllByNameLikeOrPhoneLike(String name, String phone, Pageable pageable);
 
 }

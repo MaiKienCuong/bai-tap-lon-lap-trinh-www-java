@@ -24,10 +24,10 @@ import quanaotreem.entity.Customer;
 @Repository
 public interface CustomerRepo extends JpaRepository<Customer, Long> {
 
-	public Page<Customer> findAllByNameLikeOrPhoneLike(String name, String phone, Pageable pageable);
-
 	public boolean existsByEmail(String email);
 
 	public Optional<Customer> findByEmail(String email);
+
+	public Page<Customer> findAllByNameLikeOrPhoneLike(String name, String phone, Pageable pageable);
 
 }

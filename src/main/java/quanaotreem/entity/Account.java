@@ -41,7 +41,7 @@ public class Account {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "username", columnDefinition = "varchar(50) not null", unique = true)
+	@Column(name = "username", columnDefinition = "varchar(60) not null", unique = true)
 	private String username;
 
 	@JsonIgnore

@@ -31,15 +31,43 @@ import quanaotreem.jwt.AuthTokenFilter;
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	/**
+	 * The user details service.
+	 * <p>
+	 * Doi tuong nay dung de lay thong tin nguoi dung dang nhap theo username
+	 * </p>
+	 */
 	@Autowired
 	private UserDetailsService userDetailsService;
 
+	/**
+	 * The unauthorized handler.
+	 * <p>
+	 * Doi tuong nay handle loi 401
+	 * </p>
+	 */
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
 
+	/**
+	 * The access denied handle.
+	 * <p>
+	 * Doi tuong nay handle loi 403
+	 * </p>
+	 */
 	@Autowired
 	private AccessDeniedHandlerJwt accessDeniedHandle;
 
+	/**
+	 * Authentication jwt token filter.
+	 *
+	 * <p>
+	 * Doi tuong filter, extend class OncePerRequestFilter, dung cho viec xac thuc
+	 * jwt
+	 * </p>
+	 * 
+	 * @return the auth token filter
+	 */
 	@Bean
 	public AuthTokenFilter authenticationJwtTokenFilter() {
 		return new AuthTokenFilter();
@@ -59,6 +87,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
+	/**
+	 * Authentication manager bean.
+	 * <p>
+	 * Doi tuong quan ly viec dang nhap, duoc su dung trong class AuthApi
+	 * </p>
+	 * 
+	 * @return the authentication manager
+	 * @throws Exception the exception
+	 */
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -84,16 +121,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-		.cors()
-		.and()
-		.csrf().disable().authorizeRequests()
-		.antMatchers("/").permitAll()
-		.antMatchers("/src/**").permitAll()
-		.antMatchers("/api/**").permitAll()
-		.anyRequest().authenticated()
-		.and().exceptionHandling().accessDeniedHandler(accessDeniedHandle)
-		.and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-		.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			.cors()
+			.and().csrf().disable()
+			.authorizeRequests()
+			.antMatchers("/").permitAll()
+			.antMatchers("/src/**").permitAll()
+			.antMatchers("/api/**").permitAll()
+			.anyRequest().authenticated()
+			.and().exceptionHandling().accessDeniedHandler(accessDeniedHandle)
+			.and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+			.and().sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 

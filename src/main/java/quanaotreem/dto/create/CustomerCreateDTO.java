@@ -7,6 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class CustomerCreateDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@NotBlank(message = "Tên khách hàng không được để trống")
+	@Size(max = 255, message = "Tên khách hàng không được vượt quá 255 ký tự")
 	private String name;
 
 	@NotBlank(message = "Số điện thoại không được để trống")
@@ -29,8 +31,10 @@ public class CustomerCreateDTO implements Serializable {
 
 	@Email(message = "Email không hợp lệ")
 	@NotBlank(message = "Email không được để trống")
+	@Size(max = 255, message = "Email không được vượt quá 255 ký tự")
 	private String email;
 
+	@Size(max = 500, message = "Địa chỉ không được vượt quá 500 ký tự")
 	private String address;
 
 	@Valid

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -29,6 +30,7 @@ public class OrderCreateDTO implements Serializable {
 	private EnumPaymentMethod paymentMethod;
 
 	@NotBlank(message = "Địa chỉ giao hàng không được để trống")
+	@Size(max = 500, message = "Địa chỉ không được vượt quá 500 ký tự")
 	private String shipAddress;
 
 	@NotNull(message = "Chưa có thông tin khách hàng")

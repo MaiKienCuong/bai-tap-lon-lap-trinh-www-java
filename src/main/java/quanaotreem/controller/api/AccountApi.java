@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -65,8 +64,8 @@ public class AccountApi {
 	@GetMapping("/accounts")
 	public ResponseEntity<?> findAll() {
 		List<Account> findAll = accountServ.findAll();
-		findAll.removeIf(x -> x.getCustomer() == null);
 		if (!findAll.isEmpty()) {
+			findAll.removeIf(x -> x.getCustomer() == null);
 			List<AccountDTO> list = modelMapper.map(findAll, new TypeToken<List<AccountDTO>>() {
 			}.getType());
 			return ResponseEntity.ok(list);
@@ -101,17 +100,18 @@ public class AccountApi {
 	 */
 	@PutMapping("/account")
 	public ResponseEntity<?> updateAccount(@Valid @RequestBody AccountUpdateDTO accountUpdateDTO) {
+		Authentication authentication;
 		try {
-			Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+			authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					accountUpdateDTO.getUsername(), accountUpdateDTO.getOldPassword()));
-			AccountDetailsImpl accountDetails = (AccountDetailsImpl) authentication.getPrincipal();
-			Account existsAccount = accountDetails.getAccount();
-			existsAccount.setPassword(encoder.encode(accountUpdateDTO.getNewPassword()));
-			if (accountServ.update(existsAccount) != null)
-				return ResponseEntity.ok(new MessageResponse("Đổi mật khẩu thành công"));
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Tài khoản hoặc mật khẩu cũ không đúng"));
 		}
+		AccountDetailsImpl accountDetails = (AccountDetailsImpl) authentication.getPrincipal();
+		Account existsAccount = accountDetails.getAccount();
+		existsAccount.setPassword(encoder.encode(accountUpdateDTO.getNewPassword()));
+		if (accountServ.update(existsAccount) != null)
+			return ResponseEntity.ok(new MessageResponse("Đổi mật khẩu thành công"));
 
 		return ResponseEntity.badRequest().body(new MessageResponse("Đổi mật khẩu không thành công"));
 	}
@@ -124,16 +124,18 @@ public class AccountApi {
 	 */
 	@DeleteMapping("/account/{id}")
 	public ResponseEntity<?> deleteAccount(@PathVariable("id") Long id) {
+		Account account = accountServ.findById(id);
 		try {
-			Account account = accountServ.findById(id);
-			Set<Role> roles = account.getRoles();
-			for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext();) {
-				Role role = iterator.next();
-				if (role.getName().equals(EnumRole.ROLE_ADMIN))
-					return ResponseEntity.ok(new MessageResponse("Không có quyền xóa tài khoản này"));
+			if (account != null) {
+				for (Iterator<Role> iterator = account.getRoles().iterator(); iterator.hasNext();) {
+					if (iterator.next().getName().equals(EnumRole.ROLE_ADMIN))
+						return ResponseEntity.ok(new MessageResponse("Không có quyền xóa tài khoản này"));
+				}
+				accountServ.delete(id);
+				return ResponseEntity.ok(new MessageResponse("Xóa thành công tài khoản"));
 			}
-			accountServ.delete(id);
-			return ResponseEntity.ok(new MessageResponse("Xóa thành công tài khoản"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy tài khoản này"));
+
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(new MessageResponse(
 					"Xóa tài khoản không thành công. Chỉ xóa được khi khách hàng của tài khoản này chưa lập hóa đơn nào"));
@@ -149,9 +151,8 @@ public class AccountApi {
 	 */
 	@GetMapping("/account/order/{id}")
 	public ResponseEntity<?> getAccountAndOrder(@PathVariable("id") Long id) {
-
 		Account existsAccount = accountServ.findById(id);
-		if (existsAccount.getCustomer() != null) {
+		if (existsAccount != null && existsAccount.getCustomer() != null) {
 			Double sum = Double.valueOf(0d);
 			List<Orderr> ordersbyCustomerId = orderServ.findAllByCustomer_Id(existsAccount.getCustomer().getId());
 

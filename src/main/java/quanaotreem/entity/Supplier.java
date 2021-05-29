@@ -32,13 +32,13 @@ public class Supplier {
 	@Column(name = "name", columnDefinition = "nvarchar(255) not null")
 	private String name;
 
-	@Column(name = "email", columnDefinition = "varchar(50)")
+	@Column(name = "email", columnDefinition = "varchar(255)")
 	private String email;
 
-	@Column(name = "address", columnDefinition = "nvarchar(255)")
+	@Column(name = "address", columnDefinition = "nvarchar(500)")
 	private String address;
 
-	@Column(name = "phone", columnDefinition = "varchar(50)")
+	@Column(name = "phone", columnDefinition = "varchar(255)")
 	private String phone;
 
 }

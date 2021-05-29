@@ -11,18 +11,18 @@ public interface AccountServ {
 
 	public Account findById(Long id);
 
-	public Page<Account> findAll(Pageable pageable);
-	
+	public Account findByUsername(String username);
+
 	public List<Account> findAll();
+
+	public Page<Account> findAll(Pageable pageable);
 
 	public Account add(Account account);
 
-	public Account update(Account account);
-
 	public void delete(Long id);
 
-	public boolean existsByUsername(String username);
+	public Account update(Account account);
 
-	public Account findByUsername(String username);
+	public boolean existsByUsername(String username);
 
 }

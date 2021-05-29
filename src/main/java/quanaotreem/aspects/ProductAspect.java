@@ -55,19 +55,23 @@ public class ProductAspect {
 
 		Category category = categoryServ.findById(newProduct.getCategory().getId());
 		Supplier supplier = supplierServ.findById(newProduct.getSupplier().getId());
-		newProduct.setCategory(category);
-		newProduct.setSupplier(supplier);
 
+		if (category == null)
+			throw new MyException("Không tìm thấy thông tin loại sản phẩm. Vui lòng thêm loại sản phẩm này trước");
+		if (supplier == null)
+			throw new MyException("Không tìm thấy thông tin nhà cung cấp. Vui lòng thêm nhà cung cấp này trước");
 		if (newProduct.getSubProducts().isEmpty())
-			throw new MyException("Danh sách sản phẩm con trống");
-
-		newProduct.getSubProducts().forEach(subProduct -> subProduct.setProduct(newProduct));
-		newProduct.getImagesUrl().forEach(image -> image.setProduct(newProduct));
+			throw new MyException("Chưa có danh sách sản phẩm con");
 
 		if (newProduct.getDiscount() > 0)
 			newProduct.setMarker("DIS");
 		else
 			newProduct.setMarker("DEF");
+
+		newProduct.setCategory(category);
+		newProduct.setSupplier(supplier);
+		newProduct.getSubProducts().forEach(subProduct -> subProduct.setProduct(newProduct));
+		newProduct.getImagesUrl().forEach(image -> image.setProduct(newProduct));
 
 	}
 
@@ -86,11 +90,11 @@ public class ProductAspect {
 	public void beforeUpdateProduct(JoinPoint joinPoint) throws MyException {
 		ProductUpdateDTO updateProduct = (ProductUpdateDTO) joinPoint.getArgs()[0];
 
-		List<Image> images = imageServ.findAllByProduct_Id(updateProduct.getId());
-		images.forEach(image -> imageServ.deleteById(image.getId()));
-
 		if (updateProduct.getSubProducts().isEmpty())
 			throw new MyException("Danh sách sản phẩm con trống");
+
+		List<Image> images = imageServ.findAllByProduct_Id(updateProduct.getId());
+		images.forEach(image -> imageServ.deleteById(image.getId()));
 
 		Product productEntity = Product.builder().id(updateProduct.getId()).build();
 		updateProduct.getImagesUrl().forEach(image -> image.setProduct(productEntity));

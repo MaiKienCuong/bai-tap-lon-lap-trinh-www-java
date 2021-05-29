@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -63,10 +62,10 @@ public class Product {
 	@Column(name = "tax")
 	private double tax;
 
-	@Column(name = "short_description", columnDefinition = "ntext")
+	@Column(name = "short_description", columnDefinition = "nvarchar(500)")
 	private String shortDescription;
 
-	@Column(name = "long_description", columnDefinition = "ntext")
+	@Column(name = "long_description", columnDefinition = "nvarchar(1000)")
 	private String longDescription;
 
 	@Column(name = "material", columnDefinition = "nvarchar(255)")
@@ -100,11 +99,6 @@ public class Product {
 		active = true;
 		createdAt = LocalDateTime.now();
 		updatedAt = createdAt;
-	}
-
-	@PreUpdate
-	public void preUpdate() {
-		updatedAt = LocalDateTime.now();
 	}
 
 }

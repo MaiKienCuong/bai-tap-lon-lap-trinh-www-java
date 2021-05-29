@@ -107,7 +107,9 @@ public class CustomerAspect {
 	public void beforeUpdateCustomer(JoinPoint joinPoint) throws MyException {
 		Customer updateCustomer = (Customer) joinPoint.getArgs()[0];
 		Customer existsCustomer = customerServ.findByEmail(updateCustomer.getEmail());
-		if (existsCustomer != null && !existsCustomer.equals(updateCustomer))
+		if (existsCustomer == null)
+			throw new MyException("Không tìm thấy thông tin của khách hàng");
+		if (!existsCustomer.equals(updateCustomer))
 			throw new MyException("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác");
 	}
 

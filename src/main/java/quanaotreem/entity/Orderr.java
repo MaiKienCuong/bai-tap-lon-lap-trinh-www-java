@@ -45,15 +45,15 @@ public class Orderr {
 	@Column(name = "order_date", columnDefinition = "datetime")
 	private LocalDateTime orderDate;
 
-	@Column(name = "ship_address", columnDefinition = "nvarchar(255)")
+	@Column(name = "ship_address", columnDefinition = "nvarchar(500)")
 	private String shipAddress;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "status", columnDefinition = "nvarchar(255)")
+	@Column(name = "status", columnDefinition = "nvarchar(50)")
 	private EnumStatusOrder status;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "payment_method", columnDefinition = "nvarchar(255)")
+	@Column(name = "payment_method", columnDefinition = "nvarchar(50)")
 	private EnumPaymentMethod paymentMethod;
 
 	@Column(name = "total")

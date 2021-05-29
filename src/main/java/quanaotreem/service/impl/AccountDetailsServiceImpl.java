@@ -42,7 +42,7 @@ public class AccountDetailsServiceImpl implements UserDetailsService {
 		if (optional.isPresent()) {
 			return AccountDetailsImpl.build(optional.get());
 		} else
-			throw new UsernameNotFoundException("Không thể xác thực được tài khoản");
+			throw new UsernameNotFoundException("Không tìm thấy tài khoản");
 	}
 
 }

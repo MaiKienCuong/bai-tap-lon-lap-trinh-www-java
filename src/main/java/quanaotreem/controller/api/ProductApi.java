@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -132,12 +133,13 @@ public class ProductApi {
 		LocalDateTime createdAt = product.getCreatedAt();
 
 		product = modelMapper.map(productUpdateDTO, Product.class);
-		product.setViews(views);
 		if (product.getDiscount() > 0)
 			product.setMarker("DIS");
 		else
 			product.setMarker("DEF");
+		product.setViews(views);
 		product.setCreatedAt(createdAt);
+		product.setUpdatedAt(LocalDateTime.now());
 		Product result = productServ.update(product);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
@@ -223,19 +225,23 @@ public class ProductApi {
 	 * @return the response entity
 	 * @throws MyException the my excetion
 	 */
+	@Transactional
 	@GetMapping("/product/marker")
 	public ResponseEntity<?> findByMarker(@RequestParam(defaultValue = "8") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort,
 			@RequestParam(defaultValue = "HOT", value = "marker") String[] markers) throws MyException {
 		List<Product> listHot = productServ.findAllByMarkerIn(new String[] { "HOT" });
 		listHot.forEach(prod -> {
-			prod.setMarker("DEF");
-			productServ.update(prod);
+			if (prod.getDiscount() > 0)
+				prod.setMarker("DIS");
+			else
+				prod.setMarker("DEF");
+//			productServ.update(prod);
 		});
-		List<Product> list = productServ.findTop8ByOrderByViewsDesc();
-		list.forEach(product -> {
+		List<Product> top8view = productServ.findTop8ByOrderByViewsDesc();
+		top8view.forEach(product -> {
 			product.setMarker("HOT");
-			productServ.update(product);
+//			productServ.update(product);
 		});
 		List<Order> orders = getListSortOrder(sort);
 		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
