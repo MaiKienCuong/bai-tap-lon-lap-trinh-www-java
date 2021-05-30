@@ -70,7 +70,7 @@ public class ProductApi {
 	 * @throws MyException the my excetion
 	 */
 	@GetMapping("/products")
-	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "8") int size,
+	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort)
 			throws MyException {
 		List<Order> orders = getListSortOrder(sort);
@@ -228,7 +228,7 @@ public class ProductApi {
 	 */
 	@Transactional
 	@GetMapping("/product/marker")
-	public ResponseEntity<?> findByMarker(@RequestParam(defaultValue = "8") int size,
+	public ResponseEntity<?> findByMarker(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "name-asc") String[] sort,
 			@RequestParam(defaultValue = "HOT", value = "marker") String[] markers) throws MyException {
 		List<Product> listHot = productServ.findAllByMarkerIn(new String[] { "HOT" });
@@ -261,7 +261,7 @@ public class ProductApi {
 	 * @throws MyException the my excetion
 	 */
 	@RequestMapping("/product/search")
-	public ResponseEntity<?> findByProductNameOrCateGoryName(@RequestParam(defaultValue = "8") int size,
+	public ResponseEntity<?> findByProductNameOrCateGoryName(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(required = false, value = "q") String query,
 			@RequestParam(defaultValue = "name-asc") String[] sort) throws MyException {
 		List<Order> orders = getListSortOrder(sort);
@@ -287,7 +287,7 @@ public class ProductApi {
 	 * @throws MyException the my excetion
 	 */
 	@RequestMapping("/product/category")
-	public ResponseEntity<?> findByCategoryName(@RequestParam(defaultValue = "8") int size,
+	public ResponseEntity<?> findByCategoryName(@RequestParam(defaultValue = "12") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(required = false, value = "q") String query,
 			@RequestParam(defaultValue = "name-asc") String[] sort) throws MyException {
 		List<Order> orders = getListSortOrder(sort);
