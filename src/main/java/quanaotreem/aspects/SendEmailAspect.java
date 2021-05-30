@@ -64,7 +64,7 @@ public class SendEmailAspect {
 				mail.setMailFrom(mailFrom);
 				mail.setMailTo(customer.getEmail());
 				mail.setMailSubject("Đặt hàng thành công");
-				mail.setMailContent("Đặt hàng thành công!");
+				mail.setMailContent("html");
 				mailService.sendEmail(mail);
 			}).start();
 		}

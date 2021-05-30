@@ -32,7 +32,7 @@ public class MailServiceImpl implements MailService {
 			mimeMessageHelper.setFrom(
 					new InternetAddress(mail.getMailFrom(), new String(personalName.getBytes("ISO-8859-1"), "UTF-8")));
 			mimeMessageHelper.setTo(mail.getMailTo());
-			mimeMessageHelper.setText(mail.getMailContent());
+			mimeMessageHelper.setText(mail.getMailContent(), true);
 
 			mailSender.send(mimeMessageHelper.getMimeMessage());
 

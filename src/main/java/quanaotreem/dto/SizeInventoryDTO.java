@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(of = { "id" })
-public class SizeInventoryDTO implements Serializable {
+public class SizeInventoryDTO implements Serializable, Comparable<SizeInventoryDTO> {
 
 	/**
 	 * 
@@ -24,4 +24,9 @@ public class SizeInventoryDTO implements Serializable {
 	private String size;
 
 	private Integer inventory;
+
+	@Override
+	public int compareTo(SizeInventoryDTO o) {
+		return size.compareTo(o.getSize());
+	}
 }

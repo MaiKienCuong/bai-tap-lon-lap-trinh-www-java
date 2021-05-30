@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.validation.Valid;
 
@@ -169,9 +170,9 @@ public class ProductApi {
 	public ResponseEntity<?> listSizeById(@PathVariable("id") Long id) {
 		List<SubProduct> list = subProductServ.findAllByProduct_Id(id);
 		if (!list.isEmpty()) {
-			Set<SizeDTO> set = modelMapper.map(list, new TypeToken<Set<SizeDTO>>() {
+			Set<SizeDTO> treeSet = modelMapper.map(list, new TypeToken<TreeSet<SizeDTO>>() {
 			}.getType());
-			return ResponseEntity.ok(set);
+			return ResponseEntity.ok(treeSet);
 		}
 
 		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
@@ -187,7 +188,7 @@ public class ProductApi {
 	public ResponseEntity<?> listColorById(@PathVariable("id") Long id) {
 		List<SubProduct> list = subProductServ.findAllByProduct_Id(id);
 		if (!list.isEmpty()) {
-			Set<ColorDTO> set = modelMapper.map(list, new TypeToken<Set<ColorDTO>>() {
+			Set<ColorDTO> set = modelMapper.map(list, new TypeToken<TreeSet<ColorDTO>>() {
 			}.getType());
 			return ResponseEntity.ok(set);
 		}
@@ -207,7 +208,7 @@ public class ProductApi {
 			@RequestParam("color") String color) {
 		List<SubProduct> list = subProductServ.findAllByProduct_IdAndColor(id, color);
 		if (!list.isEmpty()) {
-			Set<SizeInventoryDTO> set = modelMapper.map(list, new TypeToken<Set<SizeInventoryDTO>>() {
+			Set<SizeInventoryDTO> set = modelMapper.map(list, new TypeToken<TreeSet<SizeInventoryDTO>>() {
 			}.getType());
 			return ResponseEntity.ok(set);
 		}

@@ -21,12 +21,6 @@ public class Mail {
 
 	private String mailContent;
 
-	private String contentType;
-
 	private List<Object> attachments;
-
-	public Mail() {
-		contentType = "text/html";
-	}
 
 }
