@@ -1,4 +1,4 @@
-package quanaotreem.payload.response;
+package quanaotreem.response;
 
 import java.io.Serializable;
 

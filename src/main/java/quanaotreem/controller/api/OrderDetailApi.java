@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import quanaotreem.dto.OrderDetailDTO;
 import quanaotreem.entity.OrderDetail;
-import quanaotreem.payload.response.MessageResponse;
+import quanaotreem.response.MessageResponse;
 import quanaotreem.service.OrderDetailServ;
 
 @RestController

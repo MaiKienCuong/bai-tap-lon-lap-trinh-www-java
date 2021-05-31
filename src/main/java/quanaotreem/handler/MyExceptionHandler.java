@@ -30,7 +30,7 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import quanaotreem.payload.response.MessageResponse;
+import quanaotreem.response.MessageResponse;
 
 /**
  * The Class MyExceptionHandler.

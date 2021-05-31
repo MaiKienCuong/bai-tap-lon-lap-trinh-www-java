@@ -46,7 +46,7 @@ import quanaotreem.entity.Product;
 import quanaotreem.entity.SubProduct;
 import quanaotreem.entity.Supplier;
 import quanaotreem.handler.MyException;
-import quanaotreem.payload.response.MessageResponse;
+import quanaotreem.response.MessageResponse;
 import quanaotreem.service.CategoryServ;
 import quanaotreem.service.ImageServ;
 import quanaotreem.service.ProductServ;

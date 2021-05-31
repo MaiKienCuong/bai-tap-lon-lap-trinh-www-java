@@ -21,7 +21,7 @@ import quanaotreem.dto.create.CategoryCreateDTO;
 import quanaotreem.dto.mapper.DTO;
 import quanaotreem.dto.update.CategoryUpdateDTO;
 import quanaotreem.entity.Category;
-import quanaotreem.payload.response.MessageResponse;
+import quanaotreem.response.MessageResponse;
 import quanaotreem.service.CategoryServ;
 
 @RestController

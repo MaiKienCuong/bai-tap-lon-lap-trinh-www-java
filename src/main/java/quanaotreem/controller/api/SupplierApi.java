@@ -21,7 +21,7 @@ import quanaotreem.dto.create.SupplierCreateDTO;
 import quanaotreem.dto.mapper.DTO;
 import quanaotreem.dto.update.SupplierUpdateDTO;
 import quanaotreem.entity.Supplier;
-import quanaotreem.payload.response.MessageResponse;
+import quanaotreem.response.MessageResponse;
 import quanaotreem.service.SupplierServ;
 
 @RestController

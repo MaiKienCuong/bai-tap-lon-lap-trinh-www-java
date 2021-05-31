@@ -16,6 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,6 +48,7 @@ public class Product {
 	private Double price;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Image> imagesUrl;
 
 	@Column(name = "marker", columnDefinition = "nvarchar(50)")

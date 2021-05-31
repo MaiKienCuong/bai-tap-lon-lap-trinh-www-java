@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import quanaotreem.payload.response.MessageResponse;
+import quanaotreem.response.MessageResponse;
 
 /**
  * The Class AuthEntryPointJwt.
