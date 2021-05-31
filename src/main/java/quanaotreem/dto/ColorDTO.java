@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class ColorDTO implements Serializable, Comparable<ColorDTO>{
+public class ColorDTO implements Serializable, Comparable<ColorDTO> {
 
 	/**
 	 * 

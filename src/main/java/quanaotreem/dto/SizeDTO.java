@@ -20,7 +20,12 @@ public class SizeDTO implements Serializable, Comparable<SizeDTO> {
 
 	@Override
 	public int compareTo(SizeDTO o) {
-		return size.compareTo(o.getSize());
+		if (size.length() == o.getSize().length())
+			return size.compareTo(o.getSize());
+		if (size.length() < o.getSize().length())
+			return size.length();
+		return o.getSize().length();
+
 	}
 
 }

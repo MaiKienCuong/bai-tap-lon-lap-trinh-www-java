@@ -3,6 +3,7 @@ package quanaotreem.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import quanaotreem.entity.SubProduct;
@@ -22,7 +23,8 @@ import quanaotreem.entity.SubProduct;
 @Repository
 public interface SubProductRepo extends JpaRepository<SubProduct, Long> {
 
-	public List<SubProduct> findAllByProduct_Id(Long id);
+//	@Query(value = "select s from SubProduct s where s.product.id =:productId order by cast (s.size as int)")
+	public List<SubProduct> findAllByProduct_Id(@Param("productId") Long id);
 
 	public List<SubProduct> findAllByProduct_IdAndColor(Long id, String color);
 

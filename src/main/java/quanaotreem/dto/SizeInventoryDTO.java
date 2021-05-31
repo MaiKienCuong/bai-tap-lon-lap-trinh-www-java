@@ -27,6 +27,10 @@ public class SizeInventoryDTO implements Serializable, Comparable<SizeInventoryD
 
 	@Override
 	public int compareTo(SizeInventoryDTO o) {
-		return size.compareTo(o.getSize());
+		if (size.length() == o.getSize().length())
+			return size.compareTo(o.getSize());
+		if (size.length() < o.getSize().length())
+			return size.length();
+		return o.getSize().length();
 	}
 }
