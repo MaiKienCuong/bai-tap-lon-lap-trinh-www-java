@@ -3,6 +3,7 @@ package quanaotreem.controller.api;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,12 +40,18 @@ import quanaotreem.dto.SizeInventoryDTO;
 import quanaotreem.dto.create.ProductCreateDTO;
 import quanaotreem.dto.mapper.DTO;
 import quanaotreem.dto.update.ProductUpdateDTO;
+import quanaotreem.entity.Category;
+import quanaotreem.entity.Image;
 import quanaotreem.entity.Product;
 import quanaotreem.entity.SubProduct;
+import quanaotreem.entity.Supplier;
 import quanaotreem.handler.MyException;
 import quanaotreem.payload.response.MessageResponse;
+import quanaotreem.service.CategoryServ;
+import quanaotreem.service.ImageServ;
 import quanaotreem.service.ProductServ;
 import quanaotreem.service.SubProductServ;
+import quanaotreem.service.SupplierServ;
 
 @RestController
 @CrossOrigin(origins = "${cross.origin}", maxAge = 3600)
@@ -56,6 +63,15 @@ public class ProductApi {
 
 	@Autowired
 	private SubProductServ subProductServ;
+
+	@Autowired
+	private CategoryServ categoryServ;
+
+	@Autowired
+	private SupplierServ supplierServ;
+
+	@Autowired
+	private ImageServ imageServ;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -106,10 +122,31 @@ public class ProductApi {
 	 *
 	 * @param newProduct the new product
 	 * @return the response entity
+	 * @throws MyException
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = "/product")
-	public ResponseEntity<?> addProduct(@DTO(ProductCreateDTO.class) Product newProduct) {
+	public ResponseEntity<?> addProduct(@DTO(ProductCreateDTO.class) Product newProduct) throws MyException {
+		Category category = categoryServ.findById(newProduct.getCategory().getId());
+		Supplier supplier = supplierServ.findById(newProduct.getSupplier().getId());
+
+		if (category == null)
+			throw new MyException("Không tìm thấy thông tin loại sản phẩm. Vui lòng thêm loại sản phẩm này trước");
+		if (supplier == null)
+			throw new MyException("Không tìm thấy thông tin nhà cung cấp. Vui lòng thêm nhà cung cấp này trước");
+		if (newProduct.getSubProducts().isEmpty())
+			throw new MyException("Chưa có danh sách sản phẩm con");
+
+		if (newProduct.getDiscount() > 0)
+			newProduct.setMarker("DIS");
+		else
+			newProduct.setMarker("DEF");
+
+		newProduct.setCategory(category);
+		newProduct.setSupplier(supplier);
+		newProduct.getSubProducts().forEach(subProduct -> subProduct.setProduct(newProduct));
+		newProduct.getImagesUrl().forEach(image -> image.setProduct(newProduct));
+
 		Product result = productServ.add(newProduct);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
@@ -125,26 +162,41 @@ public class ProductApi {
 	 *
 	 * @param productUpdateDTO the product update DTO
 	 * @return the response entity
+	 * @throws MyException
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = "/product")
-	public ResponseEntity<?> updateProduct(@Valid @RequestBody ProductUpdateDTO productUpdateDTO) {
-		Product product = productServ.findById(productUpdateDTO.getId());
-		Integer views = product.getViews();
-		LocalDateTime createdAt = product.getCreatedAt();
+	public ResponseEntity<?> updateProduct(@Valid @RequestBody ProductUpdateDTO productUpdateDTO) throws MyException {
+		if (productUpdateDTO.getSubProducts().isEmpty())
+			throw new MyException("Danh sách sản phẩm con trống");
 
-		product = modelMapper.map(productUpdateDTO, Product.class);
-		if (product.getDiscount() > 0)
-			product.setMarker("DIS");
-		else
-			product.setMarker("DEF");
-		product.setViews(views);
-		product.setCreatedAt(createdAt);
-		product.setUpdatedAt(LocalDateTime.now());
-		Product result = productServ.update(product);
-		if (result != null)
-			return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
-		return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật sản phẩm không thành công"));
+		List<Image> images = imageServ.findAllByProduct_Id(productUpdateDTO.getId());
+		images.forEach(image -> imageServ.deleteById(image.getId()));
+
+		Product product = productServ.findById(productUpdateDTO.getId());
+		if (product != null) {
+			Integer views = product.getViews();
+			LocalDateTime createdAt = product.getCreatedAt();
+
+			for (Iterator<Image> iterator = productUpdateDTO.getImagesUrl().iterator(); iterator.hasNext();) {
+				iterator.next().setProduct(product);
+			}
+			product = modelMapper.map(productUpdateDTO, Product.class);
+			if (product.getDiscount() > 0)
+				product.setMarker("DIS");
+			else
+				product.setMarker("DEF");
+			product.setViews(views);
+			product.setCreatedAt(createdAt);
+			product.setUpdatedAt(LocalDateTime.now());
+
+			Product result = productServ.update(product);
+			if (result != null)
+				return ResponseEntity.ok(modelMapper.map(result, ProductDTO.class));
+			return ResponseEntity.badRequest().body(new MessageResponse("Cập nhật sản phẩm không thành công"));
+		}
+
+		return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy sản phẩm này để cập nhật"));
 
 	}
 
@@ -270,6 +322,8 @@ public class ProductApi {
 		if (query == null) {
 			pageResult = productServ.findAll(pageable);
 		} else {
+			query = query.replaceAll("[\s]+", " ").trim();
+			System.out.println(query);
 			pageResult = productServ.findAllByNameLikeOrCategory_NameLike(query, query, pageable);
 		}
 

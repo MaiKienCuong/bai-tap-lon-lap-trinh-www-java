@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +32,14 @@ import quanaotreem.dto.CustomerDTO;
 import quanaotreem.dto.create.CustomerCreateDTO;
 import quanaotreem.dto.mapper.DTO;
 import quanaotreem.dto.update.CustomerUpdateDTO;
+import quanaotreem.entity.Account;
 import quanaotreem.entity.Customer;
+import quanaotreem.entity.Role;
 import quanaotreem.handler.MyException;
 import quanaotreem.payload.response.MessageResponse;
+import quanaotreem.service.AccountServ;
 import quanaotreem.service.CustomerServ;
+import quanaotreem.service.RoleServ;
 
 @RestController
 @CrossOrigin(origins = "${cross.origin}", maxAge = 3600)
@@ -41,6 +48,15 @@ public class CustomerApi {
 
 	@Autowired
 	private CustomerServ customerServ;
+
+	@Autowired
+	private PasswordEncoder encoder;
+
+	@Autowired
+	private AccountServ accountServ;
+
+	@Autowired
+	private RoleServ roleServ;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -88,9 +104,22 @@ public class CustomerApi {
 	 *
 	 * @param newCustomer the new customer
 	 * @return the response entity
+	 * @throws MyException
 	 */
 	@PostMapping("/customer")
-	public ResponseEntity<?> addCustomer(@DTO(CustomerCreateDTO.class) Customer newCustomer) {
+	public ResponseEntity<?> addCustomer(@DTO(CustomerCreateDTO.class) Customer newCustomer) throws MyException {
+		Account newAccount = newCustomer.getAccount();
+		if (accountServ.existsByUsername(newAccount.getUsername()))
+			throw new MyException("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác");
+		if (customerServ.existsByEmail(newCustomer.getEmail()))
+			throw new MyException("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác");
+
+		Set<Role> roles = newAccount.getRoles().stream().map(item -> roleServ.findByName(item.getName()))
+				.collect(Collectors.toSet());
+		newAccount.setRoles(roles);
+		newAccount.setCustomer(newCustomer);
+		newAccount.setPassword(encoder.encode(newAccount.getPassword()));
+
 		Customer result = customerServ.add(newCustomer);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, CustomerDTO.class));
@@ -106,9 +135,16 @@ public class CustomerApi {
 	 *
 	 * @param updateCustomer the update customer
 	 * @return the response entity
+	 * @throws MyException
 	 */
 	@PutMapping("/customer")
-	public ResponseEntity<?> updateCustomer(@DTO(CustomerUpdateDTO.class) Customer updateCustomer) {
+	public ResponseEntity<?> updateCustomer(@DTO(CustomerUpdateDTO.class) Customer updateCustomer) throws MyException {
+		Customer existsCustomer = customerServ.findByEmail(updateCustomer.getEmail());
+		if (existsCustomer == null)
+			throw new MyException("Không tìm thấy thông tin của khách hàng");
+		if (!existsCustomer.equals(updateCustomer))
+			throw new MyException("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác");
+
 		Customer result = customerServ.update(updateCustomer);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, CustomerDTO.class));

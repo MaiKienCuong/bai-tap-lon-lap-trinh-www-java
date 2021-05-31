@@ -2,6 +2,7 @@ package quanaotreem.controller.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +28,16 @@ import quanaotreem.dto.OrderDTO;
 import quanaotreem.dto.create.OrderCreateDTO;
 import quanaotreem.dto.mapper.DTO;
 import quanaotreem.dto.update.OrderUpdateDTO;
+import quanaotreem.entity.Customer;
+import quanaotreem.entity.OrderDetail;
 import quanaotreem.entity.Orderr;
+import quanaotreem.entity.SubProduct;
 import quanaotreem.enumvalue.EnumStatusOrder;
 import quanaotreem.handler.MyException;
 import quanaotreem.payload.response.MessageResponse;
+import quanaotreem.service.CustomerServ;
 import quanaotreem.service.OrderServ;
+import quanaotreem.service.SubProductServ;
 
 @RestController
 @RequestMapping("/api")
@@ -40,6 +46,12 @@ public class OrderApi {
 
 	@Autowired
 	private OrderServ orderServ;
+
+	@Autowired
+	private CustomerServ customerServ;
+
+	@Autowired
+	private SubProductServ subProductServ;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -113,9 +125,27 @@ public class OrderApi {
 	 *
 	 * @param newOrderr the new orderr
 	 * @return the response entity
+	 * @throws MyException
 	 */
 	@PostMapping("/order")
-	public ResponseEntity<?> addOrder(@DTO(OrderCreateDTO.class) Orderr newOrderr) {
+	public ResponseEntity<?> addOrder(@DTO(OrderCreateDTO.class) Orderr newOrderr) throws MyException {
+		Customer existsCustomer = customerServ.findById(newOrderr.getCustomer().getId());
+		if (existsCustomer == null)
+			throw new MyException("Không tìm thấy thông tin của khách hàng");
+		newOrderr.setCustomer(existsCustomer);
+
+		List<OrderDetail> orderDetails = newOrderr.getOrderDetails();
+		for (Iterator<?> iterator = orderDetails.iterator(); iterator.hasNext();) {
+			OrderDetail detail = (OrderDetail) iterator.next();
+			SubProduct subProduct = subProductServ.findById(detail.getSubProduct().getId());
+			if (subProduct != null) {
+				detail.setSubProduct(subProduct);
+				detail.setOrder(newOrderr);
+				if (detail.getQuantity() > subProduct.getInventory())
+					throw new MyException("Sản phẩm " + subProduct.getName() + " không còn đủ số lượng");
+			} else
+				throw new MyException("Không tìm thấy sản phẩm có Id= " + detail.getSubProduct().getId());
+		}
 		Orderr result = orderServ.add(newOrderr);
 		if (result != null)
 			return ResponseEntity.ok(modelMapper.map(result, OrderDTO.class));

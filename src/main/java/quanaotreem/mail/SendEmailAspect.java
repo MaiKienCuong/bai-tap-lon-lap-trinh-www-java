@@ -1,4 +1,4 @@
-package quanaotreem.aspects;
+package quanaotreem.mail;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 
 import quanaotreem.entity.Customer;
 import quanaotreem.entity.Orderr;
-import quanaotreem.mail.Mail;
-import quanaotreem.mail.MailService;
 
 @Aspect
 @Component

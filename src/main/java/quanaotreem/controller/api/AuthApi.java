@@ -1,5 +1,8 @@
 package quanaotreem.controller.api;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -9,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,12 +23,17 @@ import quanaotreem.dto.AccountDTO;
 import quanaotreem.dto.CustomerDTO;
 import quanaotreem.dto.create.CustomerCreateDTO;
 import quanaotreem.dto.mapper.DTO;
+import quanaotreem.entity.Account;
 import quanaotreem.entity.Customer;
+import quanaotreem.entity.Role;
+import quanaotreem.handler.MyException;
 import quanaotreem.jwt.JwtUtils;
 import quanaotreem.payload.request.LoginRequest;
 import quanaotreem.payload.response.JwtResponse;
 import quanaotreem.payload.response.MessageResponse;
+import quanaotreem.service.AccountServ;
 import quanaotreem.service.CustomerServ;
+import quanaotreem.service.RoleServ;
 import quanaotreem.service.impl.AccountDetailsImpl;
 
 @RestController
@@ -39,8 +48,17 @@ public class AuthApi {
 	private ModelMapper modelMapper;
 
 	@Autowired
+	private RoleServ roleServ;
+
+	@Autowired
+	private AccountServ accountServ;
+
+	@Autowired
 	private CustomerServ customerServ;
 
+	@Autowired
+	private PasswordEncoder encoder;
+	
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -78,9 +96,22 @@ public class AuthApi {
 	 *
 	 * @param newCustomer the new customer
 	 * @return the response entity
+	 * @throws MyException
 	 */
 	@PostMapping("/signup")
-	public ResponseEntity<?> signup(@DTO(CustomerCreateDTO.class) Customer newCustomer) {
+	public ResponseEntity<?> signup(@DTO(CustomerCreateDTO.class) Customer newCustomer) throws MyException {
+		Account newAccount = newCustomer.getAccount();
+		if (accountServ.existsByUsername(newAccount.getUsername()))
+			throw new MyException("Username đã tồn tại trong hệ thống. Vui lòng chọn Username khác");
+		if (customerServ.existsByEmail(newCustomer.getEmail()))
+			throw new MyException("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác");
+
+		Set<Role> roles = newAccount.getRoles().stream().map(item -> roleServ.findByName(item.getName()))
+				.collect(Collectors.toSet());
+		newAccount.setRoles(roles);
+		newAccount.setCustomer(newCustomer);
+		newAccount.setPassword(encoder.encode(newAccount.getPassword()));
+
 		if (customerServ.add(newCustomer) != null)
 			return ResponseEntity.ok(new MessageResponse("Đăng ký tài khoản thành công"));
 
