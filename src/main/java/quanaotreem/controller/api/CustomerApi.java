@@ -140,9 +140,7 @@ public class CustomerApi {
 	@PutMapping("/customer")
 	public ResponseEntity<?> updateCustomer(@DTO(CustomerUpdateDTO.class) Customer updateCustomer) throws MyException {
 		Customer existsCustomer = customerServ.findByEmail(updateCustomer.getEmail());
-		if (existsCustomer == null)
-			throw new MyException("Không tìm thấy thông tin của khách hàng");
-		if (!existsCustomer.equals(updateCustomer))
+		if (existsCustomer != null && !existsCustomer.equals(updateCustomer))
 			throw new MyException("Email đã tồn tại trong hệ thống. Vui lòng chọn Email khác");
 
 		Customer result = customerServ.update(updateCustomer);
