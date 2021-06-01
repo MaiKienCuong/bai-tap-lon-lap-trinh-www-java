@@ -58,7 +58,7 @@ public class AuthApi {
 
 	@Autowired
 	private PasswordEncoder encoder;
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -91,8 +91,8 @@ public class AuthApi {
 	/**
 	 * Signup.
 	 * 
-	 * @DTO danh dau body cua request gui len la dang DTO, nhung argument co
-	 *      annotation DTO se duoc modelMaper tu dong chuyen qua entity
+	 * @DTO danh dau body cua request gui len la doi tuong DTO, nhung argument co
+	 *      annotation DTO se duoc tu dong chuyen qua entity
 	 *
 	 * @param newCustomer the new customer
 	 * @return the response entity

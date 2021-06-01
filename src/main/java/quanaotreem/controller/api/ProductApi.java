@@ -59,19 +59,19 @@ import quanaotreem.service.SupplierServ;
 public class ProductApi {
 
 	@Autowired
+	private ImageServ imageServ;
+
+	@Autowired
 	private ProductServ productServ;
-
-	@Autowired
-	private SubProductServ subProductServ;
-
-	@Autowired
-	private CategoryServ categoryServ;
 
 	@Autowired
 	private SupplierServ supplierServ;
 
 	@Autowired
-	private ImageServ imageServ;
+	private CategoryServ categoryServ;
+
+	@Autowired
+	private SubProductServ subProductServ;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -218,13 +218,13 @@ public class ProductApi {
 	 * @param id the id
 	 * @return the response entity
 	 */
-	@GetMapping("/product/sizes/{id}")
-	public ResponseEntity<?> listSizeById(@PathVariable("id") Long id) {
+	@GetMapping("/product/sizes/{productId}")
+	public ResponseEntity<?> listSizeById(@PathVariable("productId") Long id) {
 		List<SubProduct> list = subProductServ.findAllByProduct_Id(id);
 		if (!list.isEmpty()) {
-			Set<SizeDTO> treeSet = modelMapper.map(list, new TypeToken<TreeSet<SizeDTO>>() {
+			Set<SizeDTO> sizes = modelMapper.map(list, new TypeToken<TreeSet<SizeDTO>>() {
 			}.getType());
-			return ResponseEntity.ok(treeSet);
+			return ResponseEntity.ok(sizes);
 		}
 
 		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
@@ -236,13 +236,13 @@ public class ProductApi {
 	 * @param id the id
 	 * @return the response entity
 	 */
-	@GetMapping("/product/colors/{id}")
-	public ResponseEntity<?> listColorById(@PathVariable("id") Long id) {
+	@GetMapping("/product/colors/{productId}")
+	public ResponseEntity<?> listColorById(@PathVariable("productId") Long id) {
 		List<SubProduct> list = subProductServ.findAllByProduct_Id(id);
 		if (!list.isEmpty()) {
-			Set<ColorDTO> set = modelMapper.map(list, new TypeToken<TreeSet<ColorDTO>>() {
+			Set<ColorDTO> colors = modelMapper.map(list, new TypeToken<TreeSet<ColorDTO>>() {
 			}.getType());
-			return ResponseEntity.ok(set);
+			return ResponseEntity.ok(colors);
 		}
 
 		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
@@ -260,9 +260,9 @@ public class ProductApi {
 			@RequestParam("color") String color) {
 		List<SubProduct> list = subProductServ.findAllByProduct_IdAndColor(id, color);
 		if (!list.isEmpty()) {
-			Set<SizeInventoryDTO> set = modelMapper.map(list, new TypeToken<TreeSet<SizeInventoryDTO>>() {
+			Set<SizeInventoryDTO> sizeInventories = modelMapper.map(list, new TypeToken<TreeSet<SizeInventoryDTO>>() {
 			}.getType());
-			return ResponseEntity.ok(set);
+			return ResponseEntity.ok(sizeInventories);
 		}
 
 		return ResponseEntity.badRequest().body(new MessageResponse("Danh sách trống"));
@@ -323,7 +323,6 @@ public class ProductApi {
 			pageResult = productServ.findAll(pageable);
 		} else {
 			query = query.replaceAll("[\s]+", " ").trim();
-			System.out.println(query);
 			pageResult = productServ.findAllByNameLikeOrCategory_NameLike(query, query, pageable);
 		}
 
@@ -350,6 +349,7 @@ public class ProductApi {
 		if (query == null) {
 			pageResult = productServ.findAll(pageable);
 		} else {
+			query = query.replaceAll("[\s]+", " ").trim();
 			pageResult = productServ.findAllByCategory_NameLike(query, pageable);
 		}
 

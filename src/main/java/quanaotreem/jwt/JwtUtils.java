@@ -20,9 +20,11 @@ public class JwtUtils {
 
 	private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
+//	khoa bi mat dung cho ham bam chuoi jwt
 	@Value("${jwtSecret}")
 	private String jwtSecret;
 
+//	thoi gian song cua 1 jwt
 	@Value("${jwtExpirationMs}")
 	private long jwtExpirationMs;
 

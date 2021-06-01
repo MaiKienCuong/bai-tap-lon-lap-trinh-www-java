@@ -134,9 +134,9 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setDataSource(dataSource());
-		entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
 		entityManagerFactoryBean.setPackagesToScan(packageToScan);
 		entityManagerFactoryBean.setJpaProperties(hibernateProperties());
+		entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
 
 		return entityManagerFactoryBean;
 	}
@@ -243,8 +243,8 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	private Properties hibernateProperties() {
 		Properties properties = new Properties();
 		properties.setProperty("hibernate.dialect", evn.getProperty(HIBERNATE_DIALECT));
-		properties.setProperty("hibernate.format_sql", evn.getProperty(HIBERNATE_FORMAT_SQL));
 		properties.setProperty("hibernate.show_sql", evn.getProperty(HIBERNATE_SHOW_SQL));
+		properties.setProperty("hibernate.format_sql", evn.getProperty(HIBERNATE_FORMAT_SQL));
 		properties.setProperty("hibernate.hbm2ddl.auto", evn.getProperty(HIBERNATE_HBM2DDL_AUTO));
 
 		return properties;
@@ -255,9 +255,9 @@ public class SpringWebConfig implements WebMvcConfigurer {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
 		mailSender.setHost(evn.getProperty("spring.mail.host"));
-		mailSender.setPort(Integer.valueOf(evn.getProperty("spring.mail.port")));
 		mailSender.setUsername(evn.getProperty("spring.mail.username"));
 		mailSender.setPassword(evn.getProperty("spring.mail.password"));
+		mailSender.setPort(Integer.valueOf(evn.getProperty("spring.mail.port")));
 
 		Properties javaMailProperties = new Properties();
 		javaMailProperties.put("mail.smtp.starttls.enable",

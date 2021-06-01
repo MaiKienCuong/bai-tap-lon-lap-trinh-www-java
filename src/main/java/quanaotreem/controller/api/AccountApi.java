@@ -42,16 +42,16 @@ import quanaotreem.service.impl.AccountDetailsImpl;
 public class AccountApi {
 
 	@Autowired
-	private PasswordEncoder encoder;
-
-	@Autowired
-	private AccountServ accountServ;
+	private ModelMapper modelMapper;
 
 	@Autowired
 	private OrderServ orderServ;
 
 	@Autowired
-	private ModelMapper modelMapper;
+	private PasswordEncoder encoder;
+
+	@Autowired
+	private AccountServ accountServ;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -110,6 +110,7 @@ public class AccountApi {
 		AccountDetailsImpl accountDetails = (AccountDetailsImpl) authentication.getPrincipal();
 		Account existsAccount = accountDetails.getAccount();
 		existsAccount.setPassword(encoder.encode(accountUpdateDTO.getNewPassword()));
+
 		if (accountServ.update(existsAccount) != null)
 			return ResponseEntity.ok(new MessageResponse("Đổi mật khẩu thành công"));
 
@@ -149,8 +150,8 @@ public class AccountApi {
 	 * @param id the id
 	 * @return the account and order
 	 */
-	@GetMapping("/account/order/{id}")
-	public ResponseEntity<?> getAccountAndOrder(@PathVariable("id") Long id) {
+	@GetMapping("/account/order/{accountId}")
+	public ResponseEntity<?> getAccountAndOrder(@PathVariable("accountId") Long id) {
 		Account existsAccount = accountServ.findById(id);
 		if (existsAccount != null && existsAccount.getCustomer() != null) {
 			Double sum = Double.valueOf(0d);

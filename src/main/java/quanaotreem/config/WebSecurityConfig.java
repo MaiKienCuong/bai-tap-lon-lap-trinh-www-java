@@ -24,6 +24,12 @@ import quanaotreem.jwt.AuthTokenFilter;
  * 
  * <p>
  * Config security cho ung dung
+ * <br>
+ * prePostEnabled: Cho phep su dung annotation @PreAuthorize / @PostAuthorize de phan quyen
+ * <br>
+ * securedEnabled: Cho phep su dung annotation @Secured de phan quyen
+ * <br>
+ * jsr250Enabled: Cho phep phan quyen su dung annotation @RoleAllow
  * </p>
  */
 @Configuration

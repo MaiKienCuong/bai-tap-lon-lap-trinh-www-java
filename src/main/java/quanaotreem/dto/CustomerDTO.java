@@ -27,6 +27,7 @@ public class CustomerDTO implements Serializable {
 	private String address;
 
 	@JsonIgnore
+//	bo qua thuoc tinh nay khi dua ra json
 	private AccountDTO account;
 
 }

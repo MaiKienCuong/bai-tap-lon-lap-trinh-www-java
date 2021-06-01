@@ -19,6 +19,7 @@ public class SizeInventoryDTO implements Serializable, Comparable<SizeInventoryD
 	private static final long serialVersionUID = 1L;
 
 	@JsonProperty(value = "subProductId")
+//	dat ten cho thuoc tinh nay la subproductId khi dua ra json va nguoc lai
 	private Long id;
 
 	private String size;

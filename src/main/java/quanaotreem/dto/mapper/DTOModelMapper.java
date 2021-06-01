@@ -49,7 +49,7 @@ public class DTOModelMapper extends RequestResponseBodyMethodProcessor {
 	 * Supports parameter.
 	 * 
 	 * <p>
-	 * Khai bao nhung annotation nao se duoc class nay xu ly. O day cho co
+	 * Khai bao nhung annotation nao se duoc class nay xu ly. O day chi co
 	 * annotation DTO
 	 * </p>
 	 *
@@ -65,7 +65,7 @@ public class DTOModelMapper extends RequestResponseBodyMethodProcessor {
 	 * Validate if applicable.
 	 *
 	 * <p>
-	 * Kiem tra tinh hop le cua du lieu, tuong duong voi annotation Valid
+	 * Kiem tra tinh hop le cua du lieu, tuong duong voi annotation @Valid trong phan tham so cua phuong thuc
 	 * </p>
 	 *
 	 * @param binder    the binder

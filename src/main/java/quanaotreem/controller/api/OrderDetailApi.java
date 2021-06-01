@@ -34,8 +34,8 @@ public class OrderDetailApi {
 	 * @param id the id
 	 * @return the response entity
 	 */
-	@GetMapping("/order-detail/order/{id}")
-	public ResponseEntity<?> findAllByOrderId(@PathVariable("id") Long id) {
+	@GetMapping("/order-detail/order/{orderId}")
+	public ResponseEntity<?> findAllByOrderId(@PathVariable("orderId") Long id) {
 		List<OrderDetail> list = orderDetailServ.findAllByOrder_Id(id);
 		if (!list.isEmpty()) {
 			List<OrderDetailDTO> result = modelMapper.map(list, new TypeToken<List<OrderDetailDTO>>() {

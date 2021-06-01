@@ -106,10 +106,10 @@ public class OrderApi {
 	 * @return the response entity
 	 * @throws MyException the my excetion
 	 */
-	@GetMapping("/orders/customer/{id}")
+	@GetMapping("/orders/customer/{customerId}")
 	public ResponseEntity<?> findAllByCustomerId(@RequestParam(defaultValue = "8") int size,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "orderDate-desc") String[] sort,
-			@PathVariable("id") Long id) throws MyException {
+			@PathVariable("customerId") Long id) throws MyException {
 		List<Order> orders = getListSortOrder(sort);
 		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
 		Page<Orderr> pageResult = orderServ.findAllByCustomer_Id(id, pageable);

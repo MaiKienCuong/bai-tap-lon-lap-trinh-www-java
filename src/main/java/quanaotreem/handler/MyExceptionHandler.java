@@ -81,7 +81,6 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
 	 */
 	@ExceptionHandler(JpaSystemException.class)
 	public final ResponseEntity<Object> handleJpaSystemException(JpaSystemException ex, WebRequest request) {
-		ex.printStackTrace();
 		return ResponseEntity.badRequest().body(new MessageResponse("Lỗi: Không thể thêm hoặc cập nhật dữ liệu"));
 	}
 

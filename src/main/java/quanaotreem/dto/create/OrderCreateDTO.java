@@ -24,6 +24,7 @@ public class OrderCreateDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@JsonIgnore
+//	bo qua thuoc tinh nay khi dung modelmapper de map qua entity
 	private Long id;
 
 	@NotNull(message = "Chưa có phương thức thanh toán (STORE/COD)")

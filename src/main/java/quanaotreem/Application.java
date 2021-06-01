@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 
  * <p>
  * Class nay dung de chay ung dung bang spring boot. Dung de test trong qua
- * trinh phat trien (vi no chay nhanh hon so voi chay tren server)
+ * trinh phat trien
  * </p>
  */
 @SpringBootApplication

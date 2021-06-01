@@ -37,7 +37,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
+//		filterChain la 1 chuoi cac filter lien tiep nhau
 		filterChain.doFilter(request, response);
+//		sau khi xac thuc xong, doFilter(request, response) dung de chuyen quyen dieu khien cho filter tiep theo trong chuoi filter
 	}
 
 	/**
