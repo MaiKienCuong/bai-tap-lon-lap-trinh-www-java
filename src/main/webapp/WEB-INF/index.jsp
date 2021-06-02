@@ -41,8 +41,9 @@
 		<div>
 			<h2 class="text-danger">Cách chạy Front-end:</h2>
 			<ul style="font-size: 150%">
-				<li></li>
-				<li></li>
+				<li>Tại thư mục Root mở Git Bash</li>
+				<li>cài đặt npm bằng cách gõ: npm start(nếu chưa có thư mục node_module)</li>
+				<li>chạy chương trình gõ: npm start</li>
 			</ul>
 
 		</div>

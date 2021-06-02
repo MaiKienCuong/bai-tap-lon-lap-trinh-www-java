@@ -184,7 +184,7 @@ public class SendEmailAspect {
 				+ "            <div style=\"padding:0 10px\">\r\n" + "                <p style=\"height:50px\">\r\n"
 				+ "                    <span style=\"float:left;margin-top:14px;margin-right:10px\">Để kiểm tra lại đơn hàng, Anh/chị vui lòng:<p></p></span><span style=\"margin-top: 25px;float:left\">\r\n"
 				+ "                        <span style=\"padding: 14px 35px; background:#357ebd\">\r\n"
-				+ "                            <a href=\"https://localhost:3000/login\" style=\"font-size: 16px; text-decoration: none; color: #fff;\">\r\n"
+				+ "                            <a href=\"http://localhost:3000/login\" style=\"font-size: 16px; text-decoration: none; color: #fff;\">\r\n"
 				+ "                                Đăng nhập vào tài khoản\r\n" + "                            </a>\r\n"
 				+ "                        </span>\r\n" + "                    </span>\r\n" + "                </p>\r\n"
 				+ "                <div style=\"clear:both\"></div>\r\n"

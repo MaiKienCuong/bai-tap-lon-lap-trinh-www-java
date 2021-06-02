@@ -39,7 +39,7 @@ public class SubProductUpdateDTO implements Serializable {
 
 	@NotNull(message = "Số lượng tồn không được để trống")
 	@Min(value = 1, message = "Số lượng tồn phải lớn hơn 0")
-	@Max(value = 1000000, message = "Số lượng tồn không được vượt quá 1,000,000")
+	@Max(value = 100000, message = "Số lượng tồn không được vượt quá 100,000")
 	private Integer inventory;
 
 }
