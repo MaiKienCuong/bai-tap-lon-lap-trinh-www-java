@@ -34,31 +34,34 @@
 			<h2 class="text-danger">Cách chạy Back-end:</h2>
 			<ul style="font-size: 150%">
 				<li>Chuột phải lên Project Back-end trong Eclipse</li>
-				<li>Chọn Run on server</li>
+				<li>Chọn <strong>Run on server</strong></li>
 			</ul>
 		</div>
 		<hr>
 		<div>
 			<h2 class="text-danger">Cách chạy Front-end:</h2>
 			<ul style="font-size: 150%">
-				<li>Tại thư mục Root mở Git Bash</li>
-				<li>cài đặt npm bằng cách gõ: npm start(nếu chưa có thư mục node_module)</li>
-				<li>chạy chương trình gõ: npm start</li>
+				<li>Tại thư mục Root của Project Front-end mở <strong>cmd</strong></li>
+				<li>Cài đặt thư viện (nếu chạy lần đầu tiên, chưa có thư mục
+					node_module) bằng cách gõ: <strong>npm install</strong>
+				</li>
+				<li>Đợi lệnh npm install chạy xong, để chạy chương trình gõ: <strong>npm
+						start</strong></li>
 			</ul>
 
 		</div>
 		<hr>
-		<div class="">
-			<h2>- Ứng dụng được viết hoàn toàn theo kiến trúc Spring-MVC</h2>
+		<div class="" style="font-size: 150%">
+			<div>- Ứng dụng được viết hoàn toàn theo kiến trúc Spring-MVC</div>
 			<br>
 
-			<h2>- Tuy nhiên trong quá trình phát triển, nhóm sử dụng
+			<div>- Tuy nhiên trong quá trình phát triển, nhóm sử dụng
 				dependencies của spring-boot để thuận tiện trong việc quản lý
-				dependecies cũng như quản lý version của depedencies</h2>
+				dependecies cũng như quản lý version của depedencies</div>
 			<br>
 
-			<h2>- Ứng dụng vừa có thể chạy trên Server Tomcat vừa có thể
-				chạy bằng spring-boot</h2>
+			<div>- Ứng dụng vừa có thể chạy trên Server Tomcat vừa có thể
+				chạy bằng spring-boot</div>
 		</div>
 	</div>
 
