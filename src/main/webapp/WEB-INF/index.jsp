@@ -61,6 +61,15 @@
 
 		</div>
 		<hr>
+		<div>
+			<h2 class="text-danger">Tài khoản đăng nhập</h2>
+			<ul style="font-size: 150%">
+				<li>admin: admin/admin</li>
+				<li>khách hàng: cuongmaikien/123456</li>
+			</ul>
+
+		</div>
+		<hr>
 		<div class="" style="font-size: 150%">
 			<div>- Ứng dụng được viết hoàn toàn theo kiến trúc Spring-MVC</div>
 			<br>
