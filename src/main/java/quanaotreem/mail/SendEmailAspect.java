@@ -16,6 +16,7 @@ import quanaotreem.entity.Customer;
 import quanaotreem.entity.OrderDetail;
 import quanaotreem.entity.Orderr;
 import quanaotreem.entity.SubProduct;
+import quanaotreem.enumvalue.EnumPaymentMethod;
 
 @Aspect
 @Component
@@ -27,7 +28,8 @@ public class SendEmailAspect {
 	@Value("${spring.mail.username}")
 	private String mailFrom;
 
-	private double ship = 30000;
+	@Value("${shipping}")
+	private double ship;
 
 	private DecimalFormat df = new DecimalFormat("###,###,###.0");
 
@@ -71,6 +73,8 @@ public class SendEmailAspect {
 	public void afterAddOrder(JoinPoint joinPoint, ResponseEntity<?> responseEntity) {
 		Orderr order = (Orderr) joinPoint.getArgs()[0];
 		Customer customer = order.getCustomer();
+		if (order.getPaymentMethod().equals(EnumPaymentMethod.STORE))
+			ship = 0;
 		StringBuilder content = new StringBuilder("<div class=\"container\">\r\n"
 				+ "        <div style=\"font-family: 'Arial',Helvetica Neue,Helvetica,sans-serif; line-height: 14pt;padding:20px 0px;font-size:14px;max-width:580px;margin:0 auto\">\r\n"
 				+ "            <div style=\"padding:0 10px;margin-bottom:25px\">\r\n" + "                <p>Xin chào "
