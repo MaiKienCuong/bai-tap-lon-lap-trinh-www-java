@@ -9,20 +9,20 @@ import quanaotreem.entity.Category;
 
 public interface CategoryServ {
 
-	public Category findById(Long id);
+	Category findById(Long id);
 
-	public Page<Category> findAll(Pageable pageable);
+	Page<Category> findAll(Pageable pageable);
 	
-	public List<Category> findAll();
+	List<Category> findAll();
 
-	public List<Category> findAllByNameLike(String name);
+	List<Category> findAllByNameLike(String name);
 
-	public Page<Category> findAllByNameLike(String name, Pageable pageable);
+	Page<Category> findAllByNameLike(String name, Pageable pageable);
 
-	public Category add(Category category);
+	Category add(Category category);
 
-	public void delete(Long id);
+	void delete(Long id);
 
-	public Category update(Category category);
+	Category update(Category category);
 
 }

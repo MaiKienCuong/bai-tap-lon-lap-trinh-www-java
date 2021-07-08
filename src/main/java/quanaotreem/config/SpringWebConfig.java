@@ -11,7 +11,6 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -66,8 +65,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	private static final String HIBERNATE_FORMAT_SQL = "spring.jpa.properties.hibernate.format_sql";
 	private static final String HIBERNATE_HBM2DDL_AUTO = "spring.jpa.hibernate.ddl-auto";
 
-	@Value("${package.toscan}")
-	private String packageToScan;
+	private static final String PACKAGE_TO_SCAN = "package.toscan";
 
 	/**
 	 * The evn.
@@ -134,7 +132,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setDataSource(dataSource());
-		entityManagerFactoryBean.setPackagesToScan(packageToScan);
+		entityManagerFactoryBean.setPackagesToScan(evn.getProperty(PACKAGE_TO_SCAN));
 		entityManagerFactoryBean.setJpaProperties(hibernateProperties());
 		entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
 

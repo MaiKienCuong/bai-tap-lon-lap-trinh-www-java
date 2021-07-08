@@ -9,20 +9,20 @@ import quanaotreem.entity.Account;
 
 public interface AccountServ {
 
-	public Account findById(Long id);
+	Account findById(Long id);
 
-	public Account findByUsername(String username);
+	Account findByUsername(String username);
 
-	public List<Account> findAll();
+	List<Account> findAll();
 
-	public Page<Account> findAll(Pageable pageable);
+	Page<Account> findAll(Pageable pageable);
 
-	public Account add(Account account);
+	Account add(Account account);
 
-	public void delete(Long id);
+	void delete(Long id);
 
-	public Account update(Account account);
+	Account update(Account account);
 
-	public boolean existsByUsername(String username);
+	boolean existsByUsername(String username);
 
 }

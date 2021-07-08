@@ -14,18 +14,18 @@ import quanaotreem.entity.SubProduct;
  */
 public interface SubProductServ {
 
-	public SubProduct findById(Long id);
+	SubProduct findById(Long id);
 
-	public SubProduct add(SubProduct subProduct);
+	SubProduct add(SubProduct subProduct);
 
-	public void delete(Long id);
+	void delete(Long id);
 
-	public SubProduct update(SubProduct subProduct);
+	SubProduct update(SubProduct subProduct);
 
-	public List<SubProduct> findAllByProduct_Id(Long id);
+	List<SubProduct> findAllByProduct_Id(Long id);
 
-	public List<SubProduct> findAllByProduct_IdAndColor(Long id, String color);
+	List<SubProduct> findAllByProduct_IdAndColor(Long id, String color);
 
-	public List<SubProduct> findAllByProduct_IdAndColorAndSize(Long id, String color, String size);
+	List<SubProduct> findAllByProduct_IdAndColorAndSize(Long id, String color, String size);
 
 }

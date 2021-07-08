@@ -24,10 +24,10 @@ import quanaotreem.entity.SubProduct;
 public interface SubProductRepo extends JpaRepository<SubProduct, Long> {
 
 //	@Query(value = "select s from SubProduct s where s.product.id =:productId order by cast (s.size as int)")
-	public List<SubProduct> findAllByProduct_Id(@Param("productId") Long id);
+	List<SubProduct> findAllByProduct_Id(@Param("productId") Long id);
 
-	public List<SubProduct> findAllByProduct_IdAndColor(Long id, String color);
+	List<SubProduct> findAllByProduct_IdAndColor(Long id, String color);
 
-	public List<SubProduct> findAllByProduct_IdAndColorAndSize(Long id, String color, String size);
+	List<SubProduct> findAllByProduct_IdAndColorAndSize(Long id, String color, String size);
 
 }

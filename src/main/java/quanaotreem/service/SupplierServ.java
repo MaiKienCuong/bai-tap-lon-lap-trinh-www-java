@@ -9,20 +9,20 @@ import quanaotreem.entity.Supplier;
 
 public interface SupplierServ {
 
-	public Supplier findById(Long id);
+	Supplier findById(Long id);
 
-	public Supplier add(Supplier supplier);
+	Supplier add(Supplier supplier);
 
-	public void delete(Long id);
+	void delete(Long id);
 
-	public Supplier update(Supplier supplier);
+	Supplier update(Supplier supplier);
 
-	public List<Supplier> findAllByNameLikeOrPhoneLike(String name, String phone);
+	List<Supplier> findAllByNameLikeOrPhoneLike(String name, String phone);
 
-	public Page<Supplier> findAllByNameLikeOrPhoneLike(String name, String phone, Pageable pageable);
+	Page<Supplier> findAllByNameLikeOrPhoneLike(String name, String phone, Pageable pageable);
 
-	public Page<Supplier> findAll(Pageable pageable);
+	Page<Supplier> findAll(Pageable pageable);
 
-	public List<Supplier> findAll();
+	List<Supplier> findAll();
 
 }

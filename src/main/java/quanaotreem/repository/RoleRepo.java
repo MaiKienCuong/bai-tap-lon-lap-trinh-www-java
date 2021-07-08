@@ -23,6 +23,6 @@ import quanaotreem.enumvalue.EnumRole;
 @Repository
 public interface RoleRepo extends JpaRepository<Role, Long> {
 
-	public Optional<Role> findByName(EnumRole name);
+	Optional<Role> findByName(EnumRole name);
 
 }

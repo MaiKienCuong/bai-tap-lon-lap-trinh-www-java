@@ -171,7 +171,10 @@ public class ProductApi {
 			throw new MyException("Danh sách sản phẩm con trống");
 
 		List<Image> images = imageServ.findAllByProduct_Id(productUpdateDTO.getId());
-		images.forEach(image -> imageServ.deleteById(image.getId()));
+		images.forEach(image -> {
+			image.setProduct(null);
+			imageServ.deleteById(image.getId());
+		});
 
 		Product product = productServ.findById(productUpdateDTO.getId());
 		if (product != null) {

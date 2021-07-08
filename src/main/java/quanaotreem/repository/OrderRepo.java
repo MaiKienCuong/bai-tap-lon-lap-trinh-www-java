@@ -25,10 +25,10 @@ import quanaotreem.enumvalue.EnumStatusOrder;
 @Repository
 public interface OrderRepo extends JpaRepository<Orderr, Long> {
 
-	public List<Orderr> findAllByCustomer_Id(Long id);
+	List<Orderr> findAllByCustomer_Id(Long id);
 
-	public Page<Orderr> findAllByCustomer_Id(Long id, Pageable pageable);
+	Page<Orderr> findAllByCustomer_Id(Long id, Pageable pageable);
 
-	public Page<Orderr> findAllByStatusIn(EnumStatusOrder[] status, Pageable pageable);
+	Page<Orderr> findAllByStatusIn(EnumStatusOrder[] status, Pageable pageable);
 
 }

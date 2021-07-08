@@ -24,8 +24,8 @@ import quanaotreem.entity.Category;
 @Repository
 public interface CategoryRepo extends JpaRepository<Category, Long> {
 
-	public List<Category> findAllByNameLike(String name);
+	List<Category> findAllByNameLike(String name);
 
-	public Page<Category> findAllByNameLike(String name, Pageable pageable);
+	Page<Category> findAllByNameLike(String name, Pageable pageable);
 
 }

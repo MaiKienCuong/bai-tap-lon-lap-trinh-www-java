@@ -22,6 +22,6 @@ import quanaotreem.entity.Image;
 @Repository
 public interface ImageRepo extends JpaRepository<Image, Long> {
 
-	public List<Image> findAllByProduct_Id(Long id);
+	List<Image> findAllByProduct_Id(Long id);
 
 }

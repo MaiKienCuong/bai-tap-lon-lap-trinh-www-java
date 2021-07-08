@@ -10,20 +10,20 @@ import quanaotreem.enumvalue.EnumStatusOrder;
 
 public interface OrderServ {
 
-	public Orderr findById(Long id);
+	Orderr findById(Long id);
 
-	public Orderr add(Orderr order);
+	Orderr add(Orderr order);
 
-	public Orderr update(Orderr order);
+	Orderr update(Orderr order);
 
-	public void delete(Long id);
+	void delete(Long id);
 
-	public Page<Orderr> findAll(Pageable pageable);
+	Page<Orderr> findAll(Pageable pageable);
 	
-	public List<Orderr> findAllByCustomer_Id(Long id);
+	List<Orderr> findAllByCustomer_Id(Long id);
 
-	public Page<Orderr> findAllByCustomer_Id(Long id, Pageable pageable);
+	Page<Orderr> findAllByCustomer_Id(Long id, Pageable pageable);
 	
-	public Page<Orderr> findAllByStatusIn(EnumStatusOrder[] status, Pageable pageable);
+	Page<Orderr> findAllByStatusIn(EnumStatusOrder[] status, Pageable pageable);
 
 }

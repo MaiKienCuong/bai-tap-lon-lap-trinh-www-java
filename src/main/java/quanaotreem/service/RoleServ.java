@@ -7,10 +7,10 @@ import quanaotreem.enumvalue.EnumRole;
 
 public interface RoleServ {
 
-	public Role findById(Long id);
+	Role findById(Long id);
 
-	public Role findByName(EnumRole name);
+	Role findByName(EnumRole name);
 
-	public List<Role> findAll();
+	List<Role> findAll();
 
 }

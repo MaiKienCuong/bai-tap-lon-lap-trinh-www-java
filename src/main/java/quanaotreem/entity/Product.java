@@ -47,7 +47,7 @@ public class Product {
 	@Column(name = "price")
 	private Double price;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "product", orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Image> imagesUrl;
 

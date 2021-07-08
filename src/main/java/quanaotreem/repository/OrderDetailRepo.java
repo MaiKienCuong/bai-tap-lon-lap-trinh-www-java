@@ -22,6 +22,6 @@ import quanaotreem.entity.OrderDetail;
 @Repository
 public interface OrderDetailRepo extends JpaRepository<OrderDetail, Long> {
 
-	public List<OrderDetail> findAllByOrder_Id(Long id);
+	List<OrderDetail> findAllByOrder_Id(Long id);
 
 }

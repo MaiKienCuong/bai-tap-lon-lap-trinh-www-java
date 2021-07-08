@@ -21,9 +21,9 @@ import quanaotreem.entity.Account;
  */
 @Repository
 public interface AccountRepo extends JpaRepository<Account, Long> {
+	
+	boolean existsByUsername(String username);
 
-	public boolean existsByUsername(String username);
-
-	public Optional<Account> findByUsername(String username);
+	Optional<Account> findByUsername(String username);
 
 }

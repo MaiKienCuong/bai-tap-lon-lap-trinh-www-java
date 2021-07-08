@@ -17,24 +17,24 @@ import quanaotreem.entity.Product;
  */
 public interface ProductServ {
 
-	public Product add(Product product);
+	Product add(Product product);
 
-	public void delete(Long id);
+	void delete(Long id);
 
-	public Product update(Product product);
+	Product update(Product product);
 
-	public Product findById(Long id);
+	Product findById(Long id);
 
-	public Page<Product> findAll(Pageable pageable);
+	Page<Product> findAll(Pageable pageable);
 	
-	public List<Product> findTop8ByOrderByViewsDesc();
+	List<Product> findTop8ByOrderByViewsDesc();
 	
-	public List<Product> findAllByMarkerIn(String[] markers);
+	List<Product> findAllByMarkerIn(String[] markers);
 
-	public Page<Product> findAllByMarkerIn(String[] markers, Pageable pageable);
+	Page<Product> findAllByMarkerIn(String[] markers, Pageable pageable);
 
-	public Page<Product> findAllByCategory_NameLike(String category, Pageable pageable);
+	Page<Product> findAllByCategory_NameLike(String category, Pageable pageable);
 
-	public Page<Product> findAllByNameLikeOrCategory_NameLike(String name, String category, Pageable pageable);
+	Page<Product> findAllByNameLikeOrCategory_NameLike(String name, String category, Pageable pageable);
 
 }
