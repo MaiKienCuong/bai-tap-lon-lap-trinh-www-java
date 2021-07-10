@@ -10,6 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Nationalized;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -29,29 +32,32 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = { "id" })
+@DynamicUpdate
 public class Customer {
 
 	@Id
-	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name", columnDefinition = "nvarchar(255) not null")
+	@Nationalized
+	@Column(nullable = false, length = 255)
 	private String name;
 
-	@Column(name = "phone", columnDefinition = "varchar(255) not null")
+	@Nationalized
+	@Column(nullable = false, length = 255)
 	private String phone;
 
-	@Column(name = "email", columnDefinition = "varchar(255) not null", unique = true)
+	@Column(nullable = false, length = 255, unique = true)
 	private String email;
 
-	@Column(name = "address", columnDefinition = "nvarchar(500)")
+	@Nationalized
+	@Column(length = 500)
 	private String address;
 
 	@JsonIgnore
 	@ToString.Exclude
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "account_id", columnDefinition = "bigint")
+	@JoinColumn(name = "account_id")
 	private Account account;
 
 }

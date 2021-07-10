@@ -1,6 +1,5 @@
 package quanaotreem.controller.api;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -179,7 +178,6 @@ public class ProductApi {
 		Product product = productServ.findById(productUpdateDTO.getId());
 		if (product != null) {
 			Integer views = product.getViews();
-			LocalDateTime createdAt = product.getCreatedAt();
 
 			for (Iterator<Image> iterator = productUpdateDTO.getImagesUrl().iterator(); iterator.hasNext();) {
 				iterator.next().setProduct(product);
@@ -190,8 +188,6 @@ public class ProductApi {
 			else
 				product.setMarker("DEF");
 			product.setViews(views);
-			product.setCreatedAt(createdAt);
-			product.setUpdatedAt(LocalDateTime.now());
 
 			Product result = productServ.update(product);
 			if (result != null)

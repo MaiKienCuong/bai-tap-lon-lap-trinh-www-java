@@ -16,8 +16,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,53 +38,57 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@DynamicUpdate
 public class Product {
 
 	@Id
-	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name", columnDefinition = "nvarchar(255)")
+	@Nationalized
+	@Column(length = 255)
 	private String name;
 
-	@Column(name = "price")
-	private Double price;
+	private double price;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "product", orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "product", orphanRemoval = true)
 	private List<Image> imagesUrl;
 
-	@Column(name = "marker", columnDefinition = "nvarchar(50)")
+	@Nationalized
+	@Column(length = 50)
 	private String marker;
 
-	@Column(name = "discount")
 	private double discount;
 
-	@Column(name = "views")
-	private Integer views;
+	private int views;
 
-	@Column(name = "origin", columnDefinition = "nvarchar(255)")
+	@Nationalized
+	@Column(length = 255)
 	private String origin;
 
-	@Column(name = "tax")
 	private double tax;
 
-	@Column(name = "short_description", columnDefinition = "nvarchar(500)")
+	@Nationalized
+	@Column(name = "short_description", length = 500)
 	private String shortDescription;
 
-	@Column(name = "long_description", columnDefinition = "nvarchar(1000)")
+	@Nationalized
+	@Column(name = "long_description", length = 1000)
 	private String longDescription;
 
-	@Column(name = "material", columnDefinition = "nvarchar(255)")
+	@Nationalized
+	@Column(length = 255)
 	private String material;
 
 	private boolean active;
 
-	@Column(name = "created_at", columnDefinition = "datetime")
+	@CreationTimestamp
+	@Column(name = "created_at", updatable = false)
 	private LocalDateTime createdAt;
 
-	@Column(name = "updated_at", columnDefinition = "datetime")
+	@UpdateTimestamp
+	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
 
 	@ManyToOne
@@ -94,15 +102,12 @@ public class Product {
 	private Category category;
 
 	@ToString.Exclude
-	@OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<SubProduct> subProducts;
 
 	@PrePersist
 	public void prePersist() {
-		views = 0;
 		active = true;
-		createdAt = LocalDateTime.now();
-		updatedAt = createdAt;
 	}
 
 }

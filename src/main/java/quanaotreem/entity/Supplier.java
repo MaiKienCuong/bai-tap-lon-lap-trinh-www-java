@@ -7,6 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Nationalized;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,23 +25,26 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@DynamicUpdate
 public class Supplier {
 
 	@Id
-	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name", columnDefinition = "nvarchar(255) not null")
+	@Nationalized
+	@Column(length = 255, nullable = false)
 	private String name;
 
-	@Column(name = "email", columnDefinition = "varchar(255)")
+	@Nationalized
+	@Column(length = 255)
 	private String email;
 
-	@Column(name = "address", columnDefinition = "nvarchar(500)")
+	@Nationalized
+	@Column(length = 500)
 	private String address;
 
-	@Column(name = "phone", columnDefinition = "varchar(255)")
+	@Column(length = 255)
 	private String phone;
 
 }

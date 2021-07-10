@@ -11,9 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,44 +35,39 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@DynamicUpdate
 public class SubProduct {
 
 	@Id
-	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name", columnDefinition = "nvarchar(255)")
+	@Nationalized
+	@Column(length = 255)
 	private String name;
 
-	@Column(name = "created_at", columnDefinition = "datetime")
+	@CreationTimestamp
+	@Column(name = "created_at", updatable = false)
 	private LocalDateTime createdAt;
 
-	@Column(name = "updated_at", columnDefinition = "datetime")
+	@UpdateTimestamp
+	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
 
-	@Column(name = "color", columnDefinition = "nvarchar(50)")
+	@Nationalized
+	@Column(length = 50)
 	private String color;
 
-	@Column(name = "size", columnDefinition = "nvarchar(50)")
+	@Nationalized
+	@Column(length = 50)
 	private String size;
 
-	private Integer inventory;
-
-	@PrePersist
-	public void prePersist() {
-		createdAt = LocalDateTime.now();
-		updatedAt = createdAt;
-	}
-
-	@PreUpdate
-	public void preUpdate() {
-		updatedAt = LocalDateTime.now();
-	}
+	private int inventory;
 
 	@JsonIgnore
 	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH })
 	@JoinColumn(name = "product_id")
 	private Product product;
 

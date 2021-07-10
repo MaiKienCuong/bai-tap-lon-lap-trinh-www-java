@@ -15,9 +15,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,21 +40,21 @@ import quanaotreem.enumvalue.EnumRole;
 @Table(name = "Account")
 @AllArgsConstructor
 @EqualsAndHashCode(of = { "id", "username" })
+@DynamicUpdate
 public class Account {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "username", columnDefinition = "varchar(60) not null", unique = true)
+	@Column(nullable = false, length = 60, unique = true)
 	private String username;
 
-	@JsonIgnore
 	@ToString.Exclude
-	@Column(name = "password", columnDefinition = "varchar(255) not null")
+	@Column(nullable = false, length = 255)
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
-	@Column(name = "enable", nullable = false)
 	private boolean enable;
 
 	@ToString.Exclude
@@ -63,8 +68,12 @@ public class Account {
 	private Customer customer;
 
 	public Account() {
-		enable = true;
 		roles = new HashSet<>(Arrays.asList(new Role(EnumRole.ROLE_CUSTOMER)));
+	}
+
+	@PrePersist
+	public void prePersist() {
+		enable = true;
 	}
 
 }

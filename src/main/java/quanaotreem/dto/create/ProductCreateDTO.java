@@ -40,7 +40,7 @@ public class ProductCreateDTO implements Serializable {
 
 	@Min(value = 0, message = "Giảm giá phải lớn hơn hoặc bằng 0")
 	@Max(value = 1, message = "Giảm giá phải nhỏ hơn hoặc bàng 1")
-	private double discount = 0;
+	private Double discount = 0d;
 
 	private List<Image> imagesUrl;
 
@@ -50,7 +50,7 @@ public class ProductCreateDTO implements Serializable {
 	@NotNull(message = "Chưa nhập thuế sản phẩm")
 	@Min(value = 0, message = "Thuế của sản phẩm phải lớn hơn hoặc bằng 0")
 	@Max(value = 1, message = "Thuế của sản phẩm phải nhỏ hơn 1")
-	private double tax;
+	private Double tax;
 
 	@Size(max = 500, message = "Mô tả ngắn không được vượt quá 500 ký tự")
 	private String shortDescription;

@@ -18,6 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Nationalized;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,44 +41,45 @@ import quanaotreem.enumvalue.EnumStatusOrder;
 public class Orderr {
 
 	@Id
-	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "order_date", columnDefinition = "datetime")
+	@CreationTimestamp
+	@Column(name = "order_date", updatable = false)
 	private LocalDateTime orderDate;
 
-	@Column(name = "ship_address", columnDefinition = "nvarchar(500)")
+	@Nationalized
+	@Column(name = "ship_address", length = 500)
 	private String shipAddress;
 
+	@Nationalized
+	@Column(length = 50)
 	@Enumerated(EnumType.STRING)
-	@Column(name = "status", columnDefinition = "nvarchar(50)")
 	private EnumStatusOrder status;
 
+	@Nationalized
 	@Enumerated(EnumType.STRING)
-	@Column(name = "payment_method", columnDefinition = "nvarchar(50)")
+	@Column(name = "payment_method", length = 50)
 	private EnumPaymentMethod paymentMethod;
 
-	@Column(name = "total")
-	private Double total;
+	private double total;
 
 	@PrePersist
 	public void prePersist() {
-		orderDate = LocalDateTime.now();
 		status = EnumStatusOrder.PENDING;
 		sumTotal();
 	}
 
-	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@ToString.Exclude
 	@JoinColumn(name = "customer_id")
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	private Customer customer;
 
 	@ToString.Exclude
 	@OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<OrderDetail> orderDetails;
 
-	public Double sumTotal() {
+	public double sumTotal() {
 		total = 0d;
 		if (!orderDetails.isEmpty()) {
 			orderDetails.forEach(detail -> total += detail.lineTotal());

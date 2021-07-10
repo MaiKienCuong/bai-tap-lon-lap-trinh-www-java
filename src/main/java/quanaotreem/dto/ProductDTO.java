@@ -29,13 +29,13 @@ public class ProductDTO implements Serializable {
 
 	private String marker;
 
-	private double discount;
+	private Double discount;
 
 	private Integer views;
 
 	private String origin;
 
-	private double tax;
+	private Double tax;
 
 	private String shortDescription;
 

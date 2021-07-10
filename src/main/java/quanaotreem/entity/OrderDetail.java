@@ -1,6 +1,5 @@
 package quanaotreem.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,15 +29,12 @@ import lombok.ToString;
 public class OrderDetail {
 
 	@Id
-	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "quantity", nullable = false)
-	private Integer quantity;
+	private int quantity;
 
-	@Column(name = "price", nullable = false)
-	private Double price;
+	private double price;
 
 	@JsonIgnore
 	@ToString.Exclude
@@ -51,7 +47,7 @@ public class OrderDetail {
 	@JoinColumn(name = "subProduct_id")
 	private SubProduct subProduct;
 
-	public Double lineTotal() {
+	public double lineTotal() {
 		return price * quantity;
 	}
 

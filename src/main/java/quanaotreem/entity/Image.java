@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Nationalized;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -26,6 +29,7 @@ import lombok.ToString;
 @Table(name = "ImagesUrl")
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicUpdate
 public class Image {
 
 	@Id
@@ -33,7 +37,8 @@ public class Image {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "url", columnDefinition = "nvarchar(1000)")
+	@Nationalized
+	@Column(length = 1000)
 	private String url;
 
 	@ManyToOne

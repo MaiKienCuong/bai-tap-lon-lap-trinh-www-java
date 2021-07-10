@@ -29,13 +29,12 @@ import quanaotreem.enumvalue.EnumRole;
 public class Role {
 
 	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonProperty(access = Access.WRITE_ONLY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "role", columnDefinition = "varchar(50) not null")
+	@Column(name = "role", nullable = false, length = 50)
 	private EnumRole name;
 
 	public Role(EnumRole name) {

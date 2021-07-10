@@ -40,7 +40,7 @@ public class ProductUpdateDTO implements Serializable {
 
 	@Min(value = 0, message = "Giảm giá phải lớn hơn hoặc bằng 0")
 	@Max(value = 1, message = "Giảm giá phải nhỏ hơn hoặc bàng 1")
-	private double discount = 0;
+	private Double discount = 0d;
 
 	private List<Image> imagesUrl;
 
