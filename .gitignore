@@ -1,0 +1,7 @@
+.idea
+.setting
+.classpath
+target/
+.project
+.tern-project
+quan-ao-tre-em.iml
