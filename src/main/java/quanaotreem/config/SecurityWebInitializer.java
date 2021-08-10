@@ -4,7 +4,7 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
 
 /**
  * The Class SecurityWebInitializer.
- * 
+ *
  * <p>
  * Config security
  * </p>

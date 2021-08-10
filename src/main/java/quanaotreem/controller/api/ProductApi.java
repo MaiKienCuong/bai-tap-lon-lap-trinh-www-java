@@ -2,7 +2,6 @@ package quanaotreem.controller.api;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import quanaotreem.dto.ColorDTO;
 import quanaotreem.dto.ProductDTO;
 import quanaotreem.dto.SizeDTO;
@@ -46,7 +44,6 @@ import quanaotreem.service.SupplierServ;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -175,10 +172,10 @@ public class ProductApi {
 
         Product product = productServ.findById(productUpdateDTO.getId());
         if (product != null) {
-            Integer views = product.getViews();
+            int views = product.getViews();
 
-            for (Iterator<Image> iterator = productUpdateDTO.getImagesUrl().iterator(); iterator.hasNext(); ) {
-                iterator.next().setProduct(product);
+            for (Image image : productUpdateDTO.getImagesUrl()) {
+                image.setProduct(product);
             }
             product = modelMapper.map(productUpdateDTO, Product.class);
             if (product.getDiscount() > 0)
@@ -379,8 +376,8 @@ public class ProductApi {
     private List<Order> getListSortOrder(String[] sort) throws MyException {
         List<Order> orders = new ArrayList<>();
         try {
-            for (int i = 0; i < sort.length; i++) {
-                if (sort[i].contains("-")) {
+            for (String s : sort) {
+                if (s.contains("-")) {
                     for (String sortOrder : sort) {
                         String[] subSort = sortOrder.split("-");
                         orders.add(new Order(getSortDirection(subSort[1]), subSort[0]));

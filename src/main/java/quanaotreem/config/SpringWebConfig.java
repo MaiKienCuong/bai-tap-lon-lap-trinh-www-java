@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import quanaotreem.dto.mapper.DTOModelMapper;
@@ -122,8 +123,8 @@ public class SpringWebConfig implements WebMvcConfigurer {
             throw new IllegalStateException(exc);
         }
 
-        dataSource.setJdbcUrl(evn.getRequiredProperty(DATABASE_URL));
         dataSource.setUser(evn.getRequiredProperty(DATABASE_USERNAME));
+        dataSource.setJdbcUrl(evn.getRequiredProperty(DATABASE_URL));
         dataSource.setPassword(evn.getRequiredProperty(DATABASE_PASSWORD));
 
         dataSource.setInitialPoolSize(integerProperty(
@@ -150,8 +151,9 @@ public class SpringWebConfig implements WebMvcConfigurer {
      */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean
-                = new LocalContainerEntityManagerFactoryBean();
+        LocalContainerEntityManagerFactoryBean
+                entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setPackagesToScan(evn.getProperty(PACKAGE_TO_SCAN));
         entityManagerFactoryBean.setJpaProperties(hibernateProperties());
@@ -299,6 +301,18 @@ public class SpringWebConfig implements WebMvcConfigurer {
         } catch (NumberFormatException exc) {
             throw new IllegalStateException(exc);
         }
+    }
+
+    /**
+     * thay vi phai tao 1 phuong thuc trong controller voi @RequestMapping("/")
+     * de tra ve trang index thi su dung cach nay, day la cach lam tat neu khong
+     * yeu cau xu ly gi them o controller
+     *
+     * @param registry
+     */
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("index");
     }
 
 }
