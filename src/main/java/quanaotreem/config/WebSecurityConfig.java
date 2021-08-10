@@ -144,6 +144,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/actuator/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/src/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
@@ -156,6 +158,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        /*
+        fix loi x-frame-option header spring (khong the ket noi den endpoint /h2-console)
+         */
+        http.headers().frameOptions().disable();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
