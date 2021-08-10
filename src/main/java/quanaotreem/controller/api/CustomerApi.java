@@ -1,12 +1,5 @@
 package quanaotreem.controller.api;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import quanaotreem.dto.CustomerDTO;
 import quanaotreem.dto.create.CustomerCreateDTO;
 import quanaotreem.dto.mapper.DTO;
@@ -40,6 +32,13 @@ import quanaotreem.response.MessageResponse;
 import quanaotreem.service.AccountServ;
 import quanaotreem.service.CustomerServ;
 import quanaotreem.service.RoleServ;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "${cross.origin}", maxAge = 3600)
@@ -192,8 +191,8 @@ public class CustomerApi {
 	private List<Order> getListSortOrder(String[] sort) throws MyException {
 		List<Order> orders = new ArrayList<>();
 		try {
-			for (int i = 0; i < sort.length; i++) {
-				if (sort[i].contains("-")) {
+			for (String s : sort) {
+				if (s.contains("-")) {
 					for (String sortOrder : sort) {
 						String[] subSort = sortOrder.split("-");
 						orders.add(new Order(getSortDirection(subSort[1]), subSort[0]));

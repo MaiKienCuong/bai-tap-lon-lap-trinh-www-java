@@ -1,11 +1,5 @@
 package quanaotreem.controller.api;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import quanaotreem.dto.OrderDTO;
 import quanaotreem.dto.create.OrderCreateDTO;
 import quanaotreem.dto.mapper.DTO;
@@ -38,6 +31,11 @@ import quanaotreem.response.MessageResponse;
 import quanaotreem.service.CustomerServ;
 import quanaotreem.service.OrderServ;
 import quanaotreem.service.SubProductServ;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -135,8 +133,7 @@ public class OrderApi {
 		newOrderr.setCustomer(existsCustomer);
 
 		List<OrderDetail> orderDetails = newOrderr.getOrderDetails();
-		for (Iterator<?> iterator = orderDetails.iterator(); iterator.hasNext();) {
-			OrderDetail detail = (OrderDetail) iterator.next();
+		for (OrderDetail detail : orderDetails) {
 			SubProduct subProduct = subProductServ.findById(detail.getSubProduct().getId());
 			if (subProduct != null) {
 				detail.setSubProduct(subProduct);
@@ -200,8 +197,8 @@ public class OrderApi {
 	private List<Order> getListSortOrder(String[] sort) throws MyException {
 		List<Order> orders = new ArrayList<>();
 		try {
-			for (int i = 0; i < sort.length; i++) {
-				if (sort[i].contains("-")) {
+			for (String s : sort) {
+				if (s.contains("-")) {
 					for (String sortOrder : sort) {
 						String[] subSort = sortOrder.split("-");
 						orders.add(new Order(getSortDirection(subSort[1]), subSort[0]));

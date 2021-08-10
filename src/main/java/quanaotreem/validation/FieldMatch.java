@@ -20,6 +20,9 @@ public @interface FieldMatch {
 
     String message() default "";
 
+    /*
+    hai phuong thuc groups va payload la bat buoc phai co
+     */
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};

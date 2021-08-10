@@ -132,22 +132,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        authenticationManagerBuilder
+                .userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors()
-                .and().csrf().disable()
+                .and()
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/src/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
-                .and().exceptionHandling().accessDeniedHandler(accessDeniedHandle)
-                .and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-                .and().sessionManagement()
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandle)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(unauthorizedHandler)
+                .and()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
