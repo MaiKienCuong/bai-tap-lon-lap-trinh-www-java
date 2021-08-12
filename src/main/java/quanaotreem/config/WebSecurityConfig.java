@@ -139,24 +139,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .cors()
+            .cors()
                 .and()
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/actuator/**").permitAll()
-                .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/src/**").permitAll()
-                .antMatchers("/api/**").permitAll()
-                .anyRequest().authenticated()
+            .csrf()
+                .disable()
+            .authorizeRequests()
+            .antMatchers("/").permitAll()
+            .antMatchers("/actuator/**").permitAll()
+            .antMatchers("/h2-console/**").permitAll()
+            .antMatchers("/src/**").permitAll()
+            .antMatchers("/api/**").permitAll()
+            .anyRequest()
+                .authenticated()
                 .and()
-                .exceptionHandling()
+            .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandle)
                 .and()
-                .exceptionHandling()
+            .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler)
                 .and()
-                .sessionManagement()
+            .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         /*

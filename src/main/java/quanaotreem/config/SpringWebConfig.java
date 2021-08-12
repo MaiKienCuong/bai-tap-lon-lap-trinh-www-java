@@ -14,6 +14,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.http.CacheControl;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -32,6 +33,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
+import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
 
@@ -243,13 +245,15 @@ public class SpringWebConfig implements WebMvcConfigurer {
      *
      * <p>
      * khai bao cac duong dan cho cac tai nguyen tinh nhu html, css, image,...
+     * set cache cac tai nguyen tinh trong vong 1 nam tren trinh duyet
      * </p>
      *
      * @param registry the registry
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/src/**").addResourceLocations("/src/");
+        registry.addResourceHandler("/src/**").addResourceLocations("/src/")
+                .setCacheControl(CacheControl.maxAge(Duration.ofDays(365)));
     }
 
     /**
